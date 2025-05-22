@@ -1,0 +1,40 @@
+# Node.js and npm
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json # Optional: some prefer to commit it, others don't. For Next.js, it's often committed.
+# If you want to ignore package-lock.json for the root, uncomment the line above.
+# However, for the chat app, its own package-lock.json (chat/package-lock.json) will be committed if not ignored here.
+
+# Next.js (specifically for the chat/ subdirectory)
+chat/node_modules/
+chat/.next/
+chat/out/
+chat/.env.local
+chat/.env*.test
+chat/.env*.production
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear in the root
+.idea/
+.vscode/ # Optional: if you don't want to share VS Code specific settings
+*.iml
+
+# Log files
+*.log
+logs
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
+# PredictAI specific (if any, like local test files you don't want to commit)
+# chat-app-placeholder.html # Uncomment if you decide you don't want to commit this test file 

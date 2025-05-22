@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PredictAI – Community Hub</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Jdenticon CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" crossorigin="anonymous"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @keyframes pulse-accent-border {
+      0% { border-left-color: #56eced; }
+      50% { border-left-color: rgba(86, 236, 237, 0.5); }
+      100% { border-left-color: #56eced; }
+    }
+    .sidebar-link.active.animate-pulse-border {
+      animation: pulse-accent-border 1.5s infinite;
+      border-left-width: 4px !important;
+      border-left-style: solid !important;
+      background-color: transparent !important;
+    }
+    .sidebar-link.active {
+        color: #56eced !important;
+        border-left-color: #56eced !important;
+        background-color: transparent !important;
+        padding-left: 1rem !important;
+    }
+    .sidebar-link.active i {
+      color: #56eced !important;
+    }
+    .sidebar-link.active:hover {
+        background-color: transparent !important;
+    }
+    .chat-embed-placeholder {
+        border: 2px dashed #374151; /* dark:border-dark-border */
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+    }
+    .dark .chat-embed-placeholder {
+        border-color: #E5E7EB; /* light-border */
+    }
+    .token-chat-room-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .token-chat-room-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .dark .token-chat-room-card:hover {
+        box-shadow: 0 10px 20px rgba(86,236,237,0.15);
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        fontFamily: {
+          'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+        },
+        extend: {
+          colors: {
+            'light-bg': '#F8F9FB',
+            'light-sidebar': '#FFFFFF',
+            'light-text': '#222222',
+            'light-text-secondary': '#666666',
+            'light-card-bg': '#FFFFFF',
+            'light-border': '#E5E7EB',
+
+            'dark-bg': '#121212',
+            'dark-sidebar': '#1A1A1A',
+            'dark-text': '#FFFFFF',
+            'dark-text-secondary': '#B0B0B0',
+            'dark-card-bg': '#1F2937',
+            'dark-border': '#374151',
+
+            'accent': '#56eced',
+            'accent-hover': '#47C8D0',
+            'highlight': '#34D399',
+            'twitter-blue': '#1DA1F2',
+          },
+          maxWidth: {
+            'container': '1200px',
+          },
+          boxShadow: {
+            'cursor': '0 0 0 1px #56eced, 0 2px 4px rgba(0,0,0,0.05)',
+            'cursor-hover': '0 0 0 1px #47C8D0, 0 3px 6px rgba(0,0,0,0.07)',
+            'dark-cursor': '0 0 0 1px #56eced, 0 2px 4px rgba(0,0,0,0.2)',
+            'dark-cursor-hover': '0 0 0 1px #47C8D0, 0 3px 6px rgba(0,0,0,0.3)',
+            'card-light': '0 4px 12px rgba(0,0,0,0.08)',
+            'card-dark': '0 4px 12px rgba(0,0,0,0.25)',
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-light-bg text-light-text min-h-screen flex dark:bg-dark-bg dark:text-dark-text">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="animated-circle circle1"></div>
+    <div class="animated-circle circle2"></div>
+    <div class="animated-circle circle3"></div>
+  </div>
+  <!-- Sidebar -->
+  <aside class="fixed top-0 left-0 h-full w-[250px] bg-light-sidebar flex flex-col py-6 z-20 shadow-xl border-r border-light-border dark:bg-dark-sidebar dark:border-dark-border">
+    <div class="mb-8 flex flex-col items-center px-4 pt-4">
+      <img src="sidelogo.png" alt="PredictAI Logo" class="w-full mb-2">
+      <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">AI Memecoin Insights</p>
+    </div>
+    <nav class="flex-1 w-full px-4">
+      <ul class="flex flex-col gap-1.5 w-full">
+        <li><a href="index.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-home w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Home</a></li>
+        <li><a href="dashboard.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-chart-line w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Hype-Score</a></li>
+        <li><a href="suggestions.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-lightbulb w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Discovery Engine</a></li>
+        <li><a href="token-launch.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-rocket w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Token Launch</a></li>
+        <li><a href="launched-tokens.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-tasks w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Launched Tokens</a></li>
+        <li><a href="community.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-users w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Community</a></li>
+        <li><a href="influencer.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-user-secret w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Influencer Analysis</a></li>
+        <li><a href="revenue-sharing.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-sack-dollar w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Revenue-Sharing</a></li>
+      </ul>
+    </nav>
+    <div class="mt-auto px-4 pb-4 w-full">
+      <button id="theme-toggle" class="w-full flex items-center justify-center p-3 rounded-lg bg-light-bg dark:bg-dark-bg hover:bg-light-border dark:hover:bg-dark-border transition-colors text-light-text-secondary dark:text-dark-text-secondary" title="Toggle light/dark mode">
+        <span id="theme-icon" class="text-xl">🌙</span>
+        <span class="ml-2 font-medium text-sm">Toggle Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen ml-[250px]">
+    <!-- Top Bar -->
+    <header class="w-full flex justify-end items-center px-6 py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md sticky top-0 z-10 border-b border-light-border dark:border-dark-border" style="min-height: 60px;">
+      <div id="wallet-section" class="flex items-center gap-3">
+        <button id="connect-wallet" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-3 py-1.5 text-xs shadow-cursor hover:shadow-cursor-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover">
+          Connect Wallet
+        </button>
+        <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: 50 SOL</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 md:px-10 py-8 md:py-12">
+      <div class="w-full max-w-container mx-auto">
+        <!-- Page Title -->
+        <div class="mb-8 md:mb-12 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text">PredictAI Community Hub</h1>
+            <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-2 max-w-2xl mx-auto">Engage, collaborate, and share in the world of memecoins. Your central place for all community activities.</p>
+        </div>
+
+        <!-- Token Chat Rooms Section -->
+        <section id="token-chat-section" class="mb-12 md:mb-16">
+            <div class="mb-6">
+                <h2 class="text-2xl font-semibold text-light-text dark:text-dark-text flex items-center">
+                    <i class="fas fa-comments mr-2.5 text-accent"></i>Token Chat Central
+                </h2>
+                <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">Connect & discuss specific tokens with the community.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chat Embed Iframe -->
+                <div class="md:col-span-1 card bg-light-card-bg dark:bg-dark-card-bg p-4 sm:p-6 rounded-xl shadow-card-light dark:shadow-card-dark flex flex-col">
+                    <h3 id="current-chat-room-title" class="text-lg sm:text-xl font-semibold mb-3 text-light-text dark:text-dark-text">General Community Chat</h3>
+                    <div class="flex-grow min-h-[400px] sm:min-h-[450px] rounded-lg bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border overflow-hidden">
+                        <iframe id="chat-iframe" src="chat-app-placeholder.html?room=general" class="w-full h-full border-0"></iframe>
+                    </div>
+                     <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3 text-center">The chat application will be embedded here. Create `chat-app-placeholder.html` for testing.</p>
+                </div>
+                <!-- Token-Specific Chat Rooms List -->
+                <div class="md:col-span-1 card bg-light-card-bg dark:bg-dark-card-bg p-4 sm:p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h3 class="text-lg sm:text-xl font-semibold mb-4 text-light-text dark:text-dark-text">Available Chat Rooms</h3>
+                    <div id="token-chat-rooms-container" class="space-y-2 sm:space-y-3 max-h-[400px] sm:max-h-[450px] overflow-y-auto pr-1 sm:pr-2">
+                        <!-- Chat room links will be injected here -->
+                        <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Loading chat rooms...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collaborative Token Launches Section -->
+        <section id="collaborative-launch-section" class="mb-12 md:mb-16 pt-8 border-t border-light-border dark:border-dark-border">
+            <div class="mb-6">
+                <h2 class="text-2xl font-semibold text-light-text dark:text-dark-text flex items-center">
+                    <i class="fas fa-users-cog mr-2.5 text-highlight"></i>Team Up & Launch
+                </h2>
+                <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">Propose ideas, vote on buy-ins, and launch tokens together.</p>
+            </div>
+            <div id="collaborative-launches-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Example Collaborative Launch Card (Mockup) -->
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-lg shadow-card-light dark:shadow-card-dark flex flex-col">
+                    <div class="flex items-center mb-3">
+                        <div class="w-10 h-10 rounded-full bg-highlight/20 flex items-center justify-center mr-3">
+                            <i class="fas fa-lightbulb text-xl text-highlight"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-md text-light-text dark:text-dark-text">"Solana Summer Surge" Idea</h4>
+                            <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Proposed by @Memelord9000</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mb-2 line-clamp-2">
+                        Concept: A token to capture the hype of the next big Solana rally. Community-driven marketing.
+                    </p>
+                    <div class="text-xs space-y-1 mb-3">
+                        <p><strong>Suggested Buy-in:</strong> 0.5 - 2 SOL</p>
+                        <p><strong>Team Size:</strong> 5-10 members</p>
+                        <p><strong>Votes for Buy-in:</strong> 15 <span class="text-light-text-secondary dark:text-dark-text-secondary">(Waiting for more)</span></p>
+                    </div>
+                    <div class="mt-auto flex flex-col sm:flex-row gap-2">
+                        <button class="cursor-btn-sm flex-1 bg-highlight/10 hover:bg-highlight/20 text-highlight font-medium py-2 px-3 rounded-md text-xs transition-colors duration-150">
+                            <i class="fas fa-vote-yea mr-1"></i> Vote on Buy-in
+                        </button>
+                        <button class="cursor-btn-sm flex-1 bg-accent/10 hover:bg-accent/20 text-accent font-medium py-2 px-3 rounded-md text-xs transition-colors duration-150">
+                            <i class="fas fa-users mr-1"></i> Join Launch Team
+                        </button>
+                    </div>
+                </div>
+                <!-- More cards can be added here or dynamically generated -->
+                 <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-lg shadow-card-light dark:shadow-card-dark flex flex-col items-center justify-center border-2 border-dashed border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors">
+                    <i class="fas fa-plus-circle text-3xl text-light-text-secondary dark:text-dark-text-secondary group-hover:text-accent mb-2"></i>
+                    <h4 class="font-semibold text-md text-light-text dark:text-dark-text mb-1">Propose New Idea</h4>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary text-center">Got a brilliant memecoin concept? Start a new collaborative launch!</p>
+                    <button class="cursor-btn-sm mt-3 bg-accent text-gray-900 font-medium py-2 px-4 rounded-md text-xs">
+                        <i class="fas fa-paper-plane mr-1.5"></i>Propose Now
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Share Your Voice Section -->
+        <section id="twitter-share-section" class="mb-8 md:mb-12 pt-8 border-t border-light-border dark:border-dark-border">
+            <div class="mb-6">
+                <h2 class="text-2xl font-semibold text-light-text dark:text-dark-text flex items-center">
+                    <i class="fab fa-twitter mr-2.5 text-twitter-blue"></i>Spread the Word
+                </h2>
+                <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-1">Share your favorite tokens or your own launches with pre-made tweets.</p>
+            </div>
+            <div id="twitter-share-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-lg shadow-card-light dark:shadow-card-dark">
+                    <h4 class="font-semibold text-md text-light-text dark:text-dark-text mb-2">Share a Token Discovery</h4>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mb-3">
+                        Just found an amazing new token <span class="font-bold text-light-text dark:text-dark-text">[Token Name/$SYMBOL]</span> on @PredictAiPro! Looks promising. #Memecoin #Solana #Crypto #[Symbol]
+                    </p>
+                    <button class="twitter-share-button cursor-btn w-full bg-twitter-blue text-white font-medium py-2 px-3 rounded-md text-sm hover:bg-blue-500 transition-colors duration-150" data-text="Just found an amazing new token [Token Name/$SYMBOL] on @PredictAiPro! Looks promising. #Memecoin #Solana #Crypto #[Symbol]">
+                        <i class="fab fa-twitter mr-1.5"></i>Tweet about a Discovery
+                    </button>
+                </div>
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-lg shadow-card-light dark:shadow-card-dark">
+                    <h4 class="font-semibold text-md text-light-text dark:text-dark-text mb-2">Announce Your Own Launch</h4>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mb-3">
+                        Excited to announce my new token <span class="font-bold text-light-text dark:text-dark-text">[Your Token Name/$YOURSYMBOL]</span>, launched with PredictAI! Check it out! #NewLaunch #Memecoin #[YourSymbol] @PredictAiPro
+                    </p>
+                    <button class="twitter-share-button cursor-btn w-full bg-twitter-blue text-white font-medium py-2 px-3 rounded-md text-sm hover:bg-blue-500 transition-colors duration-150" data-text="Excited to announce my new token [Your Token Name/$YOURSYMBOL], launched with PredictAI! Check it out! #NewLaunch #Memecoin #[YourSymbol] @PredictAiPro">
+                        <i class="fab fa-twitter mr-1.5"></i>Tweet Your Launch
+                    </button>
+                </div>
+            </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-light-sidebar text-light-text-secondary py-6 px-6 md:px-10 mt-auto border-t border-light-border dark:bg-dark-sidebar dark:text-dark-text-secondary dark:border-dark-border">
+      <div class="max-w-container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-sm">
+          © 2024 PredictAI. All rights reserved.
+        </div>
+        <div class="flex gap-4 mb-2 md:mb-0 text-sm">
+          <a href="#" class="hover:text-accent">About</a>
+          <a href="mailto:support@predictai.com" class="hover:text-accent">Contact</a>
+          <a href="#" class="hover:text-accent">Privacy Policy</a>
+        </div>
+        <div class="flex gap-3">
+          <a href="https://x.com/PredictAiPro" target="_blank" rel="noopener noreferrer" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="X (Twitter)">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.38 1.64 4.7c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.82 1.92 3.6-.71-.02-1.38-.22-1.97-.54v.05c0 2.1 1.5 3.85 3.5 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.11 2.94 3.97 2.97A8.6 8.6 0 0 1 2 19.54c-.32 0-.63-.02-.94-.06A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg>
+          </a>
+          <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M9.04 16.87l-.39 3.66c.56 0 .8-.24 1.09-.53l2.62-2.5 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.84c.32-1.48-.54-2.06-1.5-1.7L2.2 9.3c-1.45.56-1.43 1.36-.25 1.72l4.6 1.44 10.7-6.74c.5-.32.96-.14.58.18z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Discord">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.8732.8914.0766.0766 0 0 0-.0406.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0312-.0552c.5004-5.177-.8382-9.673-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1835 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1836 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Common scripts (Theme Toggle, Wallet Connect, Active Sidebar Link)
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function setTheme(mode) {
+      localStorage.setItem('theme', mode);
+      if (mode === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        themeIcon.textContent = '☀️';
+      } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    const initialTheme = savedTheme || 'dark';
+    setTheme(initialTheme);
+    if (initialTheme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+    } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      setTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const connectBtn = document.getElementById('connect-wallet');
+    if (connectBtn) {
+        connectBtn.addEventListener('click', function() {
+          Swal.fire({
+            html: `
+                <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
+                <div class="flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-accent mr-2">
+                    <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071 1.071L12.75 5.25v.985c0 .245-.12.479-.326.625C11.297 7.705 9.92 8 8.25 8c-2.144 0-4.005-.805-5.115-2.06C2.673 5.423 2.25 4.735 2.25 4.005 2.25 2.9 3.15 2 4.256 2H6.75V1.125C6.75.504 7.254 0 7.875 0h2.25C10.746 0 11.25.504 11.25 1.125V2h2.506c1.105 0 2.006.9 2.006 2.005 0 .73-.423 1.418-.987 1.939C13.659 7.195 11.798 8 9.652 8c-.89 0-1.712-.123-2.46-.352-.24-.073-.392-.284-.392-.517V6.06c0-.272.176-.516.443-.625.283-.115.7-.234 1.193-.234.593 0 1.196.163 1.721.453.274.151.61.115.842-.089l.812-.721a.75.75 0 00-1.071-1.071L9.652 4.987c-.984-.52-2.205-.737-3.402-.737C4.65 4.25 3.75 4.95 3.75 5.895c0 .474.256.926.695 1.282C5.496 8.203 6.953 8.75 8.652 8.75c1.938 0 3.578-.664 4.642-1.799.24-.253.358-.561.358-.876v-1.5c0-.474-.256-.926-.695-1.282C11.801 2.26 10.837 2 9.652 2c-.399 0-.784.029-1.152.086L7.875 2.25A.75.75 0 007.5 3H4.256A.75.75 0 013.506 2.25C3.506 1.836 3.842 1.5 4.256 1.5H6.75V.75a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75V1.5h2.463z" clip-rule="evenodd" />
+                    <path d="M14.25 10.191a.75.75 0 01.634 1.332l-1.512 3.024a.75.75 0 01-1.348-.672l1.225-2.45V10.5a.75.75 0 01.75-.75h.252zM10.055 12.346a.75.75 0 00-1.332.634l3.024 1.512a.75.75 0 00.672-1.348l-2.363-1.182zM10.5 15.75a.75.75 0 00-.75.75v.252l-2.45 1.225a.75.75 0 00.672 1.348l3.024-1.512a.75.75 0 00-.634-1.332L10.5 16.5z" />
+                    <path fill-rule="evenodd" d="M12 24a.75.75 0 00.594-.275l3.291-4.608a.75.75 0 10-1.188-.846L12 22.088l-2.709-3.792a.75.75 0 00-1.188.846l3.292 4.608A.75.75 0 0012 24z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M14.883 16.017a.75.75 0 001.06.023l3.358-3.358a.75.75 0 10-1.06-1.06l-3.359 3.358a.75.75 0 00-.022 1.036zM6.023 12.68a.75.75 0 00-1.037-.023L1.628 16.015a.75.75 0 101.06 1.06l3.358-3.358a.75.75 0 00-.023-1.036z" clip-rule="evenodd" />
+                  </svg>
+                  <h2 class="text-2xl font-bold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
+                </div>
+                <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
+                    Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
+                </p>
+                <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
+                    Stay updated! Join our official Telegram for launch announcements.
+                </p>
+                <div id="countdown-timer-placeholder" class="my-4 text-lg font-semibold text-accent dark:text-accent">
+                    Launch Countdown: Activating Soon!
+                </div>
+                <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg" style="background-color: #2AABEE;">
+                    <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
+                </a>
+            `,
+            showConfirmButton: true,
+            confirmButtonText: 'Got It!',
+            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+            confirmButtonColor: '#56eced',
+            footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">Preview. Full functionality soon!</p>',
+            customClass: { htmlContainer: 'swal2-html-container-no-icon' },
+            showCloseButton: true
+          });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      const sidebarLinks = document.querySelectorAll('.sidebar-link');
+      sidebarLinks.forEach(link => {
+        const icon = link.querySelector('i');
+        // Clear all potentially conflicting classes first
+        link.classList.remove('active', 'animate-pulse-border', '!text-accent', '!dark:text-accent', 'text-accent', 'dark:text-accent','border-l-4', 'border-accent', '!bg-transparent', 'bg-accent', 'bg-accent/5', 'bg-accent/10', 'dark:bg-accent/10', 'dark:bg-accent/20');
+        link.classList.add('text-light-text-secondary', 'dark:text-dark-text-secondary'); // Apply default text colors
+        if (icon) {
+            icon.classList.remove('!text-accent', '!dark:text-accent', 'text-accent', 'dark:text-accent');
+            icon.classList.add('text-gray-400', 'dark:text-gray-500'); // Apply default icon colors
+        }
+
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active', 'animate-pulse-border');
+          // Remove default text/icon colors and let 'active' styles (defined in <style>) take over
+          link.classList.remove('text-light-text-secondary', 'dark:text-dark-text-secondary');
+          if (icon) {
+            icon.classList.remove('text-gray-400', 'dark:text-gray-500');
+          }
+        }
+      });
+
+      // Load General Chat by default
+      loadChatRoom('general', 'General Community Chat');
+      displayTokenChatRooms(); // This will also call loadChatRoom for 'general' initially if no tokens.
+      setupTwitterShareButtons();
+
+      // Listener for storage changes to update chat rooms if tokens are added/removed elsewhere
+      window.addEventListener('storage', function(event) {
+        if (event.key === 'predictAI_submittedTokens') {
+            displayTokenChatRooms();
+        }
+      });
+    });
+
+    let currentlyActiveRoomElement = null;
+
+    function loadChatRoom(roomId, roomName) {
+        const iframe = document.getElementById('chat-iframe');
+        const roomTitleElement = document.getElementById('current-chat-room-title');
+
+        if (iframe) {
+            // IMPORTANT: In production, replace 'chat-app-placeholder.html' 
+            // with the actual URL of your deployed chat application.
+            iframe.src = `chat-app-placeholder.html?room=${encodeURIComponent(roomId)}`;
+        }
+        if (roomTitleElement) {
+            roomTitleElement.textContent = roomName ? roomName : 'Chat';
+        }
+
+        // Update active state in the room list
+        const roomElements = document.querySelectorAll('.token-chat-room-link');
+        roomElements.forEach(el => {
+            if (el.dataset.roomId === roomId) {
+                el.classList.add('bg-accent/10', 'dark:bg-accent/20', 'border-accent');
+                el.classList.remove('hover:bg-light-border', 'dark:hover:bg-dark-border');
+                currentlyActiveRoomElement = el;
+            } else {
+                el.classList.remove('bg-accent/10', 'dark:bg-accent/20', 'border-accent');
+                el.classList.add('hover:bg-light-border', 'dark:hover:bg-dark-border');
+            }
+        });
+         console.log(`Attempting to load chat room: ${roomId} - ${roomName}`);
+    }
+
+    function displayTokenChatRooms() {
+        const container = document.getElementById('token-chat-rooms-container');
+        if (!container) return;
+
+        const tokens = JSON.parse(localStorage.getItem('predictAI_submittedTokens')) || [];
+        container.innerHTML = ''; // Clear previous content
+
+        // Add General Community Chat
+        const generalChatCard = document.createElement('div');
+        generalChatCard.className = "token-chat-room-link cursor-pointer bg-light-bg dark:bg-dark-bg p-3 rounded-lg shadow-sm hover:shadow-md dark:hover:shadow-accent/20 transition-all duration-200 ease-in-out border-l-4 border-transparent";
+        generalChatCard.dataset.roomId = 'general';
+        generalChatCard.innerHTML = `
+            <div class="flex items-center">
+                <div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-light-text dark:text-dark-text mr-3">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="flex-grow">
+                    <h5 class="font-semibold text-sm text-light-text dark:text-dark-text truncate" title="General Community Chat">General Community Chat</h5>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">General discussions and announcements.</p>
+                </div>
+                <i class="fas fa-chevron-right text-xs text-light-text-secondary dark:text-dark-text-secondary ml-2"></i>
+            </div>
+        `;
+        generalChatCard.addEventListener('click', () => {
+            loadChatRoom('general', 'General Community Chat');
+        });
+        container.appendChild(generalChatCard);
+
+
+        if (tokens.length === 0) {
+            const noTokensMessage = document.createElement('p');
+            noTokensMessage.className = "text-sm text-light-text-secondary dark:text-dark-text-secondary mt-4 text-center";
+            noTokensMessage.textContent = 'No specific token rooms yet. Launch a token to create its dedicated chat!';
+            // Only append if general chat is the only thing (to avoid duplicate messages if tokens array is empty later)
+            if (container.children.length <= 1) {
+                 container.appendChild(noTokensMessage);
+            }
+        } else {
+            tokens.forEach(token => {
+                const card = document.createElement('div');
+                card.className = "token-chat-room-link cursor-pointer bg-light-bg dark:bg-dark-bg p-3 rounded-lg shadow-sm hover:shadow-md dark:hover:shadow-accent/20 transition-all duration-200 ease-in-out border-l-4 border-transparent";
+                card.dataset.roomId = token.symbol; // Use symbol as a unique ID for the room
+
+                let logoHtml = '';
+                const logoSize = 32;
+                 if (token.displayLogo && token.displayLogo.startsWith('data:image')) {
+                    logoHtml = `<img src="${token.displayLogo}" alt="${token.name}" class="w-8 h-8 rounded-full object-cover mr-3">`;
+                } else if (token.displayLogo && token.displayLogo.startsWith('http')) {
+                    const fallbackId = `chat-room-jdenticon-${token.symbol.replace(/[^a-zA-Z0-9]/g, '')}`;
+                    logoHtml = `<img src="${token.displayLogo}" alt="${token.name}" class="w-8 h-8 rounded-full object-cover mr-3" onerror="this.style.display='none'; document.getElementById('${fallbackId}').style.display='flex';">
+                                <div id="${fallbackId}" style="display:none; width:${logoSize}px; height:${logoSize}px;" class="rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-3">${token.symbol && typeof jdenticon !== 'undefined' ? jdenticon.toSvg(token.symbol, logoSize) : ''}</div>`;
+                } else if (token.symbol && typeof jdenticon !== 'undefined' && token.displayLogo && token.displayLogo.startsWith('jdenticon:')) {
+                    logoHtml = `<div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mr-3">${jdenticon.toSvg(token.symbol, logoSize)}</div>`;
+                } else { // Fallback to initials
+                    logoHtml = `<div class="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-light-text dark:text-dark-text mr-3 text-sm font-semibold">${token.symbol ? token.symbol.substring(0,2).toUpperCase() : '?'}</div>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center">
+                        ${logoHtml}
+                        <div class="flex-grow">
+                            <h5 class="font-semibold text-sm text-light-text dark:text-dark-text truncate" title="${token.name}">${token.name} ($${token.symbol})</h5>
+                            <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary truncate">Platform: ${token.platform}</p>
+                        </div>
+                        <i class="fas fa-chevron-right text-xs text-light-text-secondary dark:text-dark-text-secondary ml-2"></i>
+                    </div>
+                `;
+                card.addEventListener('click', () => {
+                    loadChatRoom(token.symbol, `${token.name} Chat`);
+                });
+                container.appendChild(card);
+            });
+        }
+        if (typeof jdenticon !== 'undefined') {
+            jdenticon(); // Re-render jdenticons if any were added
+        }
+        // Ensure the default 'general' chat is highlighted correctly after rooms are rendered
+        loadChatRoom('general', 'General Community Chat');
+    }
+
+    function setupTwitterShareButtons() {
+        const buttons = document.querySelectorAll('.twitter-share-button');
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const text = this.dataset.text;
+                // Replace placeholders with user input or dynamic data if needed
+                // For now, we'll use the generic text.
+                // Example: const dynamicText = text.replace('[Token Name/$SYMBOL]', 'MyToken/$MTK');
+                const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+                
+                // Open in a new window, or simulate if direct window opening is blocked/undesired
+                 Swal.fire({
+                    title: 'Share on X (Twitter)',
+                    html: `
+                        <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
+                            Ready to share this on X? Click the button below to open the X compose window.
+                        </p>
+                        <textarea id="tweet-text-area" class="w-full h-24 p-2 border rounded-md text-sm bg-light-bg dark:bg-dark-bg text-light-text dark:text-dark-text border-light-border dark:border-dark-border mb-3" readonly>${text}</textarea>
+                        <a href="${tweetUrl}" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center justify-center w-full bg-twitter-blue text-white font-medium py-2.5 px-4 rounded-md text-sm hover:bg-blue-500 transition-colors">
+                            <i class="fab fa-twitter mr-2"></i>Open X to Tweet
+                        </a>
+                    `,
+                    showCancelButton: true,
+                    cancelButtonText: 'Copy Text Instead',
+                    showConfirmButton: false, // We have the link as a button now
+                    background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                    color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.cancel) { // If "Copy Text Instead" is clicked
+                        navigator.clipboard.writeText(text).then(() => {
+                            Swal.fire({
+                                toast: true, icon: 'success', title: 'Tweet text copied!',
+                                position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true,
+                                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                            });
+                        }).catch(err => {
+                            console.error('Failed to copy text: ', err);
+                            Swal.fire({
+                                toast: true, icon: 'error', title: 'Failed to copy.',
+                                position: 'top-end', showConfirmButton: false, timer: 2000, timerProgressBar: true,
+                                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    }
+  </script>
+</body>
+</html>

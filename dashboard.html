@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- No 'dark' class here for light theme default -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PredictAI – $TRUMP Token Analysis</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Chart.js and plugins -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.4.0/dist/chartjs-plugin-annotation.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @keyframes pulse-accent-border {
+      0% { border-left-color: #56eced; } /* NEW Tailwind accent color */
+      50% { border-left-color: rgba(86, 236, 237, 0.5); } /* NEW Accent with 50% opacity */
+      100% { border-left-color: #56eced; }
+    }
+    .sidebar-link.active.animate-pulse-border {
+      animation: pulse-accent-border 1.5s infinite;
+      border-left-width: 4px !important; 
+      border-left-style: solid !important;
+      /* background-color is already transparent !important from .sidebar-link.active */
+    }
+    .sidebar-link.active {
+        /* General active state without animation interference */
+        color: #56eced !important; /* NEW Tailwind accent color */
+        border-left-color: #56eced !important; /* Base for animation */
+        background-color: transparent !important;
+        padding-left: 1rem !important; /* Adjusted: px-5 (1.25rem) - 4px border approx pl-4 (1rem) */
+    }
+    .sidebar-link.active i {
+      color: #56eced !important; /* NEW Tailwind accent color for icon */
+    }
+    .sidebar-link.active:hover {
+        /* Ensure hover effects are removed for active link to avoid conflicts */
+        background-color: transparent !important;
+        color: #56eced !important;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // Important for theme toggle
+      theme: {
+        fontFamily: {
+          'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+        },
+        extend: {
+          colors: {
+            'light-bg': '#F8F9FB',
+            'light-sidebar': '#FFFFFF',
+            'light-text': '#222222',
+            'light-text-secondary': '#666666',
+            'light-card-bg': '#FFFFFF',
+            'light-border': '#E5E7EB',
+
+            'dark-bg': '#121212',
+            'dark-sidebar': '#1A1A1A',
+            'dark-text': '#FFFFFF',
+            'dark-text-secondary': '#B0B0B0',
+            'dark-card-bg': '#1F2937',
+            'dark-border': '#374151',
+
+            'accent': '#56eced',
+            'accent-hover': '#47C8D0', /* Darker shade of #56eced */
+            'highlight': '#34D399',
+            'danger': '#EF4444',
+          },
+          maxWidth: {
+            'container': '1200px',
+          },
+          boxShadow: {
+            'cursor': '0 0 0 1px #56eced, 0 2px 4px rgba(0,0,0,0.05)',
+            'cursor-hover': '0 0 0 1px #47C8D0, 0 3px 6px rgba(0,0,0,0.07)',
+            'dark-cursor': '0 0 0 1px #56eced, 0 2px 4px rgba(0,0,0,0.2)',
+            'dark-cursor-hover': '0 0 0 1px #47C8D0, 0 3px 6px rgba(0,0,0,0.3)',
+            'card-light': '0 4px 12px rgba(0,0,0,0.08)',
+            'card-dark': '0 4px 12px rgba(0,0,0,0.25)',
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-light-bg text-light-text min-h-screen flex dark:bg-dark-bg dark:text-dark-text">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="animated-circle circle1"></div>
+    <div class="animated-circle circle2"></div>
+    <div class="animated-circle circle3"></div>
+  </div>
+  <!-- Sidebar -->
+  <aside class="fixed top-0 left-0 h-full w-[250px] bg-light-sidebar flex flex-col py-6 z-20 shadow-xl border-r border-light-border dark:bg-dark-sidebar dark:border-dark-border">
+    <div class="mb-8 flex flex-col items-center px-4 pt-4">
+      <img src="sidelogo.png" alt="PredictAI Logo" class="w-full mb-2">
+      <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">AI Memecoin Insights</p>
+    </div>
+    <nav class="flex-1 w-full px-4">
+      <ul class="flex flex-col gap-1.5 w-full">
+        <li><a href="index.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-home w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Home</a></li>
+        <li><a href="dashboard.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-chart-line w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Hype-Score</a></li>
+        <li><a href="suggestions.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-lightbulb w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Discovery Engine</a></li>
+        <li><a href="token-launch.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-rocket w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Token Launch</a></li>
+        <li><a href="launched-tokens.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-tasks w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Launched Tokens</a></li>
+        <li><a href="community.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-users w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Community</a></li>
+        <li><a href="influencer.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-user-secret w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Influencer Analysis</a></li>
+        <li><a href="revenue-sharing.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-sack-dollar w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Revenue-Sharing</a></li>
+      </ul>
+    </nav>
+    <div class="mt-auto px-4 pb-4 w-full">
+      <button id="theme-toggle" class="w-full flex items-center justify-center p-3 rounded-lg bg-light-bg dark:bg-dark-bg hover:bg-light-border dark:hover:bg-dark-border transition-colors text-light-text-secondary dark:text-dark-text-secondary" title="Toggle light/dark mode">
+        <span id="theme-icon" class="text-xl">🌙</span>
+        <span class="ml-2 font-medium text-sm">Toggle Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen ml-[250px]">
+    <!-- Top Bar -->
+    <header class="w-full flex justify-end items-center px-6 py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md sticky top-0 z-10 border-b border-light-border dark:border-dark-border" style="min-height: 60px;">
+      <div id="wallet-section" class="flex items-center gap-3">
+        <button id="connect-wallet" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-3 py-1.5 text-xs shadow-cursor hover:shadow-cursor-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover">
+          Connect Wallet
+        </button>
+        <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: 50 SOL</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 md:px-10 py-8 md:py-12">
+      <div class="w-full max-w-container mx-auto">
+
+        <!-- Hero Section -->
+        <section id="hero-section" class="mb-10 text-center">
+            <img id="token-logo-hero" src="" alt="$TRUMP Logo" class="w-24 h-24 rounded-full border-4 border-accent object-cover mx-auto mb-4">
+            <h1 id="hero-headline" class="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text mb-2">Discover $TRUMP: The Meme Coin Powering the Movement</h1>
+            <p class="text-base text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto mb-6">The Official Trump Meme Coin – Fight, Fight, Fight!</p>
+            <div class="flex justify-center gap-3">
+                <button class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-5 py-2 text-sm">Explore Price</button>
+                <button class="cursor-btn border border-accent text-accent font-medium rounded-md px-5 py-2 text-sm hover:bg-accent/10 dark:border-accent dark:text-accent dark:hover:bg-accent/20">Buy $TRUMP</button>
+                <button class="cursor-btn border border-light-text-secondary text-light-text-secondary font-medium rounded-md px-5 py-2 text-sm hover:bg-gray-500/10 dark:border-dark-text-secondary dark:text-dark-text-secondary dark:hover:bg-gray-500/20">Join Community</button>
+            </div>
+        </section>
+
+        <!-- DexScreener Banner -->
+        <section id="dexscreener-banner-section" class="mb-10">
+            <a href="https://dexscreener.com/solana/6p6xghyf7aee6tzksmfsko444wqop15icusqi2jfgi_PN" target="_blank" rel="noopener noreferrer">
+                <img src="https://dd.dexscreener.com/ds-data/tokens/solana/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN/header.png?size=xl&key=f02e9e" alt="$TRUMP DexScreener Banner" class="w-full rounded-xl shadow-card-light dark:shadow-card-dark">
+            </a>
+        </section>
+
+        <!-- About $TRUMP -->
+        <section id="about-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+            <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">About $TRUMP</h2>
+            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-3">
+                $TRUMP is a meme coin launched on January 17, 2025, by President-elect Donald Trump via Truth Social, running on the Solana blockchain. It's branded as the "Official Trump Meme Coin," tied to his "Fight, Fight, Fight" slogan post a July 2024 assassination attempt. Per its official site, it's not an investment or security but a symbol of support for Trump's ideals.
+            </p>
+            <div class="text-sm grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-light-text-secondary dark:text-dark-text-secondary">
+                <p><strong>Launch Date:</strong> January 17, 2025</p>
+                <p><strong>Blockchain:</strong> Solana</p>
+                <p><strong>Affiliations:</strong> CIC Digital LLC, Fight Fight Fight LLC</p>
+                <p><strong>Contract Address:</strong> <code id="token-ca-display" class="text-xs bg-gray-100 dark:bg-gray-700 p-1 rounded">CA_PLACEHOLDER</code></p>
+            </div>
+        </section>
+
+        <!-- Market Data -->
+        <section id="market-data-section" class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center text-light-text dark:text-dark-text">Market Performance</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-xl shadow-card-light dark:shadow-card-dark text-center">
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Current Price</p>
+                    <p id="stat-price" class="text-xl font-bold text-highlight mt-1">$0.00</p>
+                </div>
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-xl shadow-card-light dark:shadow-card-dark text-center">
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">24h Volume</p>
+                    <p id="stat-volume" class="text-xl font-bold text-light-text dark:text-dark-text mt-1">$0</p>
+                </div>
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-xl shadow-card-light dark:shadow-card-dark text-center">
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Market Cap</p>
+                    <p id="stat-marketcap" class="text-xl font-bold text-light-text dark:text-dark-text mt-1">$0</p>
+                </div>
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-xl shadow-card-light dark:shadow-card-dark text-center">
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Ranking (CMC)</p>
+                    <p id="stat-ranking" class="text-xl font-bold text-light-text dark:text-dark-text mt-1">#0</p>
+                </div>
+            </div>
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark mb-6">
+                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                    <h3 id="chart-title" class="text-xl font-semibold text-light-text dark:text-dark-text mb-2 sm:mb-0">$TRUMP Social Hype Trend (90 Days)</h3>
+                    <button id="toggle-chart-data-btn" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-4 py-2 text-sm shadow-cursor hover:shadow-cursor-hover hover:bg-accent-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover dark:hover:bg-accent-hover">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline-block mr-1.5 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 12L3 8m4 4l4 4m6-4v12m0-12l4 8m-4-4l-4-4" /> <!-- Different icon for chart toggle -->
+                        </svg>
+                        Show Volume Trend
+                    </button>
+                </div>
+                <div class="h-80 md:h-96 bg-light-bg/50 dark:bg-dark-bg/50 p-2 rounded-lg">
+                    <canvas id="tokenTrendChart"></canvas>
+                </div>
+            </div>
+            <div class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                <p><strong>Price History Snippet:</strong> Initial Surge: Started at $0.18, skyrocketed over 300% to $75.35 by January 19, 2025. Decline: By May 21, 2025, the price dropped to ~$14.28. Recent Trends: Bullish technicals suggest a potential rebound from current levels.</p>
+            </div>
+        </section>
+
+        <!-- Hype Tracker -->
+        <section id="hype-tracker-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+            <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">Hype Tracker</h2>
+            <div class="bg-accent/10 dark:bg-accent/20 p-4 rounded-md mb-4">
+                 <p class="text-accent font-semibold text-center">"$TRUMP surged 300% on launch day, fueled by Trump's 8M+ Truth Social followers!"</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <h3 class="text-lg font-semibold mb-2 text-light-text dark:text-dark-text">Social Sentiment</h3>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">Truth Social: Trump's Jan 17, 2025 announcement sparked buying frenzy.</p>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary mb-1">X Platform: High engagement (e.g., 3,487 unique mentions, #9 on Coinbase trends).</p>
+                    <!-- X Post 1: @GetTrumpMemes -->
+                    <div class="mt-3 p-3 border border-light-border dark:border-dark-border rounded-lg bg-light-sidebar dark:bg-dark-sidebar shadow">
+                        <div class="flex items-start space-x-3">
+                            <img src="https://pbs.twimg.com/profile_images/1880437297625055232/vHBvbO0J_400x400.jpg" alt="GetTrumpMemes Avatar" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="font-semibold text-sm text-light-text dark:text-dark-text">Trump Memes</span>
+                                    <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">@GetTrumpMemes</span>
+                                    <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">· May 23</span>
+                                </div>
+                                <p class="text-sm text-light-text dark:text-dark-text mt-1 mb-2">
+                                    Can't wait for the debates! 🔥 <a href="https://x.com/hashtag/Trump?src=hashtag_click" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">#Trump</a> <a href="https://x.com/hashtag/MAGA?src=hashtag_click" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">#MAGA</a> <a href="https://x.com/hashtag/TrumpCoin?src=hashtag_click" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">#TrumpCoin</a> <a href="https://x.com/search?q=%24TRUMP&src=typed_query" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">$TRUMP</a>
+                                </p>
+                                <img src="https://pbs.twimg.com/media/GqMQQwmX0AAAg4H?format=jpg&name=large" alt="Tweet image" class="rounded-lg border border-light-border dark:border-dark-border max-h-60 w-auto object-cover">
+                                <div class="flex items-center space-x-4 text-xs text-light-text-secondary dark:text-dark-text-secondary mt-2">
+                                    <span><i class="far fa-comment"></i> 1.2K</span>
+                                    <span><i class="fas fa-retweet"></i> 3.4K</span>
+                                    <span><i class="far fa-heart"></i> 15K</span>
+                                    <span><i class="fas fa-chart-bar"></i> 1.1M</span>
+                                    <span><i class="far fa-bookmark"></i></span>
+                                    <span><i class="fas fa-arrow-up-from-bracket"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- X Post 2: Cointelegraph -->
+                    <div class="mt-3 p-3 border border-light-border dark:border-dark-border rounded-lg bg-light-sidebar dark:bg-dark-sidebar shadow">
+                        <div class="flex items-start space-x-3">
+                             <img src="https://pbs.twimg.com/profile_images/1755983593925378048/kYutau0B_400x400.jpg" alt="Cointelegraph Avatar" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <div class="flex items-center space-x-1">
+                                    <span class="font-semibold text-sm text-light-text dark:text-dark-text">Cointelegraph</span>
+                                    <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">@Cointelegraph</span>
+                                    <span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">· May 25</span>
+                                </div>
+                                <p class="text-sm text-light-text dark:text-dark-text mt-1">
+                                    Donald Trump says he will be the "crypto president," pledges to support the industry if elected. <a href="https://x.com/hashtag/CryptoNews?src=hashtag_click" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">#CryptoNews</a> <a href="https://x.com/search?q=%24TRUMP&src=typed_query" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">$TRUMP</a>
+                                </p>
+                                <div class="flex items-center space-x-4 text-xs text-light-text-secondary dark:text-dark-text-secondary mt-2">
+                                   <span><i class="far fa-comment"></i> 875</span>
+                                    <span><i class="fas fa-retweet"></i> 2.1K</span>
+                                    <span><i class="far fa-heart"></i> 9.8K</span>
+                                    <span><i class="fas fa-chart-bar"></i> 950K</span>
+                                    <span><i class="far fa-bookmark"></i></span>
+                                    <span><i class="fas fa-arrow-up-from-bracket"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2 text-light-text dark:text-dark-text">Key Events & Indicators</h3>
+                    <ul class="list-disc list-inside text-light-text-secondary dark:text-dark-text-secondary space-y-1">
+                        <li><strong>Trading Volume Spike:</strong> 189.7% increase ($1.9B) signals speculative trading.</li>
+                        <li><strong>Presidential Dinner (Apr 2025):</strong> Gala for top holders caused 12% price spike.</li>
+                        <li><strong>Political Boost (Mar 2025):</strong> Trump's pro-crypto policies fueled interest.</li>
+                        <li><strong>RSI:</strong> Bullish in April 2025, hinting at $10.50 resistance test. (Current: <span id="stat-rsi" class="font-medium text-highlight">65</span>)</li>
+                        <li><strong>Whale Activity:</strong> Early cluster earned $170M in 48hrs. (Monitor <a href="https://dune.com/" target="_blank" rel="noopener noreferrer" class="text-accent hover:underline">Dune Analytics</a>)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tokenomics -->
+        <section id="tokenomics-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+            <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">Tokenomics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary"><strong>Total Supply:</strong> 1 billion $TRUMP tokens.</p>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary"><strong>Circulating Supply:</strong> 200M (20%).</p>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary"><strong>Insider Holdings:</strong> 800M (80%) held by CIC Digital LLC & Fight Fight Fight LLC (3-year release).</p>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary"><strong>Allocation:</strong> 10% for liquidity, 20% in treasury.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-1 text-danger dark:text-danger">Concerns:</h3>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary text-danger/80 dark:text-danger/70">80% insider allocation raises fears of centralization and potential "rug pull" risks.</p>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary mt-2"><strong>Revenue Example:</strong> Creators earned $86–100M in trading fees (Jan 17–30, 2025) via Meteora.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10">
+            <div>
+                <!-- How to Buy -->
+                <section id="how-to-buy-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">How to Buy $TRUMP</h2>
+                    <ol class="list-decimal list-inside text-sm text-light-text-secondary dark:text-dark-text-secondary space-y-1 mb-3">
+                        <li>Set up a Solana-compatible wallet (e.g., MetaMask, Phantom).</li>
+                        <li>Buy on exchanges like OKX, Binance, Bitget, Coinbase, or Meteora.</li>
+                        <li>Add $TRUMP contract address to your wallet: <code class="text-xs bg-gray-100 dark:bg-gray-700 p-1 rounded truncate" id="token-ca-howtobuy">CA_PLACEHOLDER</code></li>
+                    </ol>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Exchanges: <a href="#" class="text-accent hover:underline">OKX</a>, <a href="#" class="text-accent hover:underline">Binance</a>, <a href="#" class="text-accent hover:underline">Coinbase</a></p>
+                </section>
+
+                <!-- Risks and Considerations -->
+                <section id="risks-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h2 class="text-2xl font-semibold mb-4 text-danger dark:text-danger">Risks and Considerations</h2>
+                    <ul class="list-disc list-inside text-sm text-light-text-secondary dark:text-dark-text-secondary space-y-1">
+                        <li><strong>Ethical Issues:</strong> Potential conflicts of interest.</li>
+                        <li><strong>Volatility:</strong> High (6.97% daily average), lacks intrinsic value.</li>
+                        <li><strong>Regulatory Risks:</strong> Scrutiny from DOJ & SEC.</li>
+                        <li><strong>Insider Control:</strong> 80% allocation, $52M moved by insiders.</li>
+                        <li><strong>Dilution:</strong> Future release of 800M tokens.</li>
+                    </ul>
+                    <p class="mt-3 text-xs text-danger/80 dark:text-danger/70 italic">Disclaimer: $TRUMP is a speculative asset; invest responsibly.</p>
+                </section>
+            </div>
+            <div>
+                <!-- Community and Ecosystem -->
+                <section id="community-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">Community and Ecosystem</h2>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">Join the movement! Top holders get invited to exclusive Trump gala dinners.</p>
+                    <ul class="list-disc list-inside text-sm text-light-text-secondary dark:text-dark-text-secondary space-y-1">
+                        <li>Truth Social (Official Announcements)</li>
+                        <li>X Community (#TRUMPtoken)</li>
+                        <li>Trump's Empire (Telegram Game)</li>
+                        <li>World Liberty Financial (Potential DeFi Boost)</li>
+                    </ul>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2"><strong>Current Use:</strong> Speculative trading; limited use for Trump merchandise.</p>
+                </section>
+
+                <!-- Price Predictions -->
+                <section id="predictions-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">Price Predictions <span class="text-xs font-normal text-light-text-secondary dark:text-dark-text-secondary">(Highly Speculative)</span></h2>
+                    <table class="w-full text-sm text-left text-light-text-secondary dark:text-dark-text-secondary">
+                        <thead>
+                            <tr class="border-b border-light-border dark:border-dark-border">
+                                <th class="py-2 font-medium">Source</th>
+                                <th class="py-2 font-medium">Prediction</th>
+                                <th class="py-2 font-medium">Timescale</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="py-1">CCN</td><td>$10.50</td><td>2025</td></tr>
+                            <tr><td class="py-1">ICO Bench</td><td>$70–$100</td><td>2025 (if hype persists)</td></tr>
+                            <tr><td class="py-1">Coinedition</td><td>$550 ($400-$800)</td><td>2040</td></tr>
+                            <tr><td class="py-1">Coinedition</td><td>$1,500 ($880-$2000)</td><td>2050</td></tr>
+                            <tr><td class="py-1">Digital Coin Price</td><td>$324–$467</td><td>2031-2032</td></tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-3 text-xs text-light-text-secondary dark:text-dark-text-secondary italic">Note: Predictions are speculative and based on market sentiment & hype.</p>
+                </section>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+        <section id="faq-section" class="mb-10 card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+            <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">Frequently Asked Questions</h2>
+            <div class="space-y-3 text-sm">
+                <div>
+                    <h3 class="font-medium text-light-text dark:text-dark-text">Is $TRUMP a scam?</h3>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary">It's officially linked to Trump but faces criticism for insider control and its speculative nature.</p>
+                </div>
+                <div>
+                    <h3 class="font-medium text-light-text dark:text-dark-text">How to store $TRUMP?</h3>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary">Use MetaMask or other Solana-compatible wallets. Ensure you add the correct contract address.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
+            <h3 class="text-xl font-semibold mb-3 text-light-text dark:text-dark-text">Data Sources</h3>
+            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-2">This page uses real-time data for $TRUMP token analysis. Market data, hype indicators, and predictions are based on the latest information.</p>
+            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Data is sourced from APIs like CoinGecko, Dexscreener, X/Twitter, and on-chain Solana data.</p>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-light-sidebar text-light-text-secondary py-6 px-6 md:px-10 mt-auto border-t border-light-border dark:bg-dark-sidebar dark:text-dark-text-secondary dark:border-dark-border">
+      <div class="max-w-container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-sm">
+          © <span id="footer-year-dashboard">2024</span> PredictAI. All rights reserved.
+        </div>
+        <div class="flex gap-4 mb-2 md:mb-0 text-sm">
+          <a href="#" class="hover:text-accent dark:hover:text-accent">About</a>
+          <a href="mailto:support@predictai.com" class="hover:text-accent dark:hover:text-accent">Contact</a>
+          <a href="#" class="hover:text-accent dark:hover:text-accent">Privacy Policy</a>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Twitter">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.38 1.64 4.7c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.82 1.92 3.6-.71-.02-1.38-.22-1.97-.54v.05c0 2.1 1.5 3.85 3.5 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.11 2.94 3.97 2.97A8.6 8.6 0 0 1 2 19.54c-.32 0-.63-.02-.94-.06A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M9.04 16.87l-.39 3.66c.56 0 .8-.24 1.09-.53l2.62-2.5 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.84c.32-1.48-.54-2.06-1.5-1.7L2.2 9.3c-1.45.56-1.43 1.36-.25 1.72l4.6 1.44 10.7-6.74c.5-.32.96-.14.58.18z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Discord">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.8732.8914.0766.0766 0 0 0-.0406.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0312-.0552c.5004-5.177-.8382-9.673-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1835 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1836 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+<script>
+    // --- Global Variables & Constants ---\n
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const connectWalletBtn = document.getElementById('connect-wallet');
+    const walletBalanceSpan = document.getElementById('wallet-balance');
+    let tokenTrendChart = null; 
+    const TRUMP_CA = "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"; // Example CA
+    const TRUMP_LOGO_URL = "https://dd.dexscreener.com/ds-data/tokens/solana/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN.png?size=lg&key=f02e9e";
+
+    let currentChartType = 'social'; // 'social' or 'volume'
+
+    // --- Theme Management ---\n
+    function setTheme(mode) {
+      localStorage.setItem('theme', mode);
+      if (mode === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        themeIcon.textContent = '☀️'; 
+        document.body.classList.add('dark-theme'); 
+      } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+        document.body.classList.remove('dark-theme'); 
+      }
+      updateChartTheme(mode);
+    }
+
+    function updateChartTheme(mode) {
+        if (tokenTrendChart) {
+            const isDark = mode === 'dark';
+            const twColors = tailwind.config.theme.extend.colors;
+            const textColor = isDark ? twColors['dark-text-secondary'] : twColors['light-text-secondary'];
+            const borderColor = isDark ? twColors['dark-border'] : twColors['light-border'];
+            const gridColor = isDark ? 'rgba(55, 65, 81, 0.3)' : 'rgba(229, 231, 235, 0.5)';
+
+            tokenTrendChart.options.scales.x.ticks.color = textColor;
+            tokenTrendChart.options.scales.y.ticks.color = textColor;
+            tokenTrendChart.options.scales.x.grid.borderColor = borderColor;
+            tokenTrendChart.options.scales.x.grid.color = gridColor;
+            tokenTrendChart.options.scales.y.grid.borderColor = borderColor;
+            tokenTrendChart.options.scales.y.grid.color = gridColor;
+            
+            tokenTrendChart.options.scales.x.title.color = textColor;
+            tokenTrendChart.options.scales.y.title.color = textColor;
+            tokenTrendChart.options.plugins.legend.labels.color = textColor;
+            
+            tokenTrendChart.options.plugins.tooltip.backgroundColor = isDark ? twColors['dark-card-bg'] : twColors['light-card-bg'];
+            tokenTrendChart.options.plugins.tooltip.titleColor = isDark ? twColors['dark-text'] : twColors['light-text'];
+            tokenTrendChart.options.plugins.tooltip.bodyColor = isDark ? twColors['dark-text-secondary'] : twColors['light-text-secondary'];
+            tokenTrendChart.options.plugins.tooltip.borderColor = borderColor;
+
+            if (tokenTrendChart.options.plugins.annotation && tokenTrendChart.options.plugins.annotation.annotations) {
+                Object.values(tokenTrendChart.options.plugins.annotation.annotations).forEach(annotation => {
+                    if (annotation.label) { 
+                        annotation.label.color = textColor;
+                        annotation.label.backgroundColor = isDark ? 'rgba(31, 41, 55, 0.85)' : 'rgba(255, 255, 255, 0.85)';
+                    }
+                    if(annotation.type === 'line') {
+                        annotation.borderColor = isDark ? twColors['accent'] : twColors['accent']; // Keep line color consistent or adapt
+                    }
+                });
+            }
+            tokenTrendChart.update();
+        }
+    }
+
+    // --- Data & Formatting ---
+
+    function formatMarketCap(num) {
+        if (typeof num !== 'number' || isNaN(num)) return 'N/A';
+        if (num >= 1000000000) return (num / 1000000000).toFixed(2) + 'B';
+        if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+        return num.toLocaleString(); 
+    }
+
+    function generateChartData(type = 'social', days = 90) {
+        const data = [];
+        const labels = [];
+        const baseDate = new Date(2025, 0, 1); // Start Jan 1, 2025
+
+        let peakValue = type === 'social' ? (Math.random() * 40 + 60) : (Math.random() * 50000000 + 100000000); 
+        let troughValue = type === 'social' ? (Math.random() * 10 + 5) : (Math.random() * 10000000 + 5000000);
+        
+        for (let i = 0; i < days; i++) {
+            const date = new Date(baseDate);
+            date.setDate(baseDate.getDate() + i);
+            labels.push(date);
+
+            let value;
+            if (i < days * 0.1) value = troughValue + (peakValue * 0.2 - troughValue) * (i / (days * 0.1)) + Math.random() * (type === 'social' ? 5 : 500000);
+            else if (i < days * 0.5) value = peakValue * 0.2 + (peakValue * 0.8 - peakValue * 0.2) * Math.sin((i - days * 0.1) / (days * 0.4) * Math.PI / 2) + Math.random() * (type === 'social' ? 10 : 1000000);
+            else value = peakValue - (peakValue - troughValue * 1.5) * ((i - days * 0.5) / (days * 0.5)) + Math.random() * (type === 'social' ? 15 : 1500000);
+            
+            data.push(Math.max(type === 'social' ? 5 : 100000, Math.round(value)));
+        }
+        return { labels, data };
+    }
+    
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    async function getTokenMarketData(tokenAddress) {
+        if (!tokenAddress || tokenAddress === "Unknown") {
+            console.warn("Skipping market data fetch for unknown or invalid address:", tokenAddress);
+            return { 
+                priceUsd: "N/A", 
+                volume24h: "N/A", 
+                marketCap: "N/A", 
+                liquidity: "N/A", 
+                fdv: "N/A", 
+                holderCount: "N/A",
+                imageUrl: null, 
+                name: "Unknown Token",
+                symbol: "N/A"
+            };
+        }
+        const url = `https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`;
+        try {
+            const response = await fetch(url, { headers: { "Accept": "*/*" } });
+            if (!response.ok) {
+                console.warn(`Market Data API Error for ${tokenAddress}: Status ${response.status} ${response.statusText}`);
+                const errorText = await response.text();
+                console.warn(`Response body: ${errorText}`);
+                return { 
+                    priceUsd: "Error", 
+                    volume24h: "Error", 
+                    marketCap: "Error", 
+                    liquidity: "Error", 
+                    fdv: "Error", 
+                    holderCount: "Error",
+                    imageUrl: null,
+                    name: "Error Fetching Name",
+                    symbol: "ERR"
+                };
+            }
+            const data = await response.json();
+            console.log('Raw DexScreener API Response for ' + tokenAddress + ':', data); // Logging added here
+
+            const pair = data.pairs?.[0];
+
+            if (!pair) {
+                console.warn(`No pair data found for ${tokenAddress}. Full API response:`, data);
+                return { 
+                    priceUsd: "No Pair", 
+                    volume24h: "No Pair", 
+                    marketCap: "No Pair", 
+                    liquidity: "No Pair", 
+                    fdv: "No Pair", 
+                    holderCount: "No Pair",
+                    imageUrl: data.token?.info?.imageUrl || TRUMP_LOGO_URL, 
+                    name: data.token?.name || "Unknown Token",
+                    symbol: data.token?.symbol || "N/A"
+                };
+            }
+            
+            let imageUrl = TRUMP_LOGO_URL; 
+            if (pair.info?.imageUrl) {
+                imageUrl = pair.info.imageUrl;
+            } else if (data.token?.info?.imageUrl) { 
+                 imageUrl = data.token.info.imageUrl;
+            }
+
+            return {
+                priceUsd: parseFloat(pair.priceUsd) || "N/A",
+                volume24h: pair.volume?.h24 || "N/A",
+                marketCap: pair.marketCap || "N/A",
+                liquidity: pair.liquidity?.usd || "N/A",
+                fdv: pair.fdv || "N/A",
+                holderCount: pair.info?.holderCount || "N/A",
+                imageUrl: imageUrl,
+                name: pair.baseToken?.name || "Unknown Token",
+                symbol: pair.baseToken?.symbol || "N/A"
+            };
+        } catch (error) {
+            console.error(`Error fetching market data for ${tokenAddress}:`, error);
+            return { 
+                priceUsd: "Fetch Err", 
+                volume24h: "Fetch Err", 
+                marketCap: "Fetch Err", 
+                liquidity: "Fetch Err", 
+                fdv: "Fetch Err", 
+                holderCount: "Fetch Err",
+                imageUrl: TRUMP_LOGO_URL, 
+                name: "Fetch Error",
+                symbol: "ERR"
+            };
+        }
+    }
+
+    // --- $TRUMP Token Data Display Logic ---
+
+    async function displayTrumpTokenData() {
+        const tokenAddress = TRUMP_CA; // Defined globally
+
+        // Set placeholder/loading states immediately
+        const heroLogoEl = document.getElementById('token-logo-hero');
+        if (heroLogoEl) heroLogoEl.src = TRUMP_LOGO_URL; // Default logo initially
+        
+        const caDisplayEl = document.getElementById('token-ca-display');
+        if (caDisplayEl) caDisplayEl.textContent = tokenAddress;
+        
+        const caHowToBuyEl = document.getElementById('token-ca-howtobuy');
+        if (caHowToBuyEl) caHowToBuyEl.textContent = tokenAddress;
+
+        const priceEl = document.getElementById('stat-price');
+        const volumeEl = document.getElementById('stat-volume');
+        const marketcapEl = document.getElementById('stat-marketcap');
+        const heroHeadlineEl = document.getElementById('hero-headline');
+        
+        if(priceEl) priceEl.textContent = 'Loading...';
+        if(volumeEl) volumeEl.textContent = 'Loading...';
+        if(marketcapEl) marketcapEl.textContent = 'Loading...';
+
+
+        // Fetch live data
+        const marketData = await getTokenMarketData(tokenAddress);
+
+        // Update Hero section elements
+        if (heroLogoEl && marketData.imageUrl) {
+            heroLogoEl.src = marketData.imageUrl;
+        }
+         if (heroHeadlineEl && marketData.name !== "Unknown Token" && marketData.name !== "Error Fetching Name" && marketData.name !== "Fetch Error") {
+            heroHeadlineEl.textContent = `Discover $${marketData.symbol}: ${marketData.name}`;
+        } else {
+            heroHeadlineEl.textContent = `Discover $TRUMP: The Meme Coin Powering the Movement`; // Fallback
+        }
+
+
+        // Update stats
+        if (priceEl) {
+            priceEl.textContent = typeof marketData.priceUsd === 'number' ? `$${marketData.priceUsd.toFixed(6)}` : marketData.priceUsd;
+        }
+        if (volumeEl) {
+            volumeEl.textContent = typeof marketData.volume24h === 'number' ? `$${formatMarketCap(marketData.volume24h)}` : marketData.volume24h;
+        }
+        if (marketcapEl) {
+            marketcapEl.textContent = typeof marketData.marketCap === 'number' ? `$${formatMarketCap(marketData.marketCap)}` : marketData.marketCap;
+        }
+        
+        // Ranking is not directly available, keep existing simulated logic or placeholder
+        const rankingEl = document.getElementById('stat-ranking');
+        if (rankingEl) rankingEl.textContent = `#${Math.floor(Math.random()* 20) + 30}`; 
+        
+        const rsiEl = document.getElementById('stat-rsi');
+        if (rsiEl) rsiEl.textContent = (60 + Math.random() * 10 - 5).toFixed(1); // Keep simulated RSI
+
+        updateChartDataAndTitle(); // This function already exists and handles chart updates
+    }
+
+    function getChartAnnotations(isDark) {
+        const twColors = tailwind.config.theme.extend.colors;
+        const textColor = isDark ? twColors['dark-text-secondary'] : twColors['light-text-secondary'];
+        const bgColor = isDark ? 'rgba(31, 41, 55, 0.85)' : 'rgba(255, 255, 255, 0.85)'; // Slightly more opaque
+        const lineColor = isDark ? twColors['accent'] : twColors['accent']; // Consistent line color
+
+        return {
+            truthSocialLaunch: {
+                type: 'line',
+                xMin: new Date(2025, 0, 17).valueOf(), xMax: new Date(2025, 0, 17).valueOf(),
+                borderColor: lineColor, borderWidth: 1, borderDash: [6, 6],
+                label: { content: 'Truth Social Launch', enabled: true, position: 'start', backgroundColor: bgColor, color: textColor, font: { size: 10 }, yAdjust: -25 }
+            },
+            melaniaLaunch: {
+                type: 'line',
+                xMin: new Date(2025, 1, 10).valueOf(), xMax: new Date(2025, 1, 10).valueOf(),
+                borderColor: lineColor, borderWidth: 1, borderDash: [6, 6],
+                label: { content: '$MELANIA Launch', enabled: true, position: 'start', backgroundColor: bgColor, color: textColor, font: { size: 10 }, yAdjust: -5 }
+            },
+             bitcoinReserve: {
+                type: 'line',
+                xMin: new Date(2025, 2, 5).valueOf(), xMax: new Date(2025, 2, 5).valueOf(),
+                borderColor: lineColor, borderWidth: 1, borderDash: [6, 6],
+                label: { content: 'BTC Reserve Policy', enabled: true, position: 'start', backgroundColor: bgColor, color: textColor, font: { size: 10 }, yAdjust: -40 }
+            },
+            presidentialDinner: {
+                type: 'line',
+                xMin: new Date(2025, 3, 15).valueOf(), xMax: new Date(2025, 3, 15).valueOf(),
+                borderColor: lineColor, borderWidth: 1, borderDash: [6, 6],
+                label: { content: 'Presidential Dinner Ann.', enabled: true, position: 'start', backgroundColor: bgColor, color: textColor, font: { size: 10 }, yAdjust: 10 }
+            }
+        };
+    }
+
+    function updateChartDataAndTitle() {
+        if (!tokenTrendChart) return;
+
+        const { labels, data } = generateChartData(currentChartType, 90); 
+        tokenTrendChart.data.labels = labels;
+        tokenTrendChart.data.datasets[0].data = data;
+        
+        const chartTitleEl = document.getElementById('chart-title');
+        const toggleButton = document.getElementById('toggle-chart-data-btn');
+        const svgIcon = toggleButton.querySelector('svg');
+
+        if (currentChartType === 'social') {
+            tokenTrendChart.data.datasets[0].label = '$TRUMP Social Hype Score';
+            tokenTrendChart.options.scales.y.title.text = 'Social Hype Score (0-100)';
+            if (chartTitleEl) chartTitleEl.textContent = '$TRUMP Social Hype Trend (90 Days)';
+            if (toggleButton) {
+                toggleButton.childNodes[toggleButton.childNodes.length -1].nodeValue = ' Show Volume Trend';
+                svgIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M7 16V4m0 12L3 8m4 4l4 4m6-4v12m0-12l4 8m-4-4l-4-4" />'; // Trend Up/Down icon
+            }
+        } else { // Volume
+            tokenTrendChart.data.datasets[0].label = '$TRUMP Trading Volume';
+            tokenTrendChart.options.scales.y.title.text = 'Trading Volume (USD)';
+             if (chartTitleEl) chartTitleEl.textContent = '$TRUMP Volume Trend (90 Days)';
+            if (toggleButton) {
+                toggleButton.childNodes[toggleButton.childNodes.length -1].nodeValue = ' Show Social Media Trend';
+                 svgIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />'; // Different Icon
+            }
+        }
+        tokenTrendChart.options.plugins.annotation.annotations = getChartAnnotations(html.classList.contains('dark'));
+        tokenTrendChart.update(); // Essential to redraw the chart
+        updateChartTheme(html.classList.contains('dark') ? 'dark' : 'light'); // Ensure theme is applied after data update
+    }
+
+
+    // --- Chart Initialization ---\n
+    function createTokenTrendChart() {
+        const ctx = document.getElementById('tokenTrendChart')?.getContext('2d');
+        if (!ctx) {
+            console.error('Canvas context not found for tokenTrendChart');
+            return;
+        }
+
+        const initialChartData = generateChartData(currentChartType, 90); 
+        const isDark = html.classList.contains('dark'); // Check current theme state
+        const twColors = tailwind.config.theme.extend.colors;
+        
+        tokenTrendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: initialChartData.labels,
+                datasets: [{
+                    label: '$TRUMP Social Hype Score', // Initial label
+                    data: initialChartData.data,
+                    borderColor: twColors['accent'],
+                    backgroundColor: hexToRgba(twColors['accent'], 0.1),
+                    pointBackgroundColor: twColors['highlight'],
+                    pointBorderColor: twColors['accent'],
+                    pointRadius: 2, 
+                    pointHoverRadius: 5,
+                    borderWidth: 2, 
+                    tension: 0.3,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'month', 
+                            tooltipFormat: 'MMM dd, yyyy',
+                            displayFormats: { month: 'MMM yyyy' }
+                        },
+                        title: { display: true, text: 'Date' },
+                        grid: { display: true },
+                        ticks: { autoSkip: true, maxTicksLimit: 6 } 
+                    },
+                    y: {
+                        beginAtZero: false, // Allow y-axis to not start at zero for better visualization of trends
+                        title: { display: true, text: 'Social Hype Score (0-100)' }, // Initial Y-axis title
+                        grid: { display: true },
+                        ticks: {
+                            callback: function(value, index, values) { // Format Y-axis for volume
+                                if (currentChartType === 'volume') {
+                                    return '$' + formatMarketCap(value);
+                                }
+                                return value;
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) { label += ': '; }
+                                if (context.parsed.y !== null) {
+                                    if (currentChartType === 'volume') {
+                                        label += '$' + formatMarketCap(context.parsed.y);
+                                    } else {
+                                        label += context.parsed.y;
+                                    }
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    annotation: {
+                        drawTime: 'afterDatasetsDraw', 
+                        annotations: getChartAnnotations(isDark)
+                    }
+                }
+            }
+        });
+        updateChartTheme(isDark ? 'dark' : 'light'); // Apply initial theme
+    }
+
+    // --- Event Listeners ---\n
+    themeToggle.addEventListener('click', () => {
+      const newTheme = html.classList.contains('dark') ? 'light' : 'dark';
+      setTheme(newTheme);
+    });
+
+    if (connectWalletBtn) {
+        connectWalletBtn.addEventListener('click', () => {
+            Swal.fire({
+                html: `
+                    <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
+                    <h2 class="text-2xl font-bold mb-4 text-light-text dark:text-dark-text"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-block mr-2 -mt-1 h-6 w-6 text-accent"><path d="M13.1641 3.01327C12.5993 1.71359 11.4007 1.71359 10.8359 3.01327L9.51587 6.06189C9.36106 6.42762 9.00106 6.67386 8.59992 6.6921L5.28453 6.84403C3.89037 6.90919 3.33111 8.63908 4.38258 9.662L6.82073 12.0369C7.10354 12.3116 7.23654 12.7038 7.18043 13.094L6.51153 16.5597C6.22203 18.0373 7.68953 19.0743 9.02992 18.362L11.8707 16.8676C12.2211 16.6807 12.6313 16.6807 12.9817 16.8676L15.8225 18.362C17.1629 19.0743 18.6304 18.0373 18.3409 16.5597L17.672 13.094C17.6159 12.7038 17.7489 12.3116 18.0317 12.0369L20.4698 9.662C21.5213 8.63908 20.962 6.90919 19.5679 6.84403L16.2525 6.6921C15.8513 6.67386 15.4913 6.42762 15.3365 6.06189L14.0165 3.01327C13.8117 2.54248 13.5 2.18058 13.1641 3.01327Z" fill="currentColor"></path><path d="M12 18C12.5523 18 13 17.5523 13 17V14C13 13.4477 12.5523 13 12 13C11.4477 13 11 13.4477 11 14V17C11 17.5523 11.4477 18 12 18Z" fill="currentColor"></path><path d="M12 22C11.4477 22 11 21.5523 11 21V20C11 19.4477 11.4477 19 12 19C12.5523 19 13 19.4477 13 20V21C13 21.5523 12.5523 22 12 22Z" fill="currentColor"></path></svg>Almost Ready to Connect!</h2>
+                    <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
+                        Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
+                    </p>
+                    <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
+                        Stay updated and be the first to know! Join our official Telegram channel for the latest announcements and launch countdown.
+                    </p>
+                    <div id="countdown-timer-placeholder" class="my-4 text-lg font-semibold text-accent dark:text-accent">
+                        Launch Countdown: Activating Soon!
+                    </div>
+                    <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #2AABEE; border-color: #2AABEE;"> <!-- Telegram Blue -->
+                        <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
+                    </a>
+                `,
+                showConfirmButton: true,
+                confirmButtonText: 'Got It!',
+                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                confirmButtonColor: '#56eced',
+                footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">This is a preview. Full functionality is launching soon!</p>',
+                customClass: {
+                    htmlContainer: 'swal2-html-container-no-icon'
+                },
+                showCloseButton: true
+            });
+        });
+    }
+    
+    document.getElementById('toggle-chart-data-btn')?.addEventListener('click', () => {
+        currentChartType = currentChartType === 'social' ? 'volume' : 'social';
+        updateChartDataAndTitle();
+    });
+
+    // --- Initial Load ---\n
+    document.addEventListener('DOMContentLoaded', () => {
+      const storedTheme = localStorage.getItem('theme');
+      const defaultTheme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      
+      if (html.classList.contains('dark') && defaultTheme === 'light') {
+          html.classList.remove('dark');
+      }
+      setTheme(storedTheme || 'light');
+
+      createTokenTrendChart(); 
+      displayTrumpTokenData();
+
+      document.getElementById('footer-year-dashboard').textContent = new Date().getFullYear();
+      
+      const currentPath = window.location.pathname.split("/").pop() || "index.html";
+      document.querySelectorAll('.sidebar-link').forEach(link => {
+        const icon = link.querySelector('i');
+
+        // Reset all potentially conflicting classes
+        link.classList.remove(
+            'active', 'animate-pulse-border',
+            'text-accent', 'dark:text-accent',
+            'border-l-4', 'border-accent',
+            'bg-accent', 'bg-accent/5', 'bg-accent/10',
+            'dark:bg-accent/10', 'dark:bg-accent/20'
+        );
+        link.style.color = ''; 
+        link.classList.add('text-light-text-secondary', 'dark:text-dark-text-secondary');
+        
+        if (icon) {
+            icon.classList.remove('text-accent', 'dark:text-accent');
+            icon.classList.add('text-gray-400', 'dark:text-gray-500');
+        }
+
+        if (link.getAttribute('href') === currentPath) { 
+          link.classList.add('active', 'animate-pulse-border');
+          link.classList.remove('text-light-text-secondary', 'dark:text-dark-text-secondary');
+          link.classList.add('text-accent', 'dark:text-accent');
+          link.classList.add('border-l-4', 'border-accent');
+          
+          if (icon) {
+            icon.classList.remove('text-gray-400', 'dark:text-gray-500');
+            icon.classList.add('text-accent', 'dark:text-accent');
+          }
+          link.classList.remove('hover:bg-accent/10', 'dark:hover:bg-accent/20', 'bg-accent/10', 'dark:bg-accent/20', 'bg-accent/5');
+        }
+      });
+    });
+</script>
+</body>
+</html>

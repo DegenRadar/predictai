@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PredictAI – Token Launch</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Jdenticon CDN (for generative logos) -->
+  <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" crossorigin="anonymous"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    @keyframes pulse-accent-border {
+      0% { border-left-color: #56eced; } /* NEW Tailwind accent color */
+      50% { border-left-color: rgba(86, 236, 237, 0.5); } /* NEW Accent with 50% opacity */
+      100% { border-left-color: #56eced; }
+    }
+    .sidebar-link.active.animate-pulse-border {
+      animation: pulse-accent-border 1.5s infinite;
+      border-left-width: 4px !important; 
+      border-left-style: solid !important;
+      background-color: transparent !important;
+    }
+    .sidebar-link.active {
+        color: #56eced !important; 
+        border-left-color: #56eced !important; 
+        background-color: transparent !important;
+    }
+    .sidebar-link.active i {
+      color: #56eced !important; 
+    }
+    .sidebar-link.active:hover {
+        background-color: transparent !important;
+    }
+    .swal2-icon-no-border.swal2-icon-show {
+        border: none !important;
+    }
+    .swal2-icon-no-border.swal2-icon-show .swal2-icon-content {
+        /* If your logo is SVG and needs specific styling, you might target it here */
+        /* For img tags, it's usually not necessary */
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        fontFamily: {
+          'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+        },
+        extend: {
+          colors: {
+            'light-bg': '#F8F9FB',
+            'light-sidebar': '#FFFFFF',
+            'light-text': '#222222',
+            'light-text-secondary': '#666666',
+            'light-card-bg': '#FFFFFF',
+            'light-border': '#E5E7EB',
+
+            'dark-bg': '#121212',
+            'dark-sidebar': '#1A1A1A',
+            'dark-text': '#FFFFFF',
+            'dark-text-secondary': '#B0B0B0',
+            'dark-card-bg': '#1F2937',
+            'dark-border': '#374151',
+
+            'accent': '#56eced',
+            'accent-hover': '#47C8D0', /* Darker shade of #56eced */
+            'highlight': '#34D399',
+          },
+          maxWidth: {
+            'container': '1200px',
+          },
+          boxShadow: {
+            'cursor': '0 0 0 1px #00C4B4, 0 2px 4px rgba(0,0,0,0.05)',
+            'cursor-hover': '0 0 0 1px #00A393, 0 3px 6px rgba(0,0,0,0.07)',
+            'dark-cursor': '0 0 0 1px #00C4B4, 0 2px 4px rgba(0,0,0,0.2)',
+            'dark-cursor-hover': '0 0 0 1px #00A393, 0 3px 6px rgba(0,0,0,0.3)',
+            'card-light': '0 4px 12px rgba(0,0,0,0.08)',
+            'card-dark': '0 4px 12px rgba(0,0,0,0.25)',
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-light-bg text-light-text min-h-screen flex dark:bg-dark-bg dark:text-dark-text">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="animated-circle circle1"></div>
+    <div class="animated-circle circle2"></div>
+    <div class="animated-circle circle3"></div>
+  </div>
+  <!-- Sidebar -->
+  <aside class="fixed top-0 left-0 h-full w-[250px] bg-light-sidebar flex flex-col py-6 z-20 shadow-xl border-r border-light-border dark:bg-dark-sidebar dark:border-dark-border">
+    <div class="mb-8 flex flex-col items-center px-4 pt-4">
+      <img src="sidelogo.png" alt="PredictAI Logo" class="w-full mb-2">
+      <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">AI Memecoin Insights</p>
+    </div>
+    <nav class="flex-1 w-full px-4">
+      <ul class="flex flex-col gap-1.5 w-full">
+        <li><a href="index.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-home w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Home</a></li>
+        <li><a href="dashboard.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-chart-line w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Hype-Score</a></li>
+        <li><a href="suggestions.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-lightbulb w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Discovery Engine</a></li>
+        <li><a href="token-launch.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-rocket w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Token Launch</a></li>
+        <li><a href="launched-tokens.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-tasks w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Launched Tokens</a></li>
+        <li><a href="community.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-users w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Community</a></li>
+        <li><a href="influencer.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-user-secret w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Influencer Analysis</a></li>
+        <li><a href="revenue-sharing.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-sack-dollar w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Revenue-Sharing</a></li>
+      </ul>
+    </nav>
+    <div class="mt-auto px-4 pb-4 w-full">
+      <button id="theme-toggle" class="w-full flex items-center justify-center p-3 rounded-lg bg-light-bg dark:bg-dark-bg hover:bg-light-border dark:hover:bg-dark-border transition-colors text-light-text-secondary dark:text-dark-text-secondary" title="Toggle light/dark mode">
+        <span id="theme-icon" class="text-xl">🌙</span>
+        <span class="ml-2 font-medium text-sm">Toggle Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen ml-[250px]">
+    <!-- Top Bar -->
+    <header class="w-full flex justify-end items-center px-6 py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md sticky top-0 z-10 border-b border-light-border dark:border-dark-border" style="min-height: 60px;">
+      <div id="wallet-section" class="flex items-center gap-3">
+        <button id="connect-wallet" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-3 py-1.5 text-xs shadow-cursor hover:shadow-cursor-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover">
+          Connect Wallet
+        </button>
+        <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: 50 SOL</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 md:px-10 py-8 md:py-12">
+      <div class="w-full max-w-container mx-auto">
+        <!-- Page Title -->
+        <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text">AI-Powered Token Launchpad</h1>
+            <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-1">Leverage real-time hype analysis to create and deploy your next viral memecoin on Solana.</p>
+        </div>
+
+        <!-- Information Section (Moved Up) -->
+        <section class="mb-8 md:mb-12">
+             <h2 class="text-2xl font-semibold mb-4 text-light-text dark:text-dark-text">How Our Launch Process Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h3 class="text-lg font-semibold mb-2 text-accent flex items-center"><i class="fas fa-lightbulb mr-2"></i>1. Get Inspired & Define</h3>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Pick an AI-generated token idea or define your own memecoin. Fill in name, symbol, description, and an optional image. Total supply (1 Billion) and decimals (9) are fixed.</p>
+                </div>
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h3 class="text-lg font-semibold mb-2 text-accent flex items-center"><i class="fas fa-tasks mr-2"></i>2. Choose Platform & Confirm</h3>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Select your preferred launch platform. Review all your token details carefully before proceeding.</p>
+                </div>
+                <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
+                    <h3 class="text-lg font-semibold mb-2 text-accent flex items-center"><i class="fas fa-rocket mr-2"></i>3. Prepare Launch</h3>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Click "Launch now with PredictAI" to prepare your token. You'll receive a confirmation and a reference for your new memecoin configuration.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hype Analysis & Suggestions Section -->
+        <!-- This will be split into two sections: Pulse and Horizon -->
+
+        <!-- Crypto News Section -->
+        <!-- This will be split into two sections: Pulse and Horizon -->
+
+
+        <!-- PredictAI Pulse Section (CryptoCompare) -->
+        <section class="mb-12 md:mb-16 pt-8 border-t border-light-border dark:border-dark-border">
+            <div class="mb-6 text-center">
+                <h2 class="text-3xl font-bold text-light-text dark:text-dark-text">
+                    <i class="fas fa-heartbeat text-accent mr-2"></i>PredictAI <span class="text-accent">Pulse</span>
+                </h2>
+                <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-1">Market Vitals & Immediate Opportunities from CryptoCompare</p>
+            </div>
+
+            <!-- Pulse: AI Token Ideas -->
+            <div class="mb-8 md:mb-12">
+                <h3 class="text-2xl font-semibold mb-3 text-light-text dark:text-dark-text flex items-center">
+                    <i class="fas fa-lightbulb text-accent mr-2"></i>Pulse Token Ideas
+                    <span id="pulse-loading-indicator" class="ml-3 text-sm text-light-text-secondary dark:text-dark-text-secondary">(<i class="fas fa-sync fa-spin mr-1"></i>Updating...)</span>
+                </h3>
+                <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-6">AI-generated concepts from real-time CryptoCompare data.</p>
+                <div id="pulse-hype-suggestions-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Pulse AI Token Suggestion Cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- Pulse: Crypto News -->
+            <div>
+                <h3 class="text-2xl font-semibold mb-3 text-light-text dark:text-dark-text flex items-center">
+                    <i class="fas fa-newspaper text-accent mr-2"></i>Pulse News Feed
+                    <span id="pulse-news-loading-indicator" class="ml-3 text-sm text-light-text-secondary dark:text-dark-text-secondary" style="display: none;">(<i class="fas fa-sync fa-spin mr-1"></i>Updating news...)</span>
+                </h3>
+                <div id="pulse-news-articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary md:col-span-2 lg:col-span-3">Loading Pulse news...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PredictAI Horizon Section (GNews) -->
+        <section class="mb-8 md:mb-12 pt-8 border-t border-light-border dark:border-dark-border">
+            <div class="mb-6 text-center">
+                <h2 class="text-3xl font-bold text-light-text dark:text-dark-text">
+                    <i class="fas fa-binoculars text-highlight mr-2"></i>PredictAI <span class="text-highlight">Horizon</span>
+                </h2>
+                <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-1">Broader Market Insights & Emerging Trends from GNews</p>
+            </div>
+             <!-- Horizon: AI Token Ideas -->
+            <div class="mb-8 md:mb-12">
+                <h3 class="text-2xl font-semibold mb-3 text-light-text dark:text-dark-text flex items-center">
+                    <i class="fas fa-seedling text-highlight mr-2"></i>Horizon Token Ideas
+                    <span id="horizon-loading-indicator" class="ml-3 text-sm text-light-text-secondary dark:text-dark-text-secondary">(<i class="fas fa-sync fa-spin mr-1"></i>Updating...)</span>
+                </h3>
+                <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-6">AI-generated concepts from wider GNews market signals.</p>
+                <div id="horizon-hype-suggestions-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Horizon AI Token Suggestion Cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- Horizon: Crypto News -->
+            <div>
+                <h3 class="text-2xl font-semibold mb-3 text-light-text dark:text-dark-text flex items-center">
+                    <i class="fas fa-globe-americas text-highlight mr-2"></i>Horizon News Feed
+                    <span id="horizon-news-loading-indicator" class="ml-3 text-sm text-light-text-secondary dark:text-dark-text-secondary" style="display: none;">(<i class="fas fa-sync fa-spin mr-1"></i>Updating news...)</span>
+                </h3>
+                <div id="horizon-news-articles-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                     <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary md:col-span-2 lg:col-span-3">Loading Horizon news...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Token Launch Form -->
+        <section class="card bg-light-card-bg dark:bg-dark-card-bg p-6 md:p-8 rounded-xl shadow-card-light dark:shadow-card-dark">
+          <form id="token-launch-form">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label for="token-name" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Token Name</label>
+                <input type="text" id="token-name" name="token-name" placeholder="e.g., PepeKiller" class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm">
+              </div>
+              <div>
+                <label for="token-symbol" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Token Symbol</label>
+                <input type="text" id="token-symbol" name="token-symbol" placeholder="e.g., PEKI" class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm">
+              </div>
+              <div>
+                <label for="total-supply" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Total Supply</label>
+                <input type="number" id="total-supply" name="total-supply" value="1000000000" readonly class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50 focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm cursor-not-allowed">
+              </div>
+              <div>
+                <label for="decimals" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Decimals</label>
+                <input type="number" id="decimals" name="decimals" value="9" readonly class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50 focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm cursor-not-allowed">
+              </div>
+              <div class="md:col-span-2">
+                <label for="token-description" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Token Description (Optional)</label>
+                <textarea id="token-description" name="token-description" rows="3" placeholder="Briefly describe your token..." class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm"></textarea>
+              </div>
+
+              <!-- New Metadata Fields -->
+              <div class="md:col-span-2">
+                <label for="token-website" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Website URL (Auto-filled)</label>
+                <input type="url" id="token-website" name="token-website" readonly class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50 text-sm cursor-not-allowed placeholder-light-text-secondary/70 dark:placeholder-dark-text-secondary/70">
+                <p class="mt-1 text-xs text-light-text-secondary dark:text-dark-text-secondary">Typically the source article for AI-generated ideas, or N/A.</p>
+              </div>
+              <div>
+                <label for="token-twitter" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">X (Twitter)</label>
+                <input type="url" id="token-twitter" name="token-twitter" value="https://x.com/PredictAiPro" readonly class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50 text-sm cursor-not-allowed">
+              </div>
+              <div>
+                <label for="token-telegram" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Telegram</label>
+                <input type="url" id="token-telegram" name="token-telegram" value="https://t.me/predictAIofficial" readonly class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg/50 dark:bg-dark-bg/50 text-sm cursor-not-allowed">
+              </div>
+              <!-- End New Metadata Fields -->
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Launch Platform</label>
+                <input type="hidden" id="selected-launch-platform" name="selected-launch-platform" value="pump.fun">
+                <div class="grid grid-cols-2 gap-3 mt-1">
+                    <button type="button" data-platform="pump.fun" class="platform-select-btn active-platform-btn flex items-center justify-center text-sm p-3 rounded-md border border-accent bg-accent/10 dark:bg-accent/20 text-accent dark:text-accent font-medium hover:bg-accent/20 dark:hover:bg-accent/30 transition-all">
+                        <img src="pumpfun.png" alt="pump.fun logo" class="w-5 h-5 mr-2 rounded-sm">
+                        pump.fun
+                    </button>
+                    <button type="button" data-platform="moon.it" class="platform-select-btn flex items-center justify-center text-sm p-3 rounded-md border border-light-border dark:border-dark-border hover:border-highlight hover:text-highlight dark:hover:border-highlight dark:hover:text-highlight font-medium transition-all">
+                        <img src="moonit.png" alt="moon.it logo" class="w-5 h-5 mr-2 rounded-sm">
+                        moon.it
+                    </button>
+                </div>
+              </div>
+               <div class="md:col-span-2">
+                <label for="token-image" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Token Image URL (Optional)</label>
+                <input type="url" id="token-image" name="token-image" placeholder="https://example.com/image.png" class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm">
+                <p class="mt-1 text-xs text-light-text-secondary dark:text-dark-text-secondary">Link to a direct image (PNG, JPG, GIF). Recommended: square, 256x256px.</p>
+              </div>
+              <div class="md:col-span-2">
+                <label for="token-image-upload" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Or Upload Token Image (Optional)</label>
+                <input type="file" id="token-image-upload" name="token-image-upload" accept="image/png, image/jpeg, image/gif" class="w-full text-sm text-light-text-secondary dark:text-dark-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent/10 file:text-accent hover:file:bg-accent/20 dark:file:bg-accent/20 dark:file:text-accent dark:hover:file:bg-accent/30 cursor-pointer"/>
+                <p class="mt-1 text-xs text-light-text-secondary dark:text-dark-text-secondary">Overrides the URL if an image is uploaded. Max 1MB.</p>
+                <img id="token-image-preview" src="#" alt="Image Preview" class="hidden mt-3 rounded-md max-h-24 max-w-24 object-contain"/>
+              </div>
+            </div>
+            <div class="mt-8 text-center">
+              <button type="submit" id="launch-token-btn" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-8 py-3 text-base shadow-cursor hover:shadow-cursor-hover hover:bg-accent-hover dark:bg-accent dark:text-gray-900 dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover dark:hover:bg-accent-hover">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2 -mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
+                </svg>
+                Launch now with PredictAI
+              </button>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-light-sidebar text-light-text-secondary py-6 px-6 md:px-10 mt-auto border-t border-light-border dark:bg-dark-sidebar dark:text-dark-text-secondary dark:border-dark-border">
+      <div class="max-w-container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-sm">
+          © 2024 PredictAI. All rights reserved.
+        </div>
+        <div class="flex gap-4 mb-2 md:mb-0 text-sm">
+          <a href="#" class="hover:text-accent">About</a>
+          <a href="mailto:support@predictai.com" class="hover:text-accent">Contact</a>
+          <a href="#" class="hover:text-accent">Privacy Policy</a>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Twitter">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.38 1.64 4.7c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.82 1.92 3.6-.71-.02-1.38-.22-1.97-.54v.05c0 2.1 1.5 3.85 3.5 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.11 2.94 3.97 2.97A8.6 8.6 0 0 1 2 19.54c-.32 0-.63-.02-.94-.06A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M9.04 16.87l-.39 3.66c.56 0 .8-.24 1.09-.53l2.62-2.5 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.84c.32-1.48-.54-2.06-1.5-1.7L2.2 9.3c-1.45.56-1.43 1.36-.25 1.72l4.6 1.44 10.7-6.74c.5-.32.96-.14.58.18z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Discord">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.8732.8914.0766.0766 0 0 0-.0406.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0312-.0552c.5004-5.177-.8382-9.673-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1835 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1836 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Common scripts (Theme Toggle, Wallet Connect, Active Sidebar Link)
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function setTheme(mode) {
+      localStorage.setItem('theme', mode);
+      if (mode === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        themeIcon.textContent = '☀️';
+        // Update chart for dark mode if it exists
+        if (typeof window.updateChartTheme === 'function') window.updateChartTheme('dark');
+      } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+        // Update chart for light mode if it exists
+        if (typeof window.updateChartTheme === 'function') window.updateChartTheme('light');
+      }
+    }
+
+    // Initial theme setup
+    const savedTheme = localStorage.getItem('theme');
+    // Always default to dark mode if no theme is saved
+    const initialTheme = savedTheme || 'dark'; 
+    setTheme(initialTheme);
+    // Ensure the class is set correctly on initial load based on initialTheme
+    // The setTheme function already handles adding/removing classes, 
+    // but we ensure the correct class is on the html element directly after definition.
+    if (initialTheme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light'); // Ensure light is not present
+    } else {
+        html.classList.add('light');
+        html.classList.remove('dark'); // Ensure dark is not present
+    }
+
+    themeToggle.addEventListener('click', () => {
+      setTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    // Connect Wallet logic
+    const connectBtn = document.getElementById('connect-wallet');
+    const walletBalance = document.getElementById('wallet-balance');
+    if (connectBtn) {
+        connectBtn.addEventListener('click', function() {
+          Swal.fire({
+            html: `
+                <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
+                <div class="flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-accent mr-2">
+                    <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071 1.071L12.75 5.25v.985c0 .245-.12.479-.326.625C11.297 7.705 9.92 8 8.25 8c-2.144 0-4.005-.805-5.115-2.06C2.673 5.423 2.25 4.735 2.25 4.005 2.25 2.9 3.15 2 4.256 2H6.75V1.125C6.75.504 7.254 0 7.875 0h2.25C10.746 0 11.25.504 11.25 1.125V2h2.506c1.105 0 2.006.9 2.006 2.005 0 .73-.423 1.418-.987 1.939C13.659 7.195 11.798 8 9.652 8c-.89 0-1.712-.123-2.46-.352-.24-.073-.392-.284-.392-.517V6.06c0-.272.176-.516.443-.625.283-.115.7-.234 1.193-.234.593 0 1.196.163 1.721.453.274.151.61.115.842-.089l.812-.721a.75.75 0 00-1.071-1.071L9.652 4.987c-.984-.52-2.205-.737-3.402-.737C4.65 4.25 3.75 4.95 3.75 5.895c0 .474.256.926.695 1.282C5.496 8.203 6.953 8.75 8.652 8.75c1.938 0 3.578-.664 4.642-1.799.24-.253.358-.561.358-.876v-1.5c0-.474-.256-.926-.695-1.282C11.801 2.26 10.837 2 9.652 2c-.399 0-.784.029-1.152.086L7.875 2.25A.75.75 0 007.5 3H4.256A.75.75 0 013.506 2.25C3.506 1.836 3.842 1.5 4.256 1.5H6.75V.75a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75V1.5h2.463z" clip-rule="evenodd" />
+                    <path d="M14.25 10.191a.75.75 0 01.634 1.332l-1.512 3.024a.75.75 0 01-1.348-.672l1.225-2.45V10.5a.75.75 0 01.75-.75h.252zM10.055 12.346a.75.75 0 00-1.332.634l3.024 1.512a.75.75 0 00.672-1.348l-2.363-1.182zM10.5 15.75a.75.75 0 00-.75.75v.252l-2.45 1.225a.75.75 0 00.672 1.348l3.024-1.512a.75.75 0 00-.634-1.332L10.5 16.5z" />
+                    <path fill-rule="evenodd" d="M12 24a.75.75 0 00.594-.275l3.291-4.608a.75.75 0 10-1.188-.846L12 22.088l-2.709-3.792a.75.75 0 00-1.188.846l3.292 4.608A.75.75 0 0012 24z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M14.883 16.017a.75.75 0 001.06.023l3.358-3.358a.75.75 0 10-1.06-1.06l-3.359 3.358a.75.75 0 00-.022 1.036zM6.023 12.68a.75.75 0 00-1.037-.023L1.628 16.015a.75.75 0 101.06 1.06l3.358-3.358a.75.75 0 00-.023-1.036z" clip-rule="evenodd" />
+                  </svg>
+                  <h2 class="text-2xl font-bold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
+                </div>
+                <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
+                    Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
+                </p>
+                <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
+                    Stay updated and be the first to know! Join our official Telegram channel for the latest announcements and launch countdown.
+                </p>
+                <div id="countdown-timer-placeholder" class="my-4 text-lg font-semibold text-accent dark:text-accent">
+                    Launch Countdown: Activating Soon!
+                </div>
+                <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #2AABEE; border-color: #2AABEE;"> <!-- Telegram Blue -->
+                    <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
+                </a>
+            `,
+            showConfirmButton: true, 
+            confirmButtonText: 'Got It!',
+            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+            confirmButtonColor: '#56eced',
+            footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">This is a preview. Full functionality is launching soon!</p>',
+            customClass: {
+                htmlContainer: 'swal2-html-container-no-icon' 
+            },
+            showCloseButton: true 
+          });
+        });
+    }
+
+    // Active Sidebar Link
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      const sidebarLinks = document.querySelectorAll('.sidebar-link');
+      sidebarLinks.forEach(link => {
+        const icon = link.querySelector('i');
+        link.classList.remove('active', 'animate-pulse-border', 'text-accent', 'dark:text-accent', '!text-accent', '!dark:text-accent');
+        link.classList.add('text-light-text-secondary', 'dark:text-dark-text-secondary');
+         if (icon) {
+            icon.classList.remove('text-accent', 'dark:text-accent', '!text-accent', '!dark:text-accent');
+            icon.classList.add('text-gray-400', 'dark:text-gray-500');
+        }
+
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active', 'animate-pulse-border');
+          link.classList.remove('text-light-text-secondary', 'dark:text-dark-text-secondary');
+           if (icon) {
+            icon.classList.remove('text-gray-400', 'dark:text-gray-500');
+          }
+        }
+      });
+    });
+
+    // Token Launch Form Logic
+    const form = document.getElementById('token-launch-form');
+    const tokenImageUpload = document.getElementById('token-image-upload');
+    const tokenImagePreview = document.getElementById('token-image-preview');
+    const tokenImageUrlInput = document.getElementById('token-image');
+
+    if (tokenImageUpload) {
+        tokenImageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                if (file.size > 1024 * 1024) { // 1MB limit
+                     Swal.fire('Image Too Large', 'Please upload an image smaller than 1MB.', 'warning');
+                     event.target.value = ''; // Clear the input
+                     tokenImagePreview.classList.add('hidden');
+                     tokenImagePreview.src = '#';
+                     tokenImageUrlInput.disabled = false;
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    tokenImagePreview.src = e.target.result;
+                    tokenImagePreview.classList.remove('hidden');
+                    tokenImageUrlInput.value = ''; // Clear URL field
+                    tokenImageUrlInput.disabled = true; // Disable URL field
+                }
+                reader.readAsDataURL(file);
+            } else {
+                tokenImagePreview.classList.add('hidden');
+                tokenImagePreview.src = '#';
+                tokenImageUrlInput.disabled = false; // Re-enable URL field if no file selected
+            }
+        });
+    }
+
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const tokenName = document.getElementById('token-name').value;
+            const tokenSymbol = document.getElementById('token-symbol').value;
+            const tokenDescription = document.getElementById('token-description').value;
+            const tokenImage = document.getElementById('token-image').value;
+            const launchPlatform = document.getElementById('selected-launch-platform').value;
+            const tokenImageUploadInput = document.getElementById('token-image-upload');
+            
+            // Get values from new metadata fields
+            const tokenWebsite = document.getElementById('token-website').value || 'N/A'; // Default to N/A if empty
+            const tokenTwitter = document.getElementById('token-twitter').value; // Should always have a value
+            const tokenTelegram = document.getElementById('token-telegram').value; // Should always have a value
+
+            let uploadedImageFile = null;
+            let uploadedImagePreviewSrc = null; // Will hold the base64 src for preview
+
+            if (tokenImageUploadInput && tokenImageUploadInput.files && tokenImageUploadInput.files[0]) {
+                uploadedImageFile = tokenImageUploadInput.files[0];
+                // Ensure the preview src is valid and not the placeholder '#'
+                const previewElement = document.getElementById('token-image-preview');
+                if (previewElement && previewElement.src && previewElement.src !== window.location.href + '#' && !previewElement.classList.contains('hidden')) {
+                    uploadedImagePreviewSrc = previewElement.src;
+                }
+            }
+
+            if (!tokenName || !tokenSymbol) {
+                Swal.fire({
+                    title: 'Missing Information',
+                    text: 'Please fill in Token Name and Symbol.',
+                    icon: 'warning',
+                    background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                    color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                    confirmButtonColor: '#56eced'
+                });
+                return;
+            }
+
+            // Construct Logo Display HTML for the confirmation popup
+            let logoDisplayHtml = '';
+            const logoSizePopup = 96; // Increased size to 96px
+            const fallbackId = 'popupJdenticonFallback'; // Fixed ID for onerror fallback
+
+            // Adjust styling for when the logo is used as the main icon
+            const iconContainerClasses = "mx-auto mb-4 w-24 h-24 flex items-center justify-center overflow-hidden rounded-full border-2 border-gray-200 dark:border-gray-700 shadow-md"; // Increased size, made fully round, added subtle border and shadow
+
+            if (uploadedImagePreviewSrc) {
+                logoDisplayHtml = `<div class="${iconContainerClasses}"><img src="${uploadedImagePreviewSrc}" alt="${tokenName} Logo Preview" class="h-full w-full object-cover"></div>`; // Ensure image covers the round container
+            } else if (tokenImage) {
+                let jdenticonFallbackForUrl = '';
+                if (tokenSymbol && typeof jdenticon !== 'undefined') {
+                    jdenticonFallbackForUrl = `<div id="${fallbackId}" style="display:none;" class="${iconContainerClasses}">${jdenticon.toSvg(tokenSymbol, logoSizePopup)}</div>`;
+                } else {
+                    jdenticonFallbackForUrl = `<div id="${fallbackId}" style="display:none;" class="${iconContainerClasses} bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"><i class="fas fa-image text-4xl"></i></div>`; // Increased icon size
+                }
+                logoDisplayHtml = `<div class="${iconContainerClasses}"><img src="${tokenImage}" alt="${tokenName} Logo" class="h-full w-full object-cover" onerror="this.style.display='none'; document.getElementById('${fallbackId}').style.display='block';"></div>` + jdenticonFallbackForUrl; // Ensure image covers
+            } else if (tokenSymbol && typeof jdenticon !== 'undefined') {
+                logoDisplayHtml = `<div class="${iconContainerClasses}">${jdenticon.toSvg(tokenSymbol, logoSizePopup)}</div>`;
+            } else {
+                logoDisplayHtml = `<div class="${iconContainerClasses} bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"><i class="fas fa-image text-4xl"></i></div>`; // Increased icon size
+            }
+
+            // Construct image source information text
+            let imageSourceInfoHtml = '';
+            if (uploadedImageFile) {
+                imageSourceInfoHtml = `<p><strong>Logo Source:</strong> Uploaded File (${uploadedImageFile.name}, ${(uploadedImageFile.size / 1024).toFixed(1)} KB)</p>`;
+            } else if (tokenImage) {
+                imageSourceInfoHtml = `<p><strong>Logo Source:</strong> <a href="${tokenImage}" target="_blank" class="text-accent hover:underline">View URL</a></p>`;
+            } else if (tokenSymbol) {
+                imageSourceInfoHtml = '<p><strong>Logo Source:</strong> Generated from symbol</p>';
+            } else {
+                imageSourceInfoHtml = '<p><strong>Logo Source:</strong> Not available</p>';
+            }
+
+            // Simulate multistep SweetAlert process
+            Swal.fire({
+                title: `Confirm Token: ${tokenName} (${tokenSymbol})`,
+                iconHtml: logoDisplayHtml, // Use the logo HTML as the main icon
+                customClass: {
+                    icon: 'swal2-icon-no-border' // Optional: remove border if SweetAlert adds one to custom iconHtml
+                },
+                html: `
+                    <div class="text-left text-sm space-y-1.5 text-light-text-secondary dark:text-dark-text-secondary pt-3">
+                        <p><strong>Name:</strong> ${tokenName}</p>
+                        <p><strong>Symbol:</strong> ${tokenSymbol}</p>
+                        <p><strong>Total Supply:</strong> 1,000,000,000 (Fixed)</p>
+                        <p><strong>Decimals:</strong> 9 (Fixed)</p>
+                        <p><strong>Platform:</strong> ${launchPlatform}</p>
+                        ${tokenDescription ? `<p><strong>Description:</strong> ${tokenDescription}</p>` : ''}
+                        ${imageSourceInfoHtml}
+                        <p><strong>Website:</strong> ${tokenWebsite === 'N/A' ? 'N/A' : `<a href="${tokenWebsite}" target="_blank" class="text-accent hover:underline">${tokenWebsite}</a>`}</p>
+                        <p><strong>X (Twitter):</strong> <a href="${tokenTwitter}" target="_blank" class="text-accent hover:underline">${tokenTwitter}</a></p>
+                        <p><strong>Telegram:</strong> <a href="${tokenTelegram}" target="_blank" class="text-accent hover:underline">${tokenTelegram}</a></p>
+                    </div>
+                `,
+                // icon: 'info', // Removed to use iconHtml instead
+                showCancelButton: true,
+                confirmButtonText: 'Confirm & Proceed',
+                cancelButtonText: 'Edit Details',
+                reverseButtons: true,
+                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                confirmButtonColor: '#56eced',
+                cancelButtonColor: '#6E7681'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const queuedTokens = Math.floor(Math.random() * 5); // 0 to 4 tokens
+                    let queueMessage = `Currently <strong>${queuedTokens} tokens</strong> ahead of you.`;
+                    if (queuedTokens === 0) {
+                        queueMessage = "You are <strong>next in line!</strong>";
+                    }
+
+                    // This is the "Launch Queued!" popup
+                    Swal.fire({
+                        title: 'Launch Queued!',
+                        html: `
+                            <div class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
+                                <p>Your token <strong>${tokenName}</strong> is now in the launch queue.</p>
+                                <p class="my-2">${queueMessage}</p>
+                                <p>Estimated processing time: <strong>1-5 minutes.</strong></p>
+                                <p class="mt-2">The deployment to the blockchain will begin automatically...</p>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-3"><div class="bg-accent h-2.5 rounded-full animate-pulse" style="width: 30%"></div></div>
+                            </div>
+                        `,
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading(); // Shows a spinner icon on the confirm button place
+                        },
+                        showConfirmButton: false, // Hide default confirm button as we use timer
+                        background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                        color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                        timer: 12000, // Simulate queue processing time (12 seconds)
+                        timerProgressBar: true
+                    });
+
+                    const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/23038681/2j2zviw/';
+
+                    // Prepare data for Zapier
+                    const timestamp = new Date().toISOString();
+                    const tokenNameValue = tokenName;
+                    const tokenSymbolValue = tokenSymbol;
+                    const descriptionValue = tokenDescription || 'Not provided';
+                    const platformValue = launchPlatform;
+                    
+                    let logoInfoValue = 'Not provided';
+                    const uploadedImageInfo = uploadedImageFile ? `${uploadedImageFile.name} (${(uploadedImageFile.size / 1024).toFixed(1)} KB)` : null;
+
+                    if (uploadedImageInfo && uploadedImageInfo !== 'None') {
+                        logoInfoValue = `Uploaded: ${uploadedImageInfo}`;
+                    } else if (tokenImage && tokenImage !== 'Not provided') {
+                        logoInfoValue = `URL: ${tokenImage}`;
+                    } else if (tokenSymbolValue) {
+                        logoInfoValue = `Generated from symbol: ${tokenSymbolValue}`;
+                    }
+
+
+                    const queryParams = new URLSearchParams({
+                        timestamp: timestamp,
+                        tokenName: tokenNameValue,
+                        tokenSymbol: tokenSymbolValue,
+                        description: descriptionValue,
+                        platform: platformValue,
+                        logoInfo: logoInfoValue,
+                        website: tokenWebsite, // Add website
+                        twitter: tokenTwitter,   // Add twitter
+                        telegram: tokenTelegram  // Add telegram
+                    });
+
+                    const fullZapierUrl = `${ZAPIER_WEBHOOK_URL}?${queryParams.toString()}`;
+
+                    // Send data to Zapier Webhook using GET
+                    fetch(fullZapierUrl, {
+                        method: 'GET'
+                    }).then(response => {
+                        if (!response.ok) {
+                            console.warn('Zapier Webhook (GET): Call failed with status:', response.status, response.statusText);
+                            response.text().then(text => console.warn('Zapier Webhook (GET) Response:', text));
+                        } else {
+                            // console.log('Zapier Webhook (GET): Data sent successfully.');
+                        }
+                    }).catch(error => {
+                        console.error('Zapier Webhook (GET): Error sending data:', error);
+                    });
+
+                    // This text is for the ADMINS/TEAM when they paste from clipboard (FALLBACK)
+                    // Note: launchData object used here is slightly different from what's sent to Zapier now.
+                    // This clipboard data can remain more detailed if needed.
+                    const detailsForClipboardFallback = {
+                        timestamp: timestamp,
+                        tokenName: tokenNameValue,
+                        tokenSymbol: tokenSymbolValue,
+                        description: descriptionValue,
+                        platform: platformValue,
+                        totalSupply: "1,000,000,000 (Fixed)", // Hardcoded as it's fixed
+                        decimals: "9 (Fixed)", // Hardcoded as it's fixed
+                        imageUrl: tokenImage || 'Not provided',
+                        uploadedFileInfo: uploadedImageInfo || 'None',
+                        logoInfoForTeam: logoInfoValue, // Consistent with what's sent
+                        website: tokenWebsite,
+                        twitter: tokenTwitter,
+                        telegram: tokenTelegram
+                    };
+
+                    const detailsTextForClipboard = `PredictAI - Manual Token Launch Request (FALLBACK):
+--------------------------------------
+Token Name: ${detailsForClipboardFallback.tokenName}
+Token Symbol: ${detailsForClipboardFallback.tokenSymbol}
+Description: ${detailsForClipboardFallback.description}
+Launch Platform: ${detailsForClipboardFallback.platform}
+Total Supply: ${detailsForClipboardFallback.totalSupply}
+Decimals: ${detailsForClipboardFallback.decimals}
+Logo Info: ${detailsForClipboardFallback.logoInfoForTeam}
+Image URL (if provided): ${detailsForClipboardFallback.imageUrl}
+Uploaded File (if provided): ${detailsForClipboardFallback.uploadedFileInfo}
+Website: ${detailsForClipboardFallback.website}
+X (Twitter): ${detailsForClipboardFallback.twitter}
+Telegram: ${detailsForClipboardFallback.telegram}
+--------------------------------------
+Date: ${new Date(detailsForClipboardFallback.timestamp).toLocaleString()}
+--------------------------------------
+Please launch this token manually and announce on Twitter @PredictAI_Official.`;
+
+                    // Store submitted token data in localStorage
+                    const submittedTokenData = {
+                        timestamp: timestamp,
+                        name: tokenNameValue,
+                        symbol: tokenSymbolValue,
+                        description: descriptionValue,
+                        platform: platformValue,
+                        logoInfo: logoInfoValue, // This contains uploaded, URL, or generated info
+                        website: tokenWebsite,
+                        twitter: tokenTwitter,
+                        telegram: tokenTelegram,
+                        // Store the direct image source for easier display on launched-tokens.html
+                        displayLogo: uploadedImagePreviewSrc || tokenImage || (tokenSymbolValue ? `jdenticon:${tokenSymbolValue}` : 'placeholder')
+                    };
+
+                    try {
+                        let submittedTokens = JSON.parse(localStorage.getItem('predictAI_submittedTokens')) || [];
+                        submittedTokens.unshift(submittedTokenData); // Add new token to the beginning of the array
+                        if (submittedTokens.length > 50) { // Keep only the latest 50 submissions
+                            submittedTokens = submittedTokens.slice(0, 50);
+                        }
+                        localStorage.setItem('predictAI_submittedTokens', JSON.stringify(submittedTokens));
+                    } catch (e) {
+                        console.error("Error saving to localStorage:", e);
+                        // Optionally, inform the user or log this more visibly if localStorage is critical
+                    }
+
+                    // After simulated delay, show "success"
+                    setTimeout(() => {
+                        Swal.fire({
+                            title: 'Token Launch Successful!',
+                            icon: 'success',
+                            html: `
+                                <div class="text-left text-sm space-y-2 text-light-text-secondary dark:text-dark-text-secondary">
+                                  <p>Processing complete! Your token <strong class="text-light-text dark:text-dark-text">${detailsForClipboardFallback.tokenName} (${detailsForClipboardFallback.tokenSymbol})</strong> has been automatically launched on <strong class="text-light-text dark:text-dark-text">${detailsForClipboardFallback.platform}</strong>!</p>
+                                  <p>It should be live on the network shortly.</p>
+                                  <div class="my-3 p-3 bg-light-bg dark:bg-dark-bg rounded-md border border-light-border dark:border-dark-border text-xs">
+                                    <p><strong>Name:</strong> ${detailsForClipboardFallback.tokenName}</p>
+                                    <p><strong>Symbol:</strong> ${detailsForClipboardFallback.tokenSymbol}</p>
+                                    <p><strong>Platform:</strong> ${detailsForClipboardFallback.platform}</p>
+                                  </div>
+                                  <p class="mt-2 text-xs">You can copy the launch confirmation for your records.</p>
+                                  <button id="copy-launch-details" class="mt-4 w-full cursor-btn bg-highlight text-white font-medium rounded-md px-4 py-2 text-sm hover:bg-green-500">Copy Launch Confirmation</button>
+                                </div>
+                            `,
+                            confirmButtonText: 'Awesome!',
+                            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                            confirmButtonColor: '#56eced',
+                            didOpen: () => {
+                                document.getElementById('copy-launch-details').addEventListener('click', () => {
+                                    navigator.clipboard.writeText(detailsTextForClipboard) // This copies the ADMIN text
+                                    .then(() => {
+                                        Swal.fire({
+                                            toast: true,
+                                            icon: 'success',
+                                            title: 'Confirmation copied to clipboard!',
+                                            position: 'top-end',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                                            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                                        });
+                                    }).catch(err => {
+                                        console.error('Failed to copy: ', err);
+                                        Swal.fire({
+                                            toast: true,
+                                            icon: 'error',
+                                            title: 'Failed to copy confirmation',
+                                            position: 'top-end',
+                                            showConfirmButton: false,
+                                            timer: 2000,
+                                            timerProgressBar: true,
+                                            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                                            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                                        });
+                                    });
+                                });
+                            }
+                        });
+                        form.reset(); 
+                        if (tokenImagePreview) {
+                            tokenImagePreview.classList.add('hidden');
+                            tokenImagePreview.src = '#';
+                        }
+                        if (tokenImageUrlInput) {
+                            tokenImageUrlInput.disabled = false;
+                            tokenImageUrlInput.value = ''; 
+                        }
+                        if (tokenImageUpload) {
+                            tokenImageUpload.value = '';
+                        }
+                    }, 12000); // This timeout MUST match the Swal.fire timer above
+                }
+            });
+        });
+    }
+
+    // Platform selection button logic
+    const platformButtons = document.querySelectorAll('.platform-select-btn');
+    const selectedPlatformInput = document.getElementById('selected-launch-platform');
+
+    platformButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons
+            platformButtons.forEach(btn => {
+                btn.classList.remove('active-platform-btn', 'border-accent', 'bg-accent/10', 'dark:bg-accent/20', 'text-accent', 'dark:text-accent');
+                btn.classList.add('border-light-border', 'dark:border-dark-border', 'hover:border-highlight', 'hover:text-highlight', 'dark:hover:border-highlight', 'dark:hover:text-highlight');
+            });
+            // Add active class to clicked button
+            button.classList.add('active-platform-btn', 'border-accent', 'bg-accent/10', 'dark:bg-accent/20', 'text-accent', 'dark:text-accent');
+            button.classList.remove('border-light-border', 'dark:border-dark-border', 'hover:border-highlight', 'hover:text-highlight', 'dark:hover:border-highlight', 'dark:hover:text-highlight');
+            
+            // Update hidden input
+            selectedPlatformInput.value = button.dataset.platform;
+            // console.log("Selected platform:", selectedPlatformInput.value);
+        });
+    });
+
+    // AI Hype & Token Suggestions Logic
+    // const hypeSuggestionsContainer = document.getElementById('hype-suggestions-container'); // Will be replaced by specific ones
+    // const loadingIndicator = document.getElementById('loading-indicator'); // Will be replaced
+    // const newsArticlesContainer = document.getElementById('news-articles-container'); // Will be replaced
+    // const newsLoadingIndicator = document.getElementById('news-loading-indicator'); // Will be replaced
+
+    // PredictAI Pulse (CryptoCompare) Elements
+    const pulseHypeSuggestionsContainer = document.getElementById('pulse-hype-suggestions-container');
+    const pulseLoadingIndicator = document.getElementById('pulse-loading-indicator');
+    const pulseNewsArticlesContainer = document.getElementById('pulse-news-articles-container');
+    const pulseNewsLoadingIndicator = document.getElementById('pulse-news-loading-indicator');
+    
+    // PredictAI Horizon (GNews) Elements
+    const horizonHypeSuggestionsContainer = document.getElementById('horizon-hype-suggestions-container');
+    const horizonLoadingIndicator = document.getElementById('horizon-loading-indicator');
+    const horizonNewsArticlesContainer = document.getElementById('horizon-news-articles-container');
+    const horizonNewsLoadingIndicator = document.getElementById('horizon-news-loading-indicator');
+
+    const CRYPTOCOMPARE_API_KEY = 'd5b25239ee179f984291b0ae0865e47beaa0d9cfb0cf2c8a17e3c87b7447583f'; // Restored
+    const GNEWS_API_KEY = '5e81d72f46e4404ae3f2bb8c846ba762';
+    
+    let fetchedPulseNews = [];
+    let currentPulseTokenIdeas = [];
+    let fetchedHorizonNews = [];
+    let currentHorizonTokenIdeas = [];
+
+    // Default/Fallback Token Ideas (can be shared or made specific if needed)
+    const fallbackTokenIdeas = [
+        {
+            hypeTheme: "AI Revolution",
+            name: "NeuralNet Token",
+            symbol: "NNT",
+            description: "Powering the next generation of decentralized AI applications.",
+            supply: 1000000000,
+            decimals: 9,
+            imageUrl: "https://source.unsplash.com/random/100x100/?abstract,ai,future",
+            hypeScore: 92,
+            icon: "fa-brain"
+        },
+        {
+            hypeTheme: "Gaming & Metaverse",
+            name: "PixelVerse Coin",
+            symbol: "PIXEL",
+            description: "The currency for a new immersive gaming metaverse.",
+            supply: 500000000,
+            decimals: 6,
+            imageUrl: "https://source.unsplash.com/random/100x100/?gaming,metaverse,neon",
+            hypeScore: 88,
+            icon: "fa-gamepad"
+        },
+        {
+            hypeTheme: "DeFi 2.0",
+            name: "YieldFarm Pro",
+            symbol: "YFP",
+            description: "Advanced yield farming strategies made simple and secure.",
+            supply: 100000000,
+            decimals: 18,
+            imageUrl: "https://source.unsplash.com/random/100x100/?finance,crypto,chart",
+            hypeScore: 75,
+            icon: "fa-piggy-bank"
+        },
+        {
+            hypeTheme: "Solana Ecosystem",
+            name: "SolSpark",
+            symbol: "SPARK",
+            description: "A community-driven token to fuel innovation on Solana.",
+            supply: 10000000000,
+            decimals: 9,
+            imageUrl: "https://source.unsplash.com/random/100x100/?solana,blockchain,fast",
+            hypeScore: 95,
+            icon: "fa-solar-panel"
+        },
+        {
+            hypeTheme: "Meme Magic",
+            name: "DogeMoonshot",
+            symbol: "DMS",
+            description: "To the moon and beyond! The ultimate meme-powered rocket.",
+            supply: 1000000000000,
+            decimals: 9,
+            imageUrl: "https://source.unsplash.com/random/100x100/?dog,moon,rocket",
+            hypeScore: 82,
+            icon: "fa-rocket"
+        },
+        {
+            hypeTheme: "Eco-Friendly Crypto",
+            name: "GreenChain",
+            symbol: "GCN",
+            description: "Sustainable and eco-conscious blockchain solutions.",
+            supply: 250000000,
+            decimals: 8,
+            imageUrl: "https://source.unsplash.com/random/100x100/?nature,green,plant",
+            hypeScore: 70,
+            icon: "fa-leaf"
+        }
+    ];
+
+    let currentTokenIdeas = [...fallbackTokenIdeas]; // This will likely be split or managed per source
+
+    function extractKeywordsFromTitle(title) {
+        if (!title) return [];
+        const commonWords = new Set([
+            'a', 'an', 'the', 'is', 'are', 'was', 'were', 'be', 'been', 'being',
+            'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'should', 'can',
+            'could', 'may', 'might', 'must', 'and', 'but', 'or', 'nor', 'for', 'so', 'yet',
+            'in', 'on', 'at', 'by', 'from', 'to', 'with', 'about', 'above', 'after', 'again',
+            'against', 'all', 'am', 'as', 'any', 'because', 'before', 'below', 'between', 'both',
+            'during', 'each', 'few', 'further', 'here', 'how', 'i', 'if', 'into', 'it', 'its', 'itself',
+            'just', 'me', 'more', 'most', 'my', 'myself', 'no', 'not', 'now', 'of', 'off', 'once',
+            'only', 'other', 'our', 'ours', 'ourselves', 'out', 'over', 'own', 'same', 'she',
+            'he', 'him', 'his', 'her', 'hers', 'herself', 'himself', 'some', 'such', 'than', 'that',
+            'their', 'theirs', 'them', 'themselves', 'then', 'there', 'these', 'they', 'this',
+            'those', 'through', 'too', 'under', 'until', 'up', 'very', 'we', 'what', 'when',
+            'where', 'which', 'while', 'who', 'whom', 'why', 'you', 'your', 'yours', 'yourself',
+            'yourselves', 'crypto', 'cryptocurrency', 'bitcoin', 'ethereum', 'blockchain', 'solana',
+            'token', 'coin', 'price', 'market', 'new', 'latest', 'update', 'shares', 'launch', 'reveals',
+            'says', 'talks', 'about', 'could', 'should', 'would', 'report', 'reports', 'analysis', 'outlook'
+        ]);
+
+        const words = title.toLowerCase().replace(/[^a-z0-9\s]/g, '').split(/\s+/);
+        let keywords = words.filter(word => word.length > 3 && !commonWords.has(word));
+        
+        // Prioritize words that were originally capitalized (potential proper nouns)
+        const originalWords = title.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/);
+        const capitalizedKeywords = originalWords.filter(word => 
+            word.length > 3 && 
+            word[0] === word[0].toUpperCase() && 
+            !commonWords.has(word.toLowerCase()) &&
+            keywords.includes(word.toLowerCase())
+        );
+
+        if (capitalizedKeywords.length > 0) {
+            keywords = capitalizedKeywords.map(k => k.toLowerCase()); // Keep them lowercase for consistency
+        }
+
+        return [...new Set(keywords)].slice(0, 2); // Return unique keywords, max 2
+    }
+
+    function generateTokenSymbol(keywords) {
+        let symbol = '';
+        if (keywords.length > 0) {
+            symbol = keywords.map(k => k.substring(0, 1)).join('').toUpperCase();
+            if (keywords.length === 1 && keywords[0].length >= 3) {
+                symbol = keywords[0].substring(0, 3).toUpperCase();
+            }
+        }
+        // Ensure symbol is between 3 and 4 chars, add random chars if too short
+        while (symbol.length < 3) {
+            symbol += String.fromCharCode(65 + Math.floor(Math.random() * 26)); // Random uppercase letter
+        }
+        return symbol.substring(0, 4);
+    }
+
+    function generateAndDisplayTokenIdeas(newsArray, ideasArray, suggestionsContainerElement, loadingIndicatorElement, sourceName) {
+        if (!newsArray || newsArray.length === 0) {
+            // Use a copy of fallbackTokenIdeas for this specific source
+            ideasArray.length = 0; // Clear existing ideas for this source
+            ideasArray.push(...fallbackTokenIdeas.map(idea => ({...idea, originalSource: sourceName}))); // Tag with source
+        } else {
+            const newsBasedIdeas = [];
+            const usedSymbols = new Set();
+
+            newsArray.forEach(article => {
+                const keywords = extractKeywordsFromTitle(article.title);
+                if (keywords.length > 0) {
+                    let tokenName = keywords.map(k => k.charAt(0).toUpperCase() + k.slice(1)).join(' ') + ' Cash';
+                    if (keywords.length === 1) tokenName = keywords[0].charAt(0).toUpperCase() + keywords[0].slice(1) + ' Rocket';
+                    
+                    // Generate token symbol strictly from the first letter of each word in the name
+                    let tokenSymbol = tokenName.split(' ')
+                                             .filter(word => word.length > 0) // Ensure empty strings (e.g. from multiple spaces) are ignored
+                                             .map(word => word.charAt(0))
+                                             .join('')
+                                             .toUpperCase();
+                    
+                    // If the name was empty or had no processable words, create a truly random 3-letter symbol as a fallback
+                    if (tokenSymbol.length === 0) {
+                        for (let i = 0; i < 3; i++) {
+                            tokenSymbol += String.fromCharCode(65 + Math.floor(Math.random() * 26));
+                        }
+                    }
+
+                    let attempt = 0;
+                    while(usedSymbols.has(tokenSymbol) && attempt < 10) {
+                        tokenSymbol = generateTokenSymbol(keywords.concat(String.fromCharCode(65 + Math.floor(Math.random()*26))));
+                        attempt++;
+                    }
+                    usedSymbols.add(tokenSymbol);
+
+                    const randomSupply = 1000000000; // Fixed
+                    const randomDecimals = 9; // Fixed
+                    const randomHypeScore = Math.floor(Math.random() * 30) + 70;
+                    const genericIcons = ["fa-rocket", "fa-bolt", "fa-shield-halved", "fa-star", "fa-diamond", "fa-satellite-dish"];
+
+                    newsBasedIdeas.push({
+                        hypeTheme: `${sourceName} News: ${article.title ? article.title.substring(0, 25) : 'Related Topic'}...`,
+                        name: tokenName,
+                        symbol: tokenSymbol,
+                        description: `Conceptual token inspired by ${sourceName} insights on ${keywords.join(' & ')}.`,
+                        supply: randomSupply,
+                        decimals: randomDecimals,
+                        customLogoValue: tokenSymbol,
+                        fallbackImageUrl: article.imageurl || article.image, // Ensure we get the image
+                        hypeScore: randomHypeScore,
+                        icon: genericIcons[Math.floor(Math.random() * genericIcons.length)],
+                        originalSource: sourceName, // Tag with source
+                        articleUrl: article.url // Added article URL to the idea object
+                    });
+                }
+            });
+
+            ideasArray.length = 0; // Clear existing ideas for this source
+            if (newsBasedIdeas.length > 0) {
+                shuffleArray(newsBasedIdeas);
+                ideasArray.push(...newsBasedIdeas.slice(0, Math.min(newsBasedIdeas.length, 6)));
+                if (ideasArray.length < 3 && fallbackTokenIdeas.length > 0) {
+                    const needed = 3 - ideasArray.length;
+                    ideasArray.push(...fallbackTokenIdeas.slice(0, needed).map(idea => ({...idea, originalSource: sourceName})));
+                }
+            } else {
+                ideasArray.push(...fallbackTokenIdeas.map(idea => ({...idea, originalSource: sourceName})));
+            }
+        }
+        // console.log(`Generated ${sourceName} ideas:`, ideasArray);
+        displayHypeSuggestions(suggestionsContainerElement, ideasArray, loadingIndicatorElement);
+    }
+
+    function renderTokenSuggestionCard(idea) {
+        const card = document.createElement('div');
+        card.className = "card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-lg shadow-card-light dark:shadow-card-dark hover:shadow-lg dark:hover:shadow-2xl transition-shadow duration-300 cursor-pointer flex flex-col";
+        
+        const logoSize = 40; // Size for the jdenticon
+        let logoHtml = '';
+        if (idea.customLogoValue && typeof jdenticon !== 'undefined') { // Check if jdenticon is available
+            const svgString = jdenticon.toSvg(idea.customLogoValue, logoSize);
+            logoHtml = `<div class="mr-3 flex-shrink-0">${svgString}</div>`;
+        } else if (idea.fallbackImageUrl) {
+             logoHtml = `<div class="mr-3 flex-shrink-0"><img src="${idea.fallbackImageUrl}" alt="${(idea.name || 'Token').substring(0,15)}" class="w-10 h-10 rounded-full object-cover"></div>`;
+        } else {
+            logoHtml = `<div class="mr-3 flex-shrink-0"><i class="fas ${idea.icon || 'fa-lightbulb'} text-accent text-3xl w-[40px] h-[40px] flex items-center justify-center"></i></div>`;
+        }
+
+        // Hype Meter Bar
+        const hypeMeterPercentage = Math.max(10, Math.min(100, idea.hypeScore)); // Cap between 10% and 100%
+        let hypeMeterColor = 'bg-green-500'; // Default: green
+        if (idea.hypeScore < 70) hypeMeterColor = 'bg-yellow-500';
+        if (idea.hypeScore < 40) hypeMeterColor = 'bg-red-500';
+
+        card.innerHTML = `
+            <div class="flex items-center mb-3">
+                ${logoHtml}
+                <div>
+                    <h4 class="font-semibold text-lg text-light-text dark:text-dark-text leading-tight">${idea.name} (${idea.symbol})</h4>
+                    <p class="text-xs text-accent font-medium">${idea.hypeTheme}</p>
+                </div>
+            </div>
+            <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mb-3 flex-grow">${idea.description}</p>
+            <div class="mb-3">
+                <div class="flex justify-between items-center text-xs text-light-text-secondary dark:text-dark-text-secondary mb-1">
+                    <span>HypeMeter™</span>
+                    <span class="font-bold text-light-text dark:text-dark-text">${idea.hypeScore}/100</span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div class="${hypeMeterColor} h-2.5 rounded-full transition-all duration-500 ease-out" style="width: ${hypeMeterPercentage}%"></div>
+                </div>
+            </div>
+            <button class="mt-auto w-full cursor-btn-sm bg-accent/10 hover:bg-accent/20 dark:bg-accent/20 dark:hover:bg-accent/30 text-accent font-medium py-2 px-3 rounded-md text-sm transition-colors duration-150">
+                <i class="fas fa-flask-vial mr-1.5"></i>Prepare Token Launch
+            </button>
+        `;
+
+        card.addEventListener('click', (event) => {
+            // Prevent card click from triggering if the button itself was clicked
+            if (event.target.closest('button')) return;
+            populateFormWithIdea(idea);
+        });
+        
+        card.querySelector('button').addEventListener('click', () => {
+            populateFormWithIdea(idea);
+            document.getElementById('token-launch-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        return card;
+    }
+
+    function populateFormWithIdea(idea) {
+        document.getElementById('token-name').value = idea.name;
+        document.getElementById('token-symbol').value = idea.symbol;
+        document.getElementById('token-description').value = idea.description;
+        document.getElementById('token-image').value = idea.fallbackImageUrl || '';
+        document.getElementById('token-website').value = idea.articleUrl || ''; // Populate website URL
+        
+        // Reset image upload and preview when an idea is selected
+        if (tokenImageUpload) {
+            tokenImageUpload.value = ''; // Clear file input
+        }
+        if (tokenImagePreview) {
+            tokenImagePreview.classList.add('hidden');
+            tokenImagePreview.src = '#';
+        }
+        if (tokenImageUrlInput) {
+            tokenImageUrlInput.disabled = false; // Ensure URL input is enabled
+        }
+        
+        Swal.fire({
+            toast: true,
+            icon: 'success',
+            title: `\'${idea.name}\' details loaded into form!`,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+        });
+    }
+
+    function displayHypeSuggestions(container, ideasArray, loadingIndicatorElement) {
+        if (!container) return;
+        container.innerHTML = ''; 
+        
+        if (loadingIndicatorElement) loadingIndicatorElement.style.display = 'inline-flex';
+
+        const ideasToDisplay = ideasArray.slice(0, 6); 
+
+        if (ideasToDisplay.length === 0) {
+            const noIdeasMessage = document.createElement('p');
+            noIdeasMessage.className = "text-sm text-light-text-secondary dark:text-dark-text-secondary md:col-span-2 lg:col-span-3";
+            noIdeasMessage.textContent = "No token ideas available at the moment. Waiting for news updates...";
+            container.appendChild(noIdeasMessage);
+        } else {
+            ideasToDisplay.forEach(idea => {
+                container.appendChild(renderTokenSuggestionCard(idea));
+            });
+        }
+        
+        if (loadingIndicatorElement) {
+            setTimeout(() => { 
+                loadingIndicatorElement.style.display = 'none';
+            }, 200);
+        }
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function renderNewsArticleCard(article) {
+        const card = document.createElement('div');
+        card.className = "flex flex-col card bg-light-card-bg dark:bg-dark-card-bg rounded-lg shadow-card-light dark:shadow-card-dark hover:shadow-lg dark:hover:shadow-2xl transition-shadow duration-300 overflow-hidden";
+
+        let imageHtml = '';
+        // GNews provides 'image', CryptoCompare provided 'imageurl'
+        const imageUrl = article.imageurl || article.image; 
+
+        if (imageUrl) {
+            imageHtml = `
+                <a href="${article.url || '#'}" target="_blank" rel="noopener noreferrer" class="block h-40 overflow-hidden">
+                    <img src="${imageUrl}" alt="${(article.title || 'News Article').substring(0, 50)}..." class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                </a>`;
+        } else {
+            // Fallback if no image from API
+            imageHtml = `
+                <a href="${article.url || '#'}" target="_blank" rel="noopener noreferrer" class="block h-40 flex items-center justify-center bg-light-bg dark:bg-dark-bg dark:bg-opacity-50">
+                    <i class="fas fa-image text-4xl text-light-text-secondary/50 dark:text-dark-text-secondary/50"></i>
+                </a>`;
+        }
+
+        const title = article.title || "Untitled Article";
+        // GNews provides 'description', CryptoCompare provided 'body'
+        const body = article.body || article.description || "No content available for this article.";
+        // GNews provides 'source.name', CryptoCompare provided 'source_info.name'
+        const sourceName = (article.source_info && article.source_info.name) || (article.source && article.source.name) || article.source || "Unknown Source";
+        
+        // GNews provides 'publishedAt' as ISO string, CryptoCompare 'published_on' as timestamp.
+        // Convert GNews 'publishedAt' (ISO string) to timestamp for consistency if needed, or use directly.
+        let publishedDateText = "N/A";
+        if (article.published_on && typeof article.published_on === 'number') { // CryptoCompare format (timestamp)
+            publishedDateText = new Date(article.published_on * 1000).toLocaleDateString();
+        } else if (article.publishedAt && typeof article.publishedAt === 'string') { // GNews format (ISO string)
+            const dateObj = new Date(article.publishedAt);
+            if (!isNaN(dateObj)) {
+                publishedDateText = dateObj.toLocaleDateString();
+            }
+        }
+
+        const contentHtml = `
+            <div class="p-4 flex flex-col flex-grow">
+                <h3 class="text-base font-semibold mb-2 text-light-text dark:text-dark-text leading-tight">
+                    <a href="${article.url || '#'}" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors duration-150 line-clamp-3">
+                        ${title}
+                    </a>
+                </h3>
+                <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mb-3 line-clamp-3">${body.substring(0,120)}...</p> {/* Slightly increased length for body preview */}
+                <div class="mt-auto pt-2 border-t border-light-border dark:border-dark-border">
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">
+                        Source: <span class="font-medium">${sourceName}</span>
+                    </p>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">
+                        Published: ${publishedDateText}
+                    </p>
+                </div>
+            </div>`;
+
+        card.innerHTML = imageHtml + contentHtml;
+        return card;
+    }
+
+    // async function fetchNewsFromGNews() { // This will become fetchHorizonNews
+    async function fetchHorizonNews() { // Renamed from fetchNewsFromGNews
+        if (!horizonNewsArticlesContainer || !GNEWS_API_KEY) return; 
+        if (horizonNewsLoadingIndicator) horizonNewsLoadingIndicator.style.display = 'inline-flex';
+
+        const query = encodeURIComponent('crypto OR cryptocurrency OR bitcoin OR solana OR memecoin OR "market trend" OR ethereum OR "AI crypto"'); // Expanded query
+        const apiUrl = `https://gnews.io/api/v4/search?q=${query}&lang=en&country=us&max=6&sortby=publishedAt&apikey=${GNEWS_API_KEY}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                fetchedHorizonNews.length = 0; 
+                generateAndDisplayTokenIdeas(fetchedHorizonNews, currentHorizonTokenIdeas, horizonHypeSuggestionsContainer, horizonLoadingIndicator, "Horizon");
+                let errorMsg = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorData = await response.json();
+                    if (errorData && errorData.errors && errorData.errors.length > 0) {
+                        errorMsg = errorData.errors.join(', ');
+                    } else if (errorData && errorData.message) {
+                        errorMsg = errorData.message;
+                    }
+                } catch (e) { /* Ignore if error response is not JSON */ }
+                throw new Error(errorMsg);
+            }
+            const newsData = await response.json();
+
+            if (newsData.articles && newsData.articles.length > 0) {
+                horizonNewsArticlesContainer.innerHTML = ''; 
+                fetchedHorizonNews = newsData.articles.slice(0, 6).map(article => ({ 
+                    title: article.title,
+                    body: article.description, 
+                    imageurl: article.image,    
+                    url: article.url,
+                    source_info: { name: article.source.name }, 
+                    published_on: article.publishedAt ? Math.floor(new Date(article.publishedAt).getTime() / 1000) : 0,
+                    // Keep original GNews fields if needed by renderNewsArticleCard directly
+                    description: article.description,
+                    image: article.image,
+                    source: article.source,
+                    publishedAt: article.publishedAt
+                }));
+                
+                fetchedHorizonNews.forEach(article => {
+                    horizonNewsArticlesContainer.appendChild(renderNewsArticleCard(article));
+                });
+                generateAndDisplayTokenIdeas(fetchedHorizonNews, currentHorizonTokenIdeas, horizonHypeSuggestionsContainer, horizonLoadingIndicator, "Horizon");
+            } else {
+                horizonNewsArticlesContainer.innerHTML = '<p class="text-sm text-light-text-secondary dark:text-dark-text-secondary md:col-span-2 lg:col-span-3">No relevant crypto news articles found via GNews (Horizon). Check back later.</p>';
+                fetchedHorizonNews.length = 0; 
+                generateAndDisplayTokenIdeas(fetchedHorizonNews, currentHorizonTokenIdeas, horizonHypeSuggestionsContainer, horizonLoadingIndicator, "Horizon");
+            }
+        } catch (error) {
+            console.error("Error fetching GNews (Horizon) news:", error);
+            horizonNewsArticlesContainer.innerHTML = `<p class="text-sm text-red-500 dark:text-red-400 md:col-span-2 lg:col-span-3">Could not load Horizon news: ${error.message}</p>`;
+            fetchedHorizonNews.length = 0; 
+            generateAndDisplayTokenIdeas(fetchedHorizonNews, currentHorizonTokenIdeas, horizonHypeSuggestionsContainer, horizonLoadingIndicator, "Horizon");
+        }
+        if (horizonNewsLoadingIndicator) horizonNewsLoadingIndicator.style.display = 'none';
+    }
+
+    // Fetching function for CryptoCompare (Pulse)
+    async function fetchPulseNews() {
+        if (!pulseNewsArticlesContainer || !CRYPTOCOMPARE_API_KEY) return;
+        if (pulseNewsLoadingIndicator) pulseNewsLoadingIndicator.style.display = 'inline-flex';
+
+        const apiUrl = `https://min-api.cryptocompare.com/data/v2/news/?lang=EN&categories=BTC,ETH,SOL,MEME,TRENDING&sortOrder=latest&api_key=${CRYPTOCOMPARE_API_KEY}`;
+
+        try {
+            const response = await fetch(apiUrl);
+            // No change needed for response.ok check here, as CC might return 200 OK with an error in the body.
+            const newsData = await response.json();
+
+            // Improved error handling for CryptoCompare specific error responses in JSON body
+            if (newsData.Response === "Error" || (newsData.Type && newsData.Type !== 100 && newsData.Message)) {
+                let apiErrorMessage = newsData.Message || "Unknown API error from CryptoCompare.";
+                console.error("CryptoCompare API Error:", apiErrorMessage, newsData);
+                pulseNewsArticlesContainer.innerHTML = `<p class="text-sm text-red-500 dark:text-red-400 md:col-span-2 lg:col-span-3">Could not load Pulse news: ${apiErrorMessage}</p>`;
+                fetchedPulseNews.length = 0;
+                generateAndDisplayTokenIdeas(fetchedPulseNews, currentPulseTokenIdeas, pulseHypeSuggestionsContainer, pulseLoadingIndicator, "Pulse");
+                if (pulseNewsLoadingIndicator) pulseNewsLoadingIndicator.style.display = 'none';
+                return; // Stop further processing
+            }
+
+            if (!response.ok) { // This handles actual HTTP errors (4xx, 5xx)
+                fetchedPulseNews.length = 0;
+                generateAndDisplayTokenIdeas(fetchedPulseNews, currentPulseTokenIdeas, pulseHypeSuggestionsContainer, pulseLoadingIndicator, "Pulse");
+                let errorMsg = `HTTP error! status: ${response.status}`;
+                try {
+                    // Try to parse a more specific error message from CryptoCompare if available
+                    const errorData = newsData; // newsData is already parsed
+                    if (errorData && errorData.Message) {
+                        errorMsg = errorData.Message;
+                    }
+                } catch (e) { /* Ignore if error response body is not parseable or not the expected CC format */ }
+                throw new Error(errorMsg);
+            }
+
+            if (newsData.Data && Array.isArray(newsData.Data) && newsData.Data.length > 0) {
+                pulseNewsArticlesContainer.innerHTML = ''; 
+                fetchedPulseNews = newsData.Data.slice(0, 6).map(article => ({
+                    ...article, // Spread existing fields
+                    // Ensure essential fields for card rendering are present, even if nullish
+                    title: article.title || "Untitled Pulse Article",
+                    body: article.body || article.description || "No content available.",
+                    imageurl: article.imageurl, // CryptoCompare uses imageurl
+                    url: article.url,
+                    source_info: { name: article.source_info?.name || article.source },
+                    published_on: typeof article.published_on === 'number' ? article.published_on : 0,
+                }));
+                
+                fetchedPulseNews.forEach(article => {
+                    pulseNewsArticlesContainer.appendChild(renderNewsArticleCard(article));
+                });
+                generateAndDisplayTokenIdeas(fetchedPulseNews, currentPulseTokenIdeas, pulseHypeSuggestionsContainer, pulseLoadingIndicator, "Pulse");
+            } else {
+                pulseNewsArticlesContainer.innerHTML = '<p class="text-sm text-light-text-secondary dark:text-dark-text-secondary md:col-span-2 lg:col-span-3">No recent news from CryptoCompare (Pulse). Check back later.</p>';
+                fetchedPulseNews.length = 0;
+                generateAndDisplayTokenIdeas(fetchedPulseNews, currentPulseTokenIdeas, pulseHypeSuggestionsContainer, pulseLoadingIndicator, "Pulse");
+            }
+        } catch (error) {
+            console.error("Error fetching CryptoCompare (Pulse) news:", error);
+            pulseNewsArticlesContainer.innerHTML = `<p class="text-sm text-red-500 dark:text-red-400 md:col-span-2 lg:col-span-3">Could not load Pulse news: ${error.message}</p>`;
+            fetchedPulseNews.length = 0;
+            generateAndDisplayTokenIdeas(fetchedPulseNews, currentPulseTokenIdeas, pulseHypeSuggestionsContainer, pulseLoadingIndicator, "Pulse");
+        }
+        if (pulseNewsLoadingIndicator) pulseNewsLoadingIndicator.style.display = 'none';
+    }
+    
+    // Initial calls and intervals
+    document.addEventListener('DOMContentLoaded', () => {
+        if (pulseNewsArticlesContainer && horizonNewsArticlesContainer) {
+            fetchPulseNews();
+            fetchHorizonNews();
+            setInterval(fetchPulseNews, 300000); // 5 minutes for Pulse
+            setInterval(fetchHorizonNews, 360000); // 6 minutes for Horizon (stagger to avoid simultaneous API rate limit issues)
+        }
+    });
+
+  </script>
+</body>
+</html> 

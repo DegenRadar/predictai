@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Chat Placeholder&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: sans-serif; background-color: #f0f0f0; color: #333; text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.container { padding: 20px; border: 1px solid #ccc; border-radius: 8px; background-color: #fff; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1 { margin-top: 0; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;Chat Application Placeholder&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;Room ID: &lt;strong id="roomId"&gt;Loading...&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;This is where the real chat application for the selected room will be embedded.&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const params = new URLSearchParams(window.location.search);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const roomId = params.get('room');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const roomIdElement = document.getElementById('roomId');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (roomIdElement) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>roomIdElement.textContent = roomId ? roomId : 'N/A';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// In a real app, you would use this roomId to load the specific chat interface</p>
+<p class="p1"><span class="Apple-converted-space">            </span>console.log('Chat placeholder loaded for room:', roomId);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>

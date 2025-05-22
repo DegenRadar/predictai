@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Basic scrollbar styling for chat areas etc. */
+/* For Webkit browsers (Chrome, Safari, newer Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-light-bg dark:bg-dark-bg;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-light-border dark:bg-dark-border;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* For Firefox (less customizable) */
+html {
+  scrollbar-width: thin; /* "auto" or "thin" */
+  scrollbar-color: #E5E7EB #F8F9FB; /* thumb and track */
+}
+html.dark {
+  scrollbar-color: #374151 #121212;
+} 

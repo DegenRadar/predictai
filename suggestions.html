@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PredictAI – Discovery Engine</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Jdenticon CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" crossorigin="anonymous"></script>
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        fontFamily: {
+          'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+        },
+        extend: {
+          colors: {
+            'light-bg': '#F8F9FB',
+            'light-sidebar': '#FFFFFF',
+            'light-text': '#222222',
+            'light-text-secondary': '#666666',
+            'light-card-bg': '#FFFFFF',
+            'light-border': '#E5E7EB',
+
+            'dark-bg': '#121212',
+            'dark-sidebar': '#1A1A1A',
+            'dark-text': '#FFFFFF',
+            'dark-text-secondary': '#B0B0B0',
+            'dark-card-bg': '#1F2937',
+            'dark-border': '#374151',
+
+            'accent': '#56eced',
+            'accent-hover': '#47C8D0',
+            'highlight': '#34D399',
+          },
+          maxWidth: {
+            'container': '1200px',
+          },
+          boxShadow: {
+            'cursor': '0 0 0 1px #56eced, 0 2px 4px rgba(0,0,0,0.05)',
+            'cursor-hover': '0 0 0 1px #47C8D0, 0 3px 6px rgba(0,0,0,0.07)',
+            'dark-cursor': '0 0 0 1px #56eced, 0 2px 4px rgba(0,0,0,0.2)',
+            'dark-cursor-hover': '0 0 0 1px #47C8D0, 0 3px 6px rgba(0,0,0,0.3)',
+            'card-light': '0 4px 12px rgba(0,0,0,0.08)',
+            'card-dark': '0 4px 12px rgba(0,0,0,0.25)',
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-light-bg text-light-text min-h-screen flex dark:bg-dark-bg dark:text-dark-text">
+  <!-- Animated Background -->
+  <div class="animated-bg">
+    <div class="animated-circle circle1"></div>
+    <div class="animated-circle circle2"></div>
+    <div class="animated-circle circle3"></div>
+  </div>
+  <!-- Sidebar -->
+  <aside class="fixed top-0 left-0 h-full w-[250px] bg-light-sidebar flex flex-col py-6 z-20 shadow-xl border-r border-light-border dark:bg-dark-sidebar dark:border-dark-border">
+    <div class="mb-8 flex flex-col items-center px-4 pt-4">
+      <img src="sidelogo.png" alt="PredictAI Logo" class="w-full mb-2">
+      <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">AI Memecoin Insights</p>
+    </div>
+    <nav class="flex-1 w-full px-4">
+      <ul class="flex flex-col gap-1.5 w-full">
+        <li><a href="index.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-home w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Home</a></li>
+        <li><a href="dashboard.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-chart-line w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Hype-Score</a></li>
+        <li><a href="suggestions.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-lightbulb w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Discovery Engine</a></li>
+        <li><a href="token-launch.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-rocket w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Token Launch</a></li>
+        <li><a href="launched-tokens.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-tasks w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Launched Tokens</a></li>
+        <li><a href="community.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-users w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Community</a></li>
+        <li><a href="influencer.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-user-secret w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Influencer Analysis</a></li>
+        <li><a href="revenue-sharing.html" class="sidebar-link group flex items-center px-5 py-3 rounded-lg font-medium text-light-text-secondary dark:text-dark-text-secondary hover:text-accent dark:hover:text-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-150 ease-in-out">
+            <i class="fas fa-sack-dollar w-5 h-5 mr-2.5 text-gray-400 dark:text-gray-500 group-hover:text-accent dark:group-hover:text-accent transition-colors duration-150 ease-in-out"></i>Revenue-Sharing</a></li>
+      </ul>
+    </nav>
+    <div class="mt-auto px-4 pb-4 w-full">
+      <button id="theme-toggle" class="w-full flex items-center justify-center p-3 rounded-lg bg-light-bg dark:bg-dark-bg hover:bg-light-border dark:hover:bg-dark-border transition-colors text-light-text-secondary dark:text-dark-text-secondary" title="Toggle light/dark mode">
+        <span id="theme-icon" class="text-xl">🌙</span>
+        <span class="ml-2 font-medium text-sm">Toggle Mode</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="flex-1 flex flex-col min-h-screen ml-[250px]">
+    <!-- Top Bar -->
+    <header class="w-full flex justify-end items-center px-6 py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md sticky top-0 z-10 border-b border-light-border dark:border-dark-border" style="min-height: 60px;">
+      <div id="wallet-section" class="flex items-center gap-3">
+        <button id="connect-wallet" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-3 py-1.5 text-xs shadow-cursor hover:shadow-cursor-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover">
+          Connect Wallet
+        </button>
+        <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: 50 SOL</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 md:px-10 py-8 md:py-12">
+      <div class="w-full max-w-container mx-auto">
+        <!-- Page Title -->
+        <div class="mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text">PredictAI's Discovery Engine</h1>
+            <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-1">Discover AI-curated memecoin suggestions and save your favorites.</p>
+        </div>
+
+        <!-- Suggestions and Favorites Section -->
+        <section class="space-y-12">
+            <div>
+                <h2 id="suggestions-title" class="text-2xl font-semibold text-light-text dark:text-dark-text mb-4 border-b border-light-border dark:border-dark-border pb-2">
+                    <i class="fas fa-brain mr-2 text-accent"></i>PredictAI's Smart Selections (Solana)
+                </h2>
+                <div id="memecoin-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Real-time suggestions will be loaded here by JavaScript -->
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary col-span-full">Loading suggestions...</p>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl font-semibold text-light-text dark:text-dark-text mb-4 border-b border-light-border dark:border-dark-border pb-2">
+                    <i class="fas fa-star mr-2 text-yellow-400"></i>Your Saved Favorites
+                </h2>
+                <div id="favorites-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    <!-- Saved favorites will be loaded here by JavaScript -->
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary col-span-full">No favorites saved yet.</p>
+                </div>
+            </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full bg-light-sidebar text-light-text-secondary py-6 px-6 md:px-10 mt-auto border-t border-light-border dark:bg-dark-sidebar dark:text-dark-text-secondary dark:border-dark-border">
+      <div class="max-w-container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="text-sm">
+          © 2024 PredictAI. All rights reserved.
+        </div>
+        <div class="flex gap-4 mb-2 md:mb-0 text-sm">
+          <a href="#" class="hover:text-accent">About</a>
+          <a href="mailto:support@predictai.com" class="hover:text-accent">Contact</a>
+          <a href="#" class="hover:text-accent">Privacy Policy</a>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Twitter">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.38 1.64 4.7c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.82 1.92 3.6-.71-.02-1.38-.22-1.97-.54v.05c0 2.1 1.5 3.85 3.5 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.11 2.94 3.97 2.97A8.6 8.6 0 0 1 2 19.54c-.32 0-.63-.02-.94-.06A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M9.04 16.87l-.39 3.66c.56 0 .8-.24 1.09-.53l2.62-2.5 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.84c.32-1.48-.54-2.06-1.5-1.7L2.2 9.3c-1.45.56-1.43 1.36-.25 1.72l4.6 1.44 10.7-6.74c.5-.32.96-.14.58.18z"/></svg>
+          </a>
+          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Discord">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M20.317 4.3698a19.7913 19.7913 0 0 0-4.8851-1.5152.0741.0741 0 0 0-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 0 0-.0785-.037 19.7363 19.7363 0 0 0-4.8852 1.515.0699.0699 0 0 0-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 0 0 .0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 0 0 .0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 0 0-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 0 1-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 0 1 .0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 0 1 .0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 0 1-.0066.1276 12.2986 12.2986 0 0 1-1.8732.8914.0766.0766 0 0 0-.0406.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 0 0 .0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 0 0 .0312-.0552c.5004-5.177-.8382-9.673-3.5485-13.6604a.061.061 0 0 0-.0312-.0286zM8.02 15.3312c-1.1835 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1836 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Common scripts (Theme Toggle, Wallet Connect, Active Sidebar Link)
+    const html = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+
+    function setTheme(mode) {
+      localStorage.setItem('theme', mode);
+      if (mode === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        themeIcon.textContent = '☀️';
+      } else {
+        html.classList.add('light');
+        html.classList.remove('dark');
+        themeIcon.textContent = '🌙';
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    // Always default to dark mode if no theme is saved
+    const initialTheme = savedTheme || 'dark'; 
+    setTheme(initialTheme);
+    // Ensure the class is set correctly on initial load based on initialTheme
+    // The setTheme function already handles adding/removing classes, 
+    // but we ensure the correct class is on the html element directly after definition.
+    if (initialTheme === 'dark') {
+        html.classList.add('dark');
+        html.classList.remove('light'); // Ensure light is not present
+    } else {
+        html.classList.add('light');
+        html.classList.remove('dark'); // Ensure dark is not present
+    }
+
+    themeToggle.addEventListener('click', () => {
+      setTheme(html.classList.contains('dark') ? 'light' : 'dark');
+    });
+
+    const connectBtn = document.getElementById('connect-wallet');
+    if (connectBtn) {
+        connectBtn.addEventListener('click', function() {
+          Swal.fire({
+            html: `
+                <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
+                <div class="flex items-center justify-center mb-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-accent mr-2">
+                    <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071 1.071L12.75 5.25v.985c0 .245-.12.479-.326.625C11.297 7.705 9.92 8 8.25 8c-2.144 0-4.005-.805-5.115-2.06C2.673 5.423 2.25 4.735 2.25 4.005 2.25 2.9 3.15 2 4.256 2H6.75V1.125C6.75.504 7.254 0 7.875 0h2.25C10.746 0 11.25.504 11.25 1.125V2h2.506c1.105 0 2.006.9 2.006 2.005 0 .73-.423 1.418-.987 1.939C13.659 7.195 11.798 8 9.652 8c-.89 0-1.712-.123-2.46-.352-.24-.073-.392-.284-.392-.517V6.06c0-.272.176-.516.443-.625.283-.115.7-.234 1.193-.234.593 0 1.196.163 1.721.453.274.151.61.115.842-.089l.812-.721a.75.75 0 00-1.071-1.071L9.652 4.987c-.984-.52-2.205-.737-3.402-.737C4.65 4.25 3.75 4.95 3.75 5.895c0 .474.256.926.695 1.282C5.496 8.203 6.953 8.75 8.652 8.75c1.938 0 3.578-.664 4.642-1.799.24-.253.358-.561.358-.876v-1.5c0-.474-.256-.926-.695-1.282C11.801 2.26 10.837 2 9.652 2c-.399 0-.784.029-1.152.086L7.875 2.25A.75.75 0 007.5 3H4.256A.75.75 0 013.506 2.25C3.506 1.836 3.842 1.5 4.256 1.5H6.75V.75a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75V1.5h2.463z" clip-rule="evenodd" />
+                    <path d="M14.25 10.191a.75.75 0 01.634 1.332l-1.512 3.024a.75.75 0 01-1.348-.672l1.225-2.45V10.5a.75.75 0 01.75-.75h.252zM10.055 12.346a.75.75 0 00-1.332.634l3.024 1.512a.75.75 0 00.672-1.348l-2.363-1.182zM10.5 15.75a.75.75 0 00-.75.75v.252l-2.45 1.225a.75.75 0 00.672 1.348l3.024-1.512a.75.75 0 00-.634-1.332L10.5 16.5z" />
+                    <path fill-rule="evenodd" d="M12 24a.75.75 0 00.594-.275l3.291-4.608a.75.75 0 10-1.188-.846L12 22.088l-2.709-3.792a.75.75 0 00-1.188.846l3.292 4.608A.75.75 0 0012 24z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd" d="M14.883 16.017a.75.75 0 001.06.023l3.358-3.358a.75.75 0 10-1.06-1.06l-3.359 3.358a.75.75 0 00-.022 1.036zM6.023 12.68a.75.75 0 00-1.037-.023L1.628 16.015a.75.75 0 101.06 1.06l3.358-3.358a.75.75 0 00-.023-1.036z" clip-rule="evenodd" />
+                  </svg>
+                  <h2 class="text-2xl font-bold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
+                </div>
+                <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
+                    Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
+                </p>
+                <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
+                    Stay updated and be the first to know! Join our official Telegram channel for the latest announcements and launch countdown.
+                </p>
+                <div id="countdown-timer-placeholder" class="my-4 text-lg font-semibold text-accent dark:text-accent">
+                    Launch Countdown: Activating Soon!
+                </div>
+                <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #2AABEE; border-color: #2AABEE;"> <!-- Telegram Blue -->
+                    <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
+                </a>
+            `,
+            showConfirmButton: true,
+            confirmButtonText: 'Got It!',
+            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+            confirmButtonColor: '#56eced',
+            footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">This is a preview. Full functionality is launching soon!</p>',
+            customClass: {
+                htmlContainer: 'swal2-html-container-no-icon'
+            },
+            showCloseButton: true
+          });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const currentPath = window.location.pathname.split('/').pop() || 'index.html';
+      const sidebarLinks = document.querySelectorAll('.sidebar-link');
+      
+      sidebarLinks.forEach(link => {
+        const icon = link.querySelector('i');
+        
+        // Reset all potentially conflicting classes
+        link.classList.remove(
+            'active',
+            'text-accent', 'dark:text-accent',
+            'border-l-4', 'border-accent',
+            'bg-accent', 'bg-accent/5', 'bg-accent/10', 
+            'dark:bg-accent/10', 'dark:bg-accent/20',
+            'pl-4', 'pr-5' // Remove specific active padding adjustments if any
+        );
+        link.style.color = ''; // Explicitly reset inline style color
+        link.classList.add('px-5'); // Ensure default padding is present
+        link.classList.add('text-light-text-secondary', 'dark:text-dark-text-secondary');
+        
+        if (icon) {
+            icon.classList.remove('text-accent', 'dark:text-accent');
+            icon.classList.add('text-gray-400', 'dark:text-gray-500');
+        }
+
+        if (link.getAttribute('href') === currentPath) {
+          link.classList.add('active');
+          link.classList.remove('text-light-text-secondary', 'dark:text-dark-text-secondary', 'px-5');
+          link.classList.add('text-accent', 'dark:text-accent');
+          link.classList.add('border-l-4', 'border-accent');
+          link.classList.add('pl-4'); // Specific padding for active link (indent for border)
+          
+          if (icon) {
+            icon.classList.remove('text-gray-400', 'dark:text-gray-500');
+            icon.classList.add('text-accent', 'dark:text-accent');
+          }
+          // Ensure no hover background on active link
+          link.classList.remove('hover:bg-accent/10', 'dark:hover:bg-accent/20'); 
+        }
+      });
+      
+      // Suggestions page specific script
+      const saveSuggestionButtons = document.querySelectorAll('.save-suggestion-btn');
+      saveSuggestionButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const card = this.closest('.card');
+          const tokenName = card.querySelector('h3').textContent;
+          Swal.fire({
+            title: 'Suggestion Saved!',
+            text: `${tokenName} has been saved to your watchlist (simulated).`,
+            icon: 'success',
+            confirmButtonText: 'Awesome!',
+            customClass: {
+                popup: 'predictai-swal-popup',
+                confirmButton: 'cursor-btn bg-accent text-gray-900 px-5 py-2.5 rounded-md',
+            },
+            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+            confirmButtonColor: '#56eced'
+          });
+        });
+      });
+    });
+
+    // --- Memecoin Suggestions Page Specific Script ---
+    const TOP_N_WITH_FULL_DETAILS = 3;
+
+    async function displayMemecoinSuggestions() {
+        window.currentMemecoinsForDetails = []; // Initialize at the beginning of the function scope
+        const memecoinList = document.getElementById('memecoin-list');
+        if (!memecoinList) return;
+        const suggestionsTitle = document.getElementById('suggestions-title');
+        
+        updateLoadingMessage(0, 0, true); // Show initial fetching message
+
+        try {
+            const apiUrl = 'https://api.dexscreener.com/token-boosts/top/v1';
+            const response = await fetch(apiUrl, { headers: { "Accept": "*/*" } });
+
+            if (!response.ok) throw new Error(`Boost API Error: Status ${response.status}`);
+            
+            const responseData = await response.json();
+            const boostedTokensSource = responseData || []; 
+
+            if (boostedTokensSource.length === 0) {
+                memecoinList.innerHTML = '<p class="text-light-text-secondary dark:text-dark-text-secondary col-span-full">No boosted Solana tokens found currently.</p>';
+                if (suggestionsTitle) suggestionsTitle.innerHTML = '<i class="fas fa-rocket mr-2 text-accent"></i>Top Boosted Tokens (Solana)';
+                return;
+            }
+
+            let memecoins = boostedTokensSource
+                .filter(token => token.chainId === 'solana' && token.tokenAddress)
+                .map(token => ({
+                    symbol: token.description?.split(" ")[0] || "Unknown Symbol", 
+                    name: token.description || "Unknown Name",
+                    address: token.tokenAddress,
+                    boostAmount: token.totalAmount || 0,
+                    icon: token.icon,
+                    url: token.url,
+                    links: token.links,
+                    priceUsd: "N/A", volume24h: "N/A", marketCap: "N/A", liquidity: "N/A", fdv: "N/A", holderCount: "N/A",
+                    marketDataLoaded: false
+                }))
+                .slice(0, 15); 
+            
+            window.currentMemecoinsForDetails = [...memecoins]; // Store a mutable copy after initial mapping
+            
+            console.log("Mapped Memecoins (before market data):", memecoins);
+
+            if (suggestionsTitle) {
+                suggestionsTitle.innerHTML = `<i class="fas fa-brain mr-2 text-accent"></i>PredictAI's Top ${memecoins.length} Smart Selections (Solana)`;
+            }
+
+            if (memecoins.length === 0) {
+                 memecoinList.innerHTML = '<p class="text-light-text-secondary dark:text-dark-text-secondary col-span-full">No top boosted Solana tokens found. Try again soon.</p>';
+                return;
+            }
+            
+            if (memecoins.length > 0) {
+                 updateLoadingMessage(0, Math.min(memecoins.length, TOP_N_WITH_FULL_DETAILS));
+            }
+
+            // Enrich TOP_N_WITH_FULL_DETAILS tokens with market data
+            for (let i = 0; i < Math.min(memecoins.length, TOP_N_WITH_FULL_DETAILS); i++) {
+                const coin = memecoins[i];
+                try {
+                    updateLoadingMessage(i + 1, Math.min(memecoins.length, TOP_N_WITH_FULL_DETAILS));
+                    const marketData = await getTokenMarketData(coin.address);
+                    memecoins[i] = { ...coin, ...marketData, marketDataLoaded: true };
+                } catch (error) {
+                    console.error(`Failed to get market data for ${coin.address}, proceeding with basic info:`, error);
+                    // Keep marketDataLoaded as false
+                }
+                if (i < Math.min(memecoins.length, TOP_N_WITH_FULL_DETAILS) - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 1000)); 
+                }
+            }
+            console.log("Enriched memecoins (top N):", memecoins);
+
+            memecoinList.innerHTML = ''; // Clear loading message
+
+            memecoins.forEach((coin, index) => {
+                const coinDiv = document.createElement('div');
+                coinDiv.className = 'coin card bg-light-card-bg dark:bg-dark-card-bg rounded-lg shadow-lg flex flex-col h-full border border-light-border dark:border-dark-border overflow-hidden'; 
+                coinDiv.id = `token-card-${coin.address}`; // Unique ID for each card
+
+                renderTokenCardContent(coinDiv, coin, index);
+                memecoinList.appendChild(coinDiv);
+            });
+
+        } catch (error) {
+            console.error('Error fetching or displaying memecoin suggestions:', error);
+            memecoinList.innerHTML = '<p class="text-danger text-sm col-span-full">Failed to load suggestions. Check console for errors.</p>';
+            if (suggestionsTitle) suggestionsTitle.innerHTML = '<i class="fas fa-eye-slash mr-2 text-danger"></i>Suggestions Unavailable';
+        }
+    }
+
+    function renderTokenCardContent(cardElement, coin, index, isLoadingDetails = false) {
+        let socialLinksHTML = '<div class="flex space-x-2 items-center">';
+        if (coin.links) {
+            const websiteLink = coin.links.find(link => link.label === 'Website' || link.type === 'website');
+            const twitterLink = coin.links.find(link => link.type === 'twitter');
+            const telegramLink = coin.links.find(link => link.type === 'telegram');
+            if (websiteLink && websiteLink.url) socialLinksHTML += `<a href="${websiteLink.url}" target="_blank" rel="noopener noreferrer" class="text-xs text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Website"><i class="fas fa-globe"></i></a>`;
+            if (twitterLink && twitterLink.url) socialLinksHTML += `<a href="${twitterLink.url}" target="_blank" rel="noopener noreferrer" class="text-xs text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Twitter"><i class="fab fa-twitter"></i></a>`;
+            if (telegramLink && telegramLink.url) socialLinksHTML += `<a href="${telegramLink.url}" target="_blank" rel="noopener noreferrer" class="text-xs text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram"><i class="fab fa-telegram-plane"></i></a>`;
+        }
+        socialLinksHTML += '</div>';
+
+        const escapedName = String(coin.name).replace(/'/g, "\'").replace(/"/g, '\"');
+        const escapedSymbol = String(coin.symbol).replace(/'/g, "\'").replace(/"/g, '\"');
+        const escapedIcon = String(coin.icon || '').replace(/'/g, "\'").replace(/"/g, '\"');
+        const escapedUrl = String(coin.url || '').replace(/'/g, "\'").replace(/"/g, '\"');
+        const linksString = JSON.stringify(coin.links || []).replace(/'/g, "\'").replace(/"/g, '\"');
+
+        const rank = index + 1;
+        const isHot = rank <= TOP_N_WITH_FULL_DETAILS; // Hot badge for top N that have full details loaded initially
+
+        const formatNum = (num) => {
+            if (typeof num === 'number') {
+                if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(2) + 'B';
+                if (num >= 1_000_000) return (num / 1_000_000).toFixed(2) + 'M';
+                if (num >= 1_000) return (num / 1_000).toFixed(2) + 'K';
+                return num.toFixed(0); // No decimals for small numbers unless it's price
+            }
+            return num;
+        };
+
+        let marketDataHTML = '';
+        if (coin.marketDataLoaded) {
+            marketDataHTML = `
+                <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-xs my-2">
+                    <div>Price:</div> <div class="font-semibold text-right truncate">${typeof coin.priceUsd === 'number' ? '$ ' + coin.priceUsd.toFixed(6) : coin.priceUsd}</div>
+                    <div>Volume (24h):</div> <div class="font-semibold text-right truncate">${typeof coin.volume24h === 'number' ? '$ ' + formatNum(coin.volume24h) : coin.volume24h}</div>
+                    <div>Market Cap:</div> <div class="font-semibold text-right truncate">${typeof coin.marketCap === 'number' ? '$ ' + formatNum(coin.marketCap) : coin.marketCap}</div>
+                    <div>Liquidity:</div> <div class="font-semibold text-right truncate">${typeof coin.liquidity === 'number' ? '$ ' + formatNum(coin.liquidity) : coin.liquidity}</div>
+                </div>
+            `;
+        } else if (isLoadingDetails) {
+            marketDataHTML = '<div class="text-xs text-center py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Loading details...</div>';
+        } else {
+            marketDataHTML = `
+                <div class="text-center my-3">
+                    <button onclick="loadMarketDataForToken(this, '${coin.address}', ${index})" class="load-details-btn cursor-btn bg-highlight/10 hover:bg-highlight/20 text-highlight dark:bg-highlight/20 dark:hover:bg-highlight/30 font-medium rounded-md px-3 py-1.5 text-xs">
+                        <i class="fas fa-chart-line mr-1"></i> Load Market Data
+                    </button>
+                </div>
+            `;
+        }
+
+        cardElement.innerHTML = `
+            <div class="p-3 flex-grow flex flex-col"> 
+                <div class="flex items-start gap-3 mb-2"> 
+                    <div class="text-xl font-bold text-light-text-secondary dark:text-dark-text-secondary pt-0.5">#${rank}</div>
+                    ${coin.icon ? `<img src="${coin.icon}" alt="" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border border-light-border dark:border-dark-border">` : '<div class="w-10 h-10 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center text-light-text-secondary dark:text-dark-text-secondary text-xs flex-shrink-0">No Icon</div>'}
+                    <div class="flex-grow min-w-0">
+                        <a href="${coin.url}" target="_blank" rel="noopener noreferrer" class="block hover:underline">
+                            <h3 class="text-sm font-semibold text-light-text dark:text-dark-text leading-tight" title="${escapedName}" style="height: 2.4em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                ${coin.name}
+                            </h3>
+                        </a>
+                        <p class="text-xs text-accent dark:text-highlight font-medium truncate">${coin.symbol}</p>
+                    </div>
+                    <button onclick="saveFavorite('${escapedName}', '${escapedSymbol}', '${coin.address}', '${coin.boostAmount}', '${escapedIcon}', '${escapedUrl}', '${linksString}')" 
+                            class="save-suggestion-btn cursor-btn bg-accent/10 hover:bg-accent/20 text-accent dark:bg-accent/20 dark:hover:bg-accent/30 dark:text-highlight rounded-md p-2 text-xs flex-shrink-0">
+                        <i class="fas fa-star"></i>
+                    </button>
+                </div>
+                ${marketDataHTML}
+                <div class="mt-auto pt-2 border-t border-light-border dark:border-dark-border">
+                    <div class="flex justify-between items-center mb-1">
+                        <p class="text-sm text-light-text dark:text-dark-text">
+                            Boost: <span class="font-bold text-md text-accent dark:text-highlight">${coin.boostAmount.toLocaleString()}</span>
+                        </p>
+                        ${isHot && coin.marketDataLoaded ? '<span class="text-xs font-semibold text-red-500 bg-red-500/10 px-2 py-0.5 rounded-full flex items-center gap-1"><i class="fas fa-fire text-xs"></i>HOT</span>' : ''}
+                    </div>
+                    <div class="flex justify-between items-center text-xs">
+                        <p class="text-light-text-secondary dark:text-dark-text-secondary truncate" title="${coin.address}">
+                            Addr: <span class="font-mono">${coin.address.substring(0,4)}...${coin.address.substring(coin.address.length - 4)}</span>
+                        </p>
+                        ${socialLinksHTML}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    async function loadMarketDataForToken(buttonElement, tokenAddress, coinIndex) {
+        const cardElement = document.getElementById(`token-card-${tokenAddress}`);
+        if (!cardElement) return;
+
+        // Find the original coin object from the memecoins array to update it
+        // This requires memecoins array to be accessible or passed appropriately if this function is moved outside displayMemecoinSuggestions scope
+        // For simplicity, assuming memecoins is in a scope accessible here or we refetch its basic data.
+        // Let's assume we need to find it in a global or semi-global memecoins array for now.
+        // THIS IS A SIMPLIFICATION: In a real app, you'd manage state more robustly.
+        // At the start of displayMemecoinSuggestions, before try block:
+        // window.currentMemecoinsForDetails = [];
+        // After memecoins array is mapped and sliced:
+        // window.currentMemecoinsForDetails = [...memecoins]; // Store a mutable copy for loadMarketDataForToken
+        let coinData = window.currentMemecoinsForDetails[coinIndex]; // Assuming window.currentMemecoinsForDetails is populated
+
+        renderTokenCardContent(cardElement, coinData, coinIndex, true); // Show loading state in card
+
+        try {
+            const marketData = await getTokenMarketData(tokenAddress);
+            coinData = { ...coinData, ...marketData, marketDataLoaded: true };
+            window.currentMemecoinsForDetails[coinIndex] = coinData; // Update the stored coin data
+            renderTokenCardContent(cardElement, coinData, coinIndex, false); // Re-render with full data
+        } catch (error) {
+            console.error("Error loading details for", tokenAddress, error);
+            // Re-render with an error message or revert to the load button
+            coinData.marketDataLoaded = false; // Reset status
+            renderTokenCardContent(cardElement, coinData, coinIndex, false); 
+            // Optionally, show an error in the card: cardElement.querySelector('.market-data-container').innerHTML = '<p class="text-danger text-xs">Could not load details.</p>';
+        }
+    }
+
+    async function getTokenMarketData(tokenAddress) {
+        if (!tokenAddress || tokenAddress === "Unknown") {
+            // console.warn("Skipping market data fetch for unknown address.");
+            return { priceUsd: "N/A", volume24h: "N/A", marketCap: "N/A", liquidity: "N/A", fdv: "N/A", holderCount: "N/A" };
+        }
+        const url = `https://api.dexscreener.com/latest/dex/tokens/${tokenAddress}`;
+        try {
+            const response = await fetch(url, { headers: { "Accept": "*/*" } });
+            if (!response.ok) {
+                console.warn(`Market Data API Error for ${tokenAddress}: Status ${response.status} ${response.statusText}`);
+                const errorText = await response.text();
+                console.warn(`Response body: ${errorText}`);
+                return { priceUsd: "Error", volume24h: "Error", marketCap: "Error", liquidity: "Error", fdv: "Error", holderCount: "Error" };
+            }
+            const data = await response.json();
+            // console.log(`Market Data for ${tokenAddress}:`, data);
+
+            const pair = data.pairs?.[0];
+            if (!pair) {
+                // console.warn(`No pair data for ${tokenAddress}`);
+                return { priceUsd: "No Pair", volume24h: "No Pair", marketCap: "No Pair", liquidity: "No Pair", fdv: "No Pair", holderCount: "No Pair" };
+            }
+
+            return {
+                priceUsd: pair.priceUsd || "N/A",
+                volume24h: pair.volume?.h24 || "N/A",
+                marketCap: pair.marketCap || "N/A",
+                liquidity: pair.liquidity?.usd || "N/A",
+                fdv: pair.fdv || "N/A",
+                holderCount: pair.info?.holderCount || "N/A" 
+            };
+        } catch (error) {
+            console.error(`Error fetching market data for ${tokenAddress}: ${error}`);
+            return { priceUsd: "Fetch Err", volume24h: "Fetch Err", marketCap: "Fetch Err", liquidity: "Fetch Err", fdv: "Fetch Err", holderCount: "Fetch Err" };
+        }
+    }
+
+    function updateLoadingMessage(currentIndex, totalTokens, initialBoostFetch = false) {
+        const memecoinList = document.getElementById('memecoin-list');
+        if (memecoinList) {
+            let messageText;
+            if (initialBoostFetch) {
+                messageText = "Fetching top boosted token list...";
+            } else if (totalTokens > 0) {
+                messageText = `Loading detailed market data... (${currentIndex}/${totalTokens})`;
+            } else {
+                messageText = "No boosted tokens found to load details for."; // Should ideally not be shown if caught earlier
+            }
+
+            // CSS for the custom spinner will be injected here to keep it self-contained
+            // The accent color from Tailwind config will be used for the spinner.
+            const accentColor = tailwind.config.theme.extend.colors.accent || '#00C4B4'; 
+
+            memecoinList.innerHTML = `
+                <div class="col-span-full flex flex-col items-center justify-center py-12">
+                    <style>
+                        .predictai-loader {
+                            border: 5px solid #f3f3f3; /* Light grey */
+                            border-top: 5px solid ${accentColor};
+                            border-radius: 50%;
+                            width: 50px;
+                            height: 50px;
+                            animation: predictai-spin 1s linear infinite;
+                        }
+                        @keyframes predictai-spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                    <div class="predictai-loader mb-5"></div>
+                    <p class="text-light-text-secondary dark:text-dark-text-secondary text-center">${messageText}</p>
+                </div>
+            `;
+        }
+    }
+
+    function saveFavorite(name, symbol, address, boostAmount, icon, url, linksJson) {
+        let favorites = JSON.parse(localStorage.getItem('predictai_favorites')) || [];
+        if (!favorites.some(fav => fav.address === address)) {
+            // We expect linksJson to be a string that might need parsing if it wasn't an empty array string initially
+            let links = [];
+            try {
+                links = JSON.parse(linksJson.replace(/\\'/g, "'")); // Handle escaped quotes if they exist from the stringify process
+            } catch (e) {
+                console.error("Error parsing links for favorite:", e, linksJson);
+            }
+            favorites.push({ name, symbol, address, boostAmount, icon, url, links });
+            localStorage.setItem('predictai_favorites', JSON.stringify(favorites));
+            displayFavorites();
+            Swal.fire({
+                title: 'Favorite Saved!',
+                text: `${name} (${symbol}) has been added to your favorites.`,
+                icon: 'success',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                confirmButtonColor: '#56eced'
+            });
+        } else {
+            Swal.fire({
+                title: 'Already Saved!',
+                text: `${name} (${symbol}) is already in your favorites.`,
+                icon: 'info',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                confirmButtonColor: '#56eced'
+            });
+        }
+    }
+
+    function displayFavorites() {
+        const favoritesList = document.getElementById('favorites-list');
+        if (!favoritesList) return; 
+
+        const favorites = JSON.parse(localStorage.getItem('predictai_favorites')) || [];
+        if (favorites.length === 0) {
+            favoritesList.innerHTML = '<p class="text-light-text-secondary dark:text-dark-text-secondary col-span-full">No favorites saved yet. Explore suggestions and save some!</p>';
+            return;
+        }
+        favoritesList.innerHTML = '';
+        favorites.forEach((fav, index) => {
+            console.log("Processing favorite for display:", fav);
+            const favDiv = document.createElement('div');
+            favDiv.className = 'saved card bg-light-card-bg dark:bg-dark-card-bg rounded-lg shadow-lg flex flex-col h-full border border-light-border dark:border-dark-border overflow-hidden';
+
+            let socialLinksHTML = '<div class="flex space-x-3 items-center">';
+            const favLinksArray = Array.isArray(fav.links) ? fav.links : [];
+            const websiteLink = favLinksArray.find(link => link.label === 'Website' || link.type === 'website');
+            const twitterLink = favLinksArray.find(link => link.type === 'twitter');
+            const telegramLink = favLinksArray.find(link => link.type === 'telegram');
+
+            if (websiteLink && websiteLink.url) {
+                socialLinksHTML += `<a href="${websiteLink.url}" target="_blank" rel="noopener noreferrer" class="text-light-text-secondary hover:text-highlight dark:text-dark-text-secondary dark:hover:text-highlight" title="Website"><i class="fas fa-globe"></i></a>`;
+            }
+            if (twitterLink && twitterLink.url) {
+                socialLinksHTML += `<a href="${twitterLink.url}" target="_blank" rel="noopener noreferrer" class="text-light-text-secondary hover:text-highlight dark:text-dark-text-secondary dark:hover:text-highlight" title="Twitter"><i class="fab fa-twitter"></i></a>`;
+            }
+            if (telegramLink && telegramLink.url) {
+                socialLinksHTML += `<a href="${telegramLink.url}" target="_blank" rel="noopener noreferrer" class="text-light-text-secondary hover:text-highlight dark:text-dark-text-secondary dark:hover:text-highlight" title="Telegram"><i class="fab fa-telegram-plane"></i></a>`;
+            }
+            socialLinksHTML += '</div>';
+            
+            const favName = String(fav.name || 'Unknown Name').replace(/'/g, "\'").replace(/"/g, '\"');
+            const favSymbol = String(fav.symbol || 'N/A');
+            const favBoost = fav.boostAmount ? fav.boostAmount.toLocaleString() : 'N/A';
+            const favAddressFull = String(fav.address || 'N/A');
+            const favAddressShort = fav.address ? `${fav.address.substring(0,6)}...${fav.address.substring(fav.address.length - 4)}` : 'N/A';
+            const favUrl = fav.url || '#';
+
+            favDiv.innerHTML = `
+                <div class="p-4 flex-grow flex flex-col">
+                    <div class="flex items-start gap-3 mb-3">
+                         ${fav.icon ? `<img src="${fav.icon}" alt="" class="w-12 h-12 rounded-full object-cover flex-shrink-0 border border-light-border dark:border-dark-border">` : '<div class="w-12 h-12 rounded-full bg-light-border dark:bg-dark-border flex items-center justify-center text-light-text-secondary dark:text-dark-text-secondary text-sm flex-shrink-0 border border-light-border dark:border-dark-border">No Icon</div>'}
+                        <div class="flex-grow min-w-0">
+                            <a href="${favUrl}" target="_blank" rel="noopener noreferrer" class="block hover:underline">
+                                <h3 class="text-md font-semibold text-highlight leading-tight" title="${favName}" style="height: 2.5em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">
+                                    ${fav.name || 'Unknown Name'}
+                                </h3>
+                            </a>
+                            <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary font-medium truncate">${favSymbol}</p>
+                        </div>
+                        <button onclick="removeFavorite(${index})" class="cursor-btn bg-red-500/80 hover:bg-red-500 text-white rounded-md p-2 text-xs flex-shrink-0">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-auto pt-3 border-t border-light-border dark:border-dark-border">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-sm text-highlight">
+                                Saved Boost: <span class="font-bold text-lg">${favBoost}</span>
+                            </p>
+                            ${socialLinksHTML}
+                        </div>
+                        <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary truncate" title="${favAddressFull}">
+                            Addr: <span class="font-mono">${favAddressShort}</span>
+                        </p>
+                         
+                    </div>
+                </div>
+            `;
+            favoritesList.appendChild(favDiv);
+        });
+    }
+    
+    function removeFavorite(index) {
+        let favorites = JSON.parse(localStorage.getItem('predictai_favorites')) || [];
+        const removedFav = favorites.splice(index, 1);
+        localStorage.setItem('predictai_favorites', JSON.stringify(favorites));
+        displayFavorites();
+        if (removedFav.length > 0) {
+             Swal.fire({
+                title: 'Favorite Removed',
+                text: `${removedFav[0].name} has been removed from your favorites.`,
+                icon: 'info',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
+                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
+                confirmButtonColor: '#56eced'
+            });
+        }
+    }
+
+    // Specific logic for the suggestions page
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('memecoin-list')) {
+            displayMemecoinSuggestions();
+            displayFavorites();
+        }
+    });
+  </script>
+</body>
+</html> 
