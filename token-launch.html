@@ -303,12 +303,6 @@
                 <input type="url" id="token-image" name="token-image" placeholder="https://example.com/image.png" class="w-full p-3 rounded-md border border-light-border dark:border-dark-border bg-light-bg dark:bg-dark-bg focus:ring-accent focus:border-accent placeholder-light-text-secondary/50 dark:placeholder-dark-text-secondary/50 text-sm">
                 <p class="mt-1 text-xs text-light-text-secondary dark:text-dark-text-secondary">Link to a direct image (PNG, JPG, GIF). Recommended: square, 256x256px.</p>
               </div>
-              <div class="md:col-span-2">
-                <label for="token-image-upload" class="block text-sm font-medium text-light-text dark:text-dark-text-secondary mb-1.5">Or Upload Token Image (Optional)</label>
-                <input type="file" id="token-image-upload" name="token-image-upload" accept="image/png, image/jpeg, image/gif" class="w-full text-sm text-light-text-secondary dark:text-dark-text-secondary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent/10 file:text-accent hover:file:bg-accent/20 dark:file:bg-accent/20 dark:file:text-accent dark:hover:file:bg-accent/30 cursor-pointer"/>
-                <p class="mt-1 text-xs text-light-text-secondary dark:text-dark-text-secondary">Overrides the URL if an image is uploaded. Max 1MB.</p>
-                <img id="token-image-preview" src="#" alt="Image Preview" class="hidden mt-3 rounded-md max-h-24 max-w-24 object-contain"/>
-              </div>
             </div>
             <div class="mt-8 text-center">
               <button type="submit" id="launch-token-btn" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-8 py-3 text-base shadow-cursor hover:shadow-cursor-hover hover:bg-accent-hover dark:bg-accent dark:text-gray-900 dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover dark:hover:bg-accent-hover">
@@ -492,364 +486,44 @@
       const tokenTwitterInput = document.getElementById('token-twitter');
       const tokenTelegramInput = document.getElementById('token-telegram');
       const launchPlatformSelect = document.getElementById('selected-launch-platform');
-      const tokenImageUploadInput = document.getElementById('token-image-upload');
-      const launchTokenBtn = document.getElementById('launch-token-btn');
 
       // ... existing code ...
     });
 
     // Token Launch Form Logic
     const form = document.getElementById('token-launch-form');
-    const tokenImageUpload = document.getElementById('token-image-upload');
-    const tokenImagePreview = document.getElementById('token-image-preview');
-    const tokenImageUrlInput = document.getElementById('token-image');
-
-    if (tokenImageUpload) {
-        tokenImageUpload.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                if (file.size > 1024 * 1024) { // 1MB limit
-                     Swal.fire('Image Too Large', 'Please upload an image smaller than 1MB.', 'warning');
-                     event.target.value = ''; // Clear the input
-                     tokenImagePreview.classList.add('hidden');
-                     tokenImagePreview.src = '#';
-                     tokenImageUrlInput.disabled = false;
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    tokenImagePreview.src = e.target.result;
-                    tokenImagePreview.classList.remove('hidden');
-                    tokenImageUrlInput.value = ''; // Clear URL field
-                    tokenImageUrlInput.disabled = true; // Disable URL field
-                }
-                reader.readAsDataURL(file);
-            } else {
-                tokenImagePreview.classList.add('hidden');
-                tokenImagePreview.src = '#';
-                tokenImageUrlInput.disabled = false; // Re-enable URL field if no file selected
-            }
-        });
-    }
-
     if (form) {
         form.addEventListener('submit', function(event) {
             event.preventDefault();
+            const timestamp = new Date().toISOString();
             const tokenName = document.getElementById('token-name').value;
             const tokenSymbol = document.getElementById('token-symbol').value;
-            const tokenDescription = document.getElementById('token-description').value;
-            const tokenImage = document.getElementById('token-image').value;
-            const launchPlatform = document.getElementById('selected-launch-platform').value;
-            const tokenImageUploadInput = document.getElementById('token-image-upload');
-            
-            // Get values from new metadata fields
-            const tokenWebsite = document.getElementById('token-website').value || 'N/A'; // Default to N/A if empty
-            const tokenTwitter = document.getElementById('token-twitter').value; // Should always have a value
-            const tokenTelegram = document.getElementById('token-telegram').value; // Should always have a value
+            const description = document.getElementById('token-description').value;
+            const launchpad = document.getElementById('selected-launch-platform').value;
+            const imageLink = document.getElementById('token-image').value;
+            const launchStatus = "Pending";
 
-            let uploadedImageFile = null;
-            let uploadedImagePreviewSrc = null; // Will hold the base64 src for preview
+            const params = new URLSearchParams({
+                timestamp,
+                tokenName,
+                tokenSymbol,
+                description,
+                launchpad,
+                imageLink,
+                launchStatus
+            });
 
-            if (tokenImageUploadInput && tokenImageUploadInput.files && tokenImageUploadInput.files[0]) {
-                uploadedImageFile = tokenImageUploadInput.files[0];
-                // Ensure the preview src is valid and not the placeholder '#'
-                const previewElement = document.getElementById('token-image-preview');
-                if (previewElement && previewElement.src && previewElement.src !== window.location.href + '#' && !previewElement.classList.contains('hidden')) {
-                    uploadedImagePreviewSrc = previewElement.src;
-                }
-            }
-
-            if (!tokenName || !tokenSymbol) {
-                Swal.fire({
-                    title: 'Missing Information',
-                    text: 'Please fill in Token Name and Symbol.',
-                    icon: 'warning',
-                    background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                    color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                    confirmButtonColor: '#56eced'
-                });
-                return;
-            }
-
-            // Construct Logo Display HTML for the confirmation popup
-            let logoDisplayHtml = '';
-            const logoSizePopup = 96; // Increased size to 96px
-            const fallbackId = 'popupJdenticonFallback'; // Fixed ID for onerror fallback
-
-            // Adjust styling for when the logo is used as the main icon
-            const iconContainerClasses = "mx-auto mb-4 w-24 h-24 flex items-center justify-center overflow-hidden rounded-full border-2 border-gray-200 dark:border-gray-700 shadow-md"; // Increased size, made fully round, added subtle border and shadow
-
-            if (uploadedImagePreviewSrc) {
-                logoDisplayHtml = `<div class="${iconContainerClasses}"><img src="${uploadedImagePreviewSrc}" alt="${tokenName} Logo Preview" class="h-full w-full object-cover"></div>`; // Ensure image covers the round container
-            } else if (tokenImage) {
-                let jdenticonFallbackForUrl = '';
-                if (tokenSymbol && typeof jdenticon !== 'undefined') {
-                    jdenticonFallbackForUrl = `<div id="${fallbackId}" style="display:none;" class="${iconContainerClasses}">${jdenticon.toSvg(tokenSymbol, logoSizePopup)}</div>`;
+            fetch('https://hooks.zapier.com/hooks/catch/23053180/2jhsjwo/?' + params.toString(), {
+                method: 'GET'
+            }).then(response => {
+                if (response.ok) {
+                    Swal.fire('Erfolg!', 'Dein Token wurde an das Team übermittelt.', 'success');
+                    form.reset();
                 } else {
-                    jdenticonFallbackForUrl = `<div id="${fallbackId}" style="display:none;" class="${iconContainerClasses} bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"><i class="fas fa-image text-4xl"></i></div>`; // Increased icon size
+                    Swal.fire('Fehler!', 'Es gab ein Problem beim Senden.', 'error');
                 }
-                logoDisplayHtml = `<div class="${iconContainerClasses}"><img src="${tokenImage}" alt="${tokenName} Logo" class="h-full w-full object-cover" onerror="this.style.display='none'; document.getElementById('${fallbackId}').style.display='block';"></div>` + jdenticonFallbackForUrl; // Ensure image covers
-            } else if (tokenSymbol && typeof jdenticon !== 'undefined') {
-                logoDisplayHtml = `<div class="${iconContainerClasses}">${jdenticon.toSvg(tokenSymbol, logoSizePopup)}</div>`;
-            } else {
-                logoDisplayHtml = `<div class="${iconContainerClasses} bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500"><i class="fas fa-image text-4xl"></i></div>`; // Increased icon size
-            }
-
-            // Construct image source information text
-            let imageSourceInfoHtml = '';
-            if (uploadedImageFile) {
-                imageSourceInfoHtml = `<p><strong>Logo Source:</strong> Uploaded File (${uploadedImageFile.name}, ${(uploadedImageFile.size / 1024).toFixed(1)} KB)</p>`;
-            } else if (tokenImage) {
-                imageSourceInfoHtml = `<p><strong>Logo Source:</strong> <a href="${tokenImage}" target="_blank" class="text-accent hover:underline">View URL</a></p>`;
-            } else if (tokenSymbol) {
-                imageSourceInfoHtml = '<p><strong>Logo Source:</strong> Generated from symbol</p>';
-            } else {
-                imageSourceInfoHtml = '<p><strong>Logo Source:</strong> Not available</p>';
-            }
-
-            // Simulate multistep SweetAlert process
-            Swal.fire({
-                title: `Confirm Token: ${tokenName} (${tokenSymbol})`,
-                iconHtml: logoDisplayHtml, // Use the logo HTML as the main icon
-                customClass: {
-                    icon: 'swal2-icon-no-border' // Optional: remove border if SweetAlert adds one to custom iconHtml
-                },
-                html: `
-                    <div class="text-left text-sm space-y-1.5 text-light-text-secondary dark:text-dark-text-secondary pt-3">
-                        <p><strong>Name:</strong> ${tokenName}</p>
-                        <p><strong>Symbol:</strong> ${tokenSymbol}</p>
-                        <p><strong>Total Supply:</strong> 1,000,000,000 (Fixed)</p>
-                        <p><strong>Decimals:</strong> 9 (Fixed)</p>
-                        <p><strong>Platform:</strong> ${launchPlatform}</p>
-                        ${tokenDescription ? `<p><strong>Description:</strong> ${tokenDescription}</p>` : ''}
-                        ${imageSourceInfoHtml}
-                        <p><strong>Website:</strong> ${tokenWebsite === 'N/A' ? 'N/A' : `<a href="${tokenWebsite}" target="_blank" class="text-accent hover:underline">${tokenWebsite}</a>`}</p>
-                        <p><strong>X (Twitter):</strong> <a href="${tokenTwitter}" target="_blank" class="text-accent hover:underline">${tokenTwitter}</a></p>
-                        <p><strong>Telegram:</strong> <a href="${tokenTelegram}" target="_blank" class="text-accent hover:underline">${tokenTelegram}</a></p>
-                    </div>
-                `,
-                // icon: 'info', // Removed to use iconHtml instead
-                showCancelButton: true,
-                confirmButtonText: 'Confirm & Proceed',
-                cancelButtonText: 'Edit Details',
-                reverseButtons: true,
-                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                confirmButtonColor: '#56eced',
-                cancelButtonColor: '#6E7681'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const queuedTokens = Math.floor(Math.random() * 5); // 0 to 4 tokens
-                    let queueMessage = `Currently <strong>${queuedTokens} tokens</strong> ahead of you.`;
-                    if (queuedTokens === 0) {
-                        queueMessage = "You are <strong>next in line!</strong>";
-                    }
-
-                    // This is the "Launch Queued!" popup
-                    Swal.fire({
-                        title: 'Launch Queued!',
-                        html: `
-                            <div class="text-sm text-light-text-secondary dark:text-dark-text-secondary">
-                                <p>Your token <strong>${tokenName}</strong> is now in the launch queue.</p>
-                                <p class="my-2">${queueMessage}</p>
-                                <p>Estimated processing time: <strong>1-5 minutes.</strong></p>
-                                <p class="mt-2">The deployment to the blockchain will begin automatically...</p>
-                                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-3"><div class="bg-accent h-2.5 rounded-full animate-pulse" style="width: 30%"></div></div>
-                            </div>
-                        `,
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading(); // Shows a spinner icon on the confirm button place
-                        },
-                        showConfirmButton: false, // Hide default confirm button as we use timer
-                        background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                        color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                        timer: 12000, // Simulate queue processing time (12 seconds)
-                        timerProgressBar: true
-                    });
-
-                    const ZAPIER_WEBHOOK_URL = 'https://hooks.zapier.com/hooks/catch/23038681/2j2zviw/';
-
-                    // Prepare data for Zapier
-                    const timestamp = new Date().toISOString();
-                    const tokenNameValue = tokenName;
-                    const tokenSymbolValue = tokenSymbol;
-                    const descriptionValue = tokenDescription || 'Not provided';
-                    const platformValue = launchPlatform;
-                    
-                    let logoInfoValue = 'Not provided';
-                    const uploadedImageInfo = uploadedImageFile ? `${uploadedImageFile.name} (${(uploadedImageFile.size / 1024).toFixed(1)} KB)` : null;
-
-                    if (uploadedImageInfo && uploadedImageInfo !== 'None') {
-                        logoInfoValue = `Uploaded: ${uploadedImageInfo}`;
-                    } else if (tokenImage && tokenImage !== 'Not provided') {
-                        logoInfoValue = `URL: ${tokenImage}`;
-                    } else if (tokenSymbolValue) {
-                        logoInfoValue = `Generated from symbol: ${tokenSymbolValue}`;
-                    }
-
-
-                    const queryParams = new URLSearchParams({
-                        timestamp: timestamp,
-                        tokenName: tokenNameValue,
-                        tokenSymbol: tokenSymbolValue,
-                        description: descriptionValue,
-                        platform: platformValue,
-                        logoInfo: logoInfoValue,
-                        website: tokenWebsite, // Add website
-                        twitter: tokenTwitter,   // Add twitter
-                        telegram: tokenTelegram  // Add telegram
-                    });
-
-                    const fullZapierUrl = `${ZAPIER_WEBHOOK_URL}?${queryParams.toString()}`;
-
-                    // Send data to Zapier Webhook using GET
-                    fetch(fullZapierUrl, {
-                        method: 'GET'
-                    }).then(response => {
-                        if (!response.ok) {
-                            console.warn('Zapier Webhook (GET): Call failed with status:', response.status, response.statusText);
-                            response.text().then(text => console.warn('Zapier Webhook (GET) Response:', text));
-                        } else {
-                            // console.log('Zapier Webhook (GET): Data sent successfully.');
-                        }
-                    }).catch(error => {
-                        console.error('Zapier Webhook (GET): Error sending data:', error);
-                    });
-
-                    // This text is for the ADMINS/TEAM when they paste from clipboard (FALLBACK)
-                    // Note: launchData object used here is slightly different from what's sent to Zapier now.
-                    // This clipboard data can remain more detailed if needed.
-                    const detailsForClipboardFallback = {
-                        timestamp: timestamp,
-                        tokenName: tokenNameValue,
-                        tokenSymbol: tokenSymbolValue,
-                        description: descriptionValue,
-                        platform: platformValue,
-                        totalSupply: "1,000,000,000 (Fixed)", // Hardcoded as it's fixed
-                        decimals: "9 (Fixed)", // Hardcoded as it's fixed
-                        imageUrl: tokenImage || 'Not provided',
-                        uploadedFileInfo: uploadedImageInfo || 'None',
-                        logoInfoForTeam: logoInfoValue, // Consistent with what's sent
-                        website: tokenWebsite,
-                        twitter: tokenTwitter,
-                        telegram: tokenTelegram
-                    };
-
-                    const detailsTextForClipboard = `PredictAI - Manual Token Launch Request (FALLBACK):
---------------------------------------
-Token Name: ${detailsForClipboardFallback.tokenName}
-Token Symbol: ${detailsForClipboardFallback.tokenSymbol}
-Description: ${detailsForClipboardFallback.description}
-Launch Platform: ${detailsForClipboardFallback.platform}
-Total Supply: ${detailsForClipboardFallback.totalSupply}
-Decimals: ${detailsForClipboardFallback.decimals}
-Logo Info: ${detailsForClipboardFallback.logoInfoForTeam}
-Image URL (if provided): ${detailsForClipboardFallback.imageUrl}
-Uploaded File (if provided): ${detailsForClipboardFallback.uploadedFileInfo}
-Website: ${detailsForClipboardFallback.website}
-X (Twitter): ${detailsForClipboardFallback.twitter}
-Telegram: ${detailsForClipboardFallback.telegram}
---------------------------------------
-Date: ${new Date(detailsForClipboardFallback.timestamp).toLocaleString()}
---------------------------------------
-Please launch this token manually and announce on Twitter @PredictAI_Official.`;
-
-                    // Store submitted token data in localStorage
-                    const submittedTokenData = {
-                        timestamp: timestamp,
-                        name: tokenNameValue,
-                        symbol: tokenSymbolValue,
-                        description: descriptionValue,
-                        platform: platformValue,
-                        logoInfo: logoInfoValue, // This contains uploaded, URL, or generated info
-                        website: tokenWebsite,
-                        twitter: tokenTwitter,
-                        telegram: tokenTelegram,
-                        // Store the direct image source for easier display on launched-tokens.html
-                        displayLogo: uploadedImagePreviewSrc || tokenImage || (tokenSymbolValue ? `jdenticon:${tokenSymbolValue}` : 'placeholder')
-                    };
-
-                    try {
-                        let submittedTokens = JSON.parse(localStorage.getItem('predictAI_submittedTokens')) || [];
-                        submittedTokens.unshift(submittedTokenData); // Add new token to the beginning of the array
-                        if (submittedTokens.length > 50) { // Keep only the latest 50 submissions
-                            submittedTokens = submittedTokens.slice(0, 50);
-                        }
-                        localStorage.setItem('predictAI_submittedTokens', JSON.stringify(submittedTokens));
-                    } catch (e) {
-                        console.error("Error saving to localStorage:", e);
-                        // Optionally, inform the user or log this more visibly if localStorage is critical
-                    }
-
-                    // After simulated delay, show "success"
-                    setTimeout(() => {
-                        Swal.fire({
-                            title: 'Token Launch Successful!',
-                            icon: 'success',
-                            html: `
-                                <div class="text-left text-sm space-y-2 text-light-text-secondary dark:text-dark-text-secondary">
-                                  <p>Processing complete! Your token <strong class="text-light-text dark:text-dark-text">${detailsForClipboardFallback.tokenName} (${detailsForClipboardFallback.tokenSymbol})</strong> has been automatically launched on <strong class="text-light-text dark:text-dark-text">${detailsForClipboardFallback.platform}</strong>!</p>
-                                  <p>It should be live on the network shortly.</p>
-                                  <div class="my-3 p-3 bg-light-bg dark:bg-dark-bg rounded-md border border-light-border dark:border-dark-border text-xs">
-                                    <p><strong>Name:</strong> ${detailsForClipboardFallback.tokenName}</p>
-                                    <p><strong>Symbol:</strong> ${detailsForClipboardFallback.tokenSymbol}</p>
-                                    <p><strong>Platform:</strong> ${detailsForClipboardFallback.platform}</p>
-                                  </div>
-                                  <p class="mt-2 text-xs">You can copy the launch confirmation for your records.</p>
-                                  <button id="copy-launch-details" class="mt-4 w-full cursor-btn bg-highlight text-white font-medium rounded-md px-4 py-2 text-sm hover:bg-green-500">Copy Launch Confirmation</button>
-                                </div>
-                            `,
-                            confirmButtonText: 'Awesome!',
-                            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                            confirmButtonColor: '#56eced',
-                            didOpen: () => {
-                                document.getElementById('copy-launch-details').addEventListener('click', () => {
-                                    navigator.clipboard.writeText(detailsTextForClipboard) // This copies the ADMIN text
-                                    .then(() => {
-                                        Swal.fire({
-                                            toast: true,
-                                            icon: 'success',
-                                            title: 'Confirmation copied to clipboard!',
-                                            position: 'top-end',
-                                            showConfirmButton: false,
-                                            timer: 2000,
-                                            timerProgressBar: true,
-                                            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                                            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                                        });
-                                    }).catch(err => {
-                                        console.error('Failed to copy: ', err);
-                                        Swal.fire({
-                                            toast: true,
-                                            icon: 'error',
-                                            title: 'Failed to copy confirmation',
-                                            position: 'top-end',
-                                            showConfirmButton: false,
-                                            timer: 2000,
-                                            timerProgressBar: true,
-                                            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                                            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                                        });
-                                    });
-                                });
-                            }
-                        });
-                        form.reset(); 
-                        if (tokenImagePreview) {
-                            tokenImagePreview.classList.add('hidden');
-                            tokenImagePreview.src = '#';
-                        }
-                        if (tokenImageUrlInput) {
-                            tokenImageUrlInput.disabled = false;
-                            tokenImageUrlInput.value = ''; 
-                        }
-                        if (tokenImageUpload) {
-                            tokenImageUpload.value = '';
-                        }
-                    }, 12000); // This timeout MUST match the Swal.fire timer above
-                }
+            }).catch(() => {
+                Swal.fire('Fehler!', 'Es gab ein Problem beim Senden.', 'error');
             });
         });
     }
@@ -1169,24 +843,13 @@ Please launch this token manually and announce on Twitter @PredictAI_Official.`;
         document.getElementById('token-symbol').value = idea.symbol;
         document.getElementById('token-description').value = idea.description;
         document.getElementById('token-image').value = idea.fallbackImageUrl || '';
-        document.getElementById('token-website').value = idea.articleUrl || ''; // Populate website URL
-        
-        // Reset image upload and preview when an idea is selected
-        if (tokenImageUpload) {
-            tokenImageUpload.value = ''; // Clear file input
-        }
-        if (tokenImagePreview) {
-            tokenImagePreview.classList.add('hidden');
-            tokenImagePreview.src = '#';
-        }
-        if (tokenImageUrlInput) {
-            tokenImageUrlInput.disabled = false; // Ensure URL input is enabled
-        }
-        
+        document.getElementById('token-website').value = idea.articleUrl || '';
+        // Nach dem Ausfüllen zum Formular scrollen
+        document.getElementById('token-launch-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
         Swal.fire({
             toast: true,
             icon: 'success',
-            title: `\'${idea.name}\' details loaded into form!`,
+            title: `'${idea.name}' details loaded into form!`,
             position: 'top-end',
             showConfirmButton: false,
             timer: 2000,
@@ -1429,71 +1092,67 @@ Please launch this token manually and announce on Twitter @PredictAI_Official.`;
     });
 
     document.addEventListener('DOMContentLoaded', function() {
-      // Wallet Connect Logic (New - from index.html)
-      const connectWalletBtn = document.getElementById('connect-wallet');
-      const walletBalanceSpan = document.getElementById('wallet-balance');
-      const walletBalanceAmount = document.getElementById('wallet-balance-amount');
-      const preActivationPopup = document.getElementById('pre-activation-popup');
-      const closePreActivationPopupButton = document.getElementById('close-pre-activation-popup');
-      const gotItButton = document.getElementById('got-it-button');
+      // ... existing code ...
 
-      function openPreActivationPopup() {
-        if (preActivationPopup && !localStorage.getItem('predictAI_almostReadyAcknowledged')) {
-            preActivationPopup.classList.remove('hidden');
-        } else {
-            Swal.fire({
-                title: 'Wallet Feature',
-                text: 'Full wallet functionality is activating soon! Check back after our official launch.',
-                icon: 'info',
+      // Add event listener for the token launch form
+      const tokenLaunchForm = document.getElementById('token-launch-form');
+      if (tokenLaunchForm) {
+        tokenLaunchForm.addEventListener('submit', async function(event) {
+          event.preventDefault(); // Prevent the default form submission
+
+          // Get form data
+          const formData = new FormData(tokenLaunchForm);
+          const formDataObject = {};
+          formData.forEach((value, key) => {
+            formDataObject[key] = value;
+          });
+
+          // Send data to Zapier webhook
+          try {
+            const response = await fetch('https://hooks.zapier.com/hooks/catch/23053180/2jhsjwo/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formDataObject),
+            });
+
+            if (response.ok) {
+              // Show success message
+              Swal.fire({
+                title: 'Success!',
+                text: 'Your token launch request has been submitted.',
+                icon: 'success',
                 confirmButtonColor: tailwind.config.theme.extend.colors.accent,
                 background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
                 color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
-            });
-        }
-      }
-
-      if (connectWalletBtn) {
-          connectWalletBtn.addEventListener('click', openPreActivationPopup);
-      }
-
-      if (preActivationPopup && closePreActivationPopupButton && gotItButton) {
-          closePreActivationPopupButton.addEventListener('click', () => {
-              preActivationPopup.classList.add('hidden');
-          });
-
-          gotItButton.addEventListener('click', () => {
-              preActivationPopup.classList.add('hidden');
-              localStorage.setItem('predictAI_almostReadyAcknowledged', 'true');
-              Swal.fire({
-                  title: 'Got it!',
-                  text: 'Thanks for your patience! Full features are on the way.',
-                  icon: 'success',
-                  timer: 2000,
-                  showConfirmButton: false,
-                  background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
-                  color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
               });
-          });
-      } else {
-          console.warn("[Token Launch Page] New popup HTML elements (pre-activation-popup, etc.) not found. Ensure they are in the HTML.");
+            } else {
+              // Show error message
+              Swal.fire({
+                title: 'Error!',
+                text: 'There was an error submitting your token launch request. Please try again.',
+                icon: 'error',
+                confirmButtonColor: tailwind.config.theme.extend.colors.accent,
+                background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
+                color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
+              });
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            // Show error message
+            Swal.fire({
+              title: 'Error!',
+              text: 'There was an error submitting your token launch request. Please try again.',
+              icon: 'error',
+              confirmButtonColor: tailwind.config.theme.extend.colors.accent,
+              background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
+              color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
+            });
+          }
+        });
       }
-      // End Wallet Connect Logic
-
-      // Existing scripts from token-launch.html that should be within DOMContentLoaded
-      const tokenNameInput = document.getElementById('token-name');
-      const tokenSymbolInput = document.getElementById('token-symbol');
-      const tokenDescriptionInput = document.getElementById('token-description');
-      const tokenImageInput = document.getElementById('token-image');
-      const tokenWebsiteInput = document.getElementById('token-website');
-      const tokenTwitterInput = document.getElementById('token-twitter');
-      const tokenTelegramInput = document.getElementById('token-telegram');
-      const launchPlatformSelect = document.getElementById('selected-launch-platform');
-      const tokenImageUploadInput = document.getElementById('token-image-upload');
-      const launchTokenBtn = document.getElementById('launch-token-btn');
-
-      // ... existing code ...
     });
-
   </script>
 </body>
 </html> 
