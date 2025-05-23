@@ -16,6 +16,28 @@
   <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" crossorigin="anonymous"></script>
   <!-- Custom Styles -->
   <link rel="stylesheet" href="styles.css">
+  <style>
+    @media (max-width: 767px) {
+      aside.fixed {
+        width: 64px !important;
+        min-width: 64px !important;
+        max-width: 64px !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      .sidebar-link {
+        justify-content: center !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+      .sidebar-link span, .sidebar-link .sidebar-label, .sidebar-link .ml-2, .sidebar-link .font-medium {
+        display: none !important;
+      }
+      aside .mb-8, aside .mt-auto, aside p, aside img {
+        display: none !important;
+      }
+    }
+  </style>
   <script>
     tailwind.config = {
       darkMode: 'class',
