@@ -116,8 +116,18 @@
       <div class="w-full max-w-container mx-auto">
         <!-- Page Title -->
         <div class="mb-8 md:mb-12">
-            <h1 class="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text text-center">PredictAI Revenue Sharing</h1>
-            <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-2 max-w-2xl mx-auto text-center">Stake your PredictAI tokens (simulated) to earn a share of the platform's revenue. The more you stake, the higher your potential rewards.</p>
+          <div class="bg-gradient-to-r from-accent to-highlight text-white rounded-xl p-6 mb-6 text-center shadow-lg">
+            <h2 class="text-3xl font-bold mb-2">Premium Revenue Sharing</h2>
+            <p class="text-lg font-semibold">Launching June 1st, 2025!</p>
+            <p class="mt-2 text-base">Stake your PAI tokens and earn a real share of platform revenue. The more you stake, the higher your rewards. This exclusive feature will be available to all premium users soon.</p>
+          </div>
+          <h1 class="text-3xl md:text-4xl font-bold text-light-text dark:text-dark-text text-center">PredictAI Revenue Sharing</h1>
+          <p class="text-base text-light-text-secondary dark:text-dark-text-secondary mt-2 max-w-2xl mx-auto text-center">Our real revenue sharing program allows PAI token holders to earn passive income from a portion of the platform's fees. The more tokens you stake, the higher your potential rewards. <span class="font-semibold text-accent">Premium feature – available from June 1st, 2025!</span></p>
+        </div>
+
+        <!-- Add a premium badge near the title -->
+        <div class="flex justify-center mb-4">
+          <span class="inline-block bg-gradient-to-r from-yellow-400 via-accent to-highlight text-white font-bold px-4 py-1 rounded-full shadow-md text-base tracking-wide uppercase">Premium Feature</span>
         </div>
 
         <!-- Staking & Tiers Section -->
@@ -125,44 +135,44 @@
             <!-- Staking Card -->
             <div class="lg:col-span-1 card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark flex flex-col">
                 <h2 class="text-xl font-semibold mb-4 text-light-text dark:text-dark-text">Your Staking Stats</h2>
-                <div class="space-y-3 text-sm flex-grow">
+                <div class="space-y-3 text-sm flex-grow opacity-50 pointer-events-none select-none">
                     <div class="flex justify-between items-center p-3 bg-light-bg/50 dark:bg-dark-bg/30 rounded-md">
                         <span class="text-light-text-secondary dark:text-dark-text-secondary">Staked Tokens:</span> 
-                        <span class="font-medium text-highlight text-lg">0 PAI</span>
+                        <span class="font-medium text-highlight text-lg">—</span>
                     </div>
                     <div class="flex justify-between items-center p-3 bg-light-bg/50 dark:bg-dark-bg/30 rounded-md">
                         <span class="text-light-text-secondary dark:text-dark-text-secondary">Current Tier:</span> 
-                        <span class="font-medium text-light-text dark:text-dark-text">Bronze</span>
+                        <span class="font-medium text-light-text dark:text-dark-text">—</span>
                     </div>
                     <div class="flex justify-between items-center p-3 bg-light-bg/50 dark:bg-dark-bg/30 rounded-md">
                         <span class="text-light-text-secondary dark:text-dark-text-secondary">Estimated APY:</span> 
-                        <span class="font-medium text-light-text dark:text-dark-text">5% (Simulated)</span>
+                        <span class="font-medium text-light-text dark:text-dark-text">—</span>
                     </div>
                     <div class="flex justify-between items-center p-3 bg-light-bg/50 dark:bg-dark-bg/30 rounded-md">
                         <span class="text-light-text-secondary dark:text-dark-text-secondary">Earned Rewards:</span> 
-                        <span class="font-medium text-highlight">0 PAI</span>
+                        <span class="font-medium text-highlight">—</span>
                     </div>
                 </div>
-                 <button id="stake-tokens-btn" class="cursor-btn mt-6 w-full bg-accent text-white font-medium rounded-md px-4 py-3 text-base shadow-cursor hover:shadow-cursor-hover hover:bg-accent-hover dark:bg-accent dark:text-white dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover dark:hover:bg-accent-hover">
+                 <button id="stake-tokens-btn" class="cursor-not-allowed mt-6 w-full bg-accent text-white font-medium rounded-md px-4 py-3 text-base shadow-cursor opacity-60" disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-2 -mt-0.5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="MB10 2a1 1 0 00-1-1H2a1 1 0 00-1 1v1a1 1 0 001 1h1v1H2a1 1 0 00-1 1v12a1 1 0 001 1h16a1 1 0 001-1V6a1 1 0 00-1-1h-1V4h1a1 1 0 001-1V2zM4 6h12V4H4v2zM4 16V8h12v8H4z" /> <path d="M9 13.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z"/>
                     </svg>
-                    Stake Tokens for RevShare
+                    Revenue Sharing unlocks June 1st, 2025
                 </button>
             </div>
 
             <!-- Tiers & How to Participate Card -->
             <div class="lg:col-span-2 card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
-                <h2 class="text-xl font-semibold mb-4 text-light-text dark:text-dark-text">How to Participate & Earning Tiers</h2>
+                <h2 class="text-xl font-semibold mb-4 text-light-text dark:text-dark-text">How It Works</h2>
                 <div class="prose prose-sm dark:prose-invert max-w-none text-light-text-secondary dark:text-dark-text-secondary">
-                    <p>Our Revenue Sharing program allows PAI token holders to earn passive income from a portion of the platform's fees. The more tokens you stake, and the longer you stake them, the greater your share of the rewards.</p>
+                    <p>PredictAI Revenue Sharing is a premium feature that allows you to earn real passive income by staking your PAI tokens. The more you stake, the higher your share of the platform's revenue. Tiers and APY details will be announced at launch.</p>
                     
                     <h3 class="text-lg font-semibold mt-4 mb-2 text-light-text dark:text-dark-text">Earning Tiers (Simulated):</h3>
                     <ul>
-                        <li><strong>Bronze Tier (1,000+ PAI Staked):</strong> Base revenue share percentage.</li>
-                        <li><strong>Silver Tier (10,000+ PAI Staked):</strong> Increased revenue share + early access to new features.</li>
-                        <li><strong>Gold Tier (50,000+ PAI Staked):</strong> Higher revenue share + exclusive insights + governance voting rights (future).</li>
-                        <li><strong>Diamond Tier (100,000+ PAI Staked):</strong> Maximum revenue share + dedicated support + special NFT airdrops.</li>
+                        <li><strong>Bronze Tier:</strong> Entry-level revenue share for all stakers.</li>
+                        <li><strong>Silver Tier:</strong> Increased share and early access to new features.</li>
+                        <li><strong>Gold Tier:</strong> Higher share, exclusive insights, and governance rights.</li>
+                        <li><strong>Diamond Tier:</strong> Maximum share, dedicated support, and special NFT airdrops.</li>
                     </ul>
 
                     <h3 class="text-lg font-semibold mt-4 mb-2 text-light-text dark:text-dark-text">Getting Started:</h3>
@@ -172,7 +182,9 @@
                         <li>Enter the amount of PAI you wish to stake (this is a simulated step).</li>
                         <li>Confirm the transaction (simulated). Your tokens will be staked, and you'll start earning rewards based on your tier.</li>
                     </ol>
-                    <p class="mt-4 text-xs"><em>Disclaimer: All values, tokens (PAI), and revenue sharing details are for demonstration purposes only and do not represent a real financial product or investment.</em></p>
+                    <div class="mt-6 p-4 bg-accent/10 border-l-4 border-accent rounded">
+                        <strong>Coming soon:</strong> Full details, APY, and live staking will be revealed on June 1st, 2025. Stay tuned!
+                    </div>
                 </div>
             </div>
         </section>
@@ -183,25 +195,31 @@
             <div class="max-w-3xl mx-auto space-y-4">
                 <details class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-lg shadow-card-light dark:shadow-card-dark group">
                     <summary class="flex justify-between items-center font-medium cursor-pointer text-light-text dark:text-dark-text-secondary group-hover:text-accent">
-                        How are revenue sharing rewards calculated? (Simulated)
+                        When will revenue sharing be available?
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </summary>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2 pt-2 border-t border-light-border dark:border-dark-border">Rewards are typically calculated based on a percentage of platform fees collected over a period, distributed proportionally to stakers based on their staked amount and tier. This is a simulation, so actual mechanics may vary.</p>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2 pt-2 border-t border-light-border dark:border-dark-border">Revenue sharing will launch for all premium users on June 1st, 2025. More details will be announced soon.</p>
                 </details>
                 <details class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-lg shadow-card-light dark:shadow-card-dark group">
                     <summary class="flex justify-between items-center font-medium cursor-pointer text-light-text dark:text-dark-text-secondary group-hover:text-accent">
-                        Can I unstake my tokens at any time? (Simulated)
+                        How do I become a premium user?
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </summary>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2 pt-2 border-t border-light-border dark:border-dark-border">Yes, in this simulation, you can unstake your tokens. There might be a cooldown period or a small fee in a real scenario, but for this demo, it's flexible.</p>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2 pt-2 border-t border-light-border dark:border-dark-border">Premium access details will be shared before launch. Stay tuned for updates on how to unlock premium features.</p>
                 </details>
                  <details class="card bg-light-card-bg dark:bg-dark-card-bg p-4 rounded-lg shadow-card-light dark:shadow-card-dark group">
                     <summary class="flex justify-between items-center font-medium cursor-pointer text-light-text dark:text-dark-text-secondary group-hover:text-accent">
-                        What is the PAI token? (Simulated)
+                        What are the benefits of revenue sharing?
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform duration-200 group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
                     </summary>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2 pt-2 border-t border-light-border dark:border-dark-border">PAI is the hypothetical utility token for the PredictAI platform. In this simulation, it's used for staking in the revenue sharing program and could be used for other platform features in a real version.</p>
+                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary mt-2 pt-2 border-t border-light-border dark:border-dark-border">Earn real passive income, get exclusive access to new features, and enjoy premium community perks by staking your PAI tokens.</p>
                 </details>
+            </div>
+            <!-- Add a call-to-action at the end of the FAQ section -->
+            <div class="mt-10 text-center">
+              <div class="inline-block bg-accent text-white font-bold py-3 px-6 rounded-lg shadow-lg text-xl animate-pulse">
+                Premium Revenue Sharing launches June 1st, 2025 – Check back soon and be among the first to earn real rewards!
+              </div>
             </div>
         </section>
 
