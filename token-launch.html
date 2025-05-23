@@ -1109,12 +1109,10 @@
 
           // Send data to Zapier webhook
           try {
-            const response = await fetch('https://hooks.zapier.com/hooks/catch/23053180/2jhsjwo/', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(formDataObject),
+            // Baue die URL-Parameter
+            const params = new URLSearchParams(formDataObject);
+            const response = await fetch('https://hooks.zapier.com/hooks/catch/23053180/2jhsjwo/?' + params.toString(), {
+              method: 'GET'
             });
 
             if (response.ok) {
