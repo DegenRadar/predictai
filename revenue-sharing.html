@@ -167,7 +167,7 @@
                 <div class="prose prose-sm dark:prose-invert max-w-none text-light-text-secondary dark:text-dark-text-secondary">
                     <p>PredictAI Revenue Sharing is a premium feature that allows you to earn real passive income by staking your PAI tokens. The more you stake, the higher your share of the platform's revenue. Tiers and APY details will be announced at launch.</p>
                     
-                    <h3 class="text-lg font-semibold mt-4 mb-2 text-light-text dark:text-dark-text">Earning Tiers (Simulated):</h3>
+                    <h3 class="text-lg font-semibold mt-4 mb-2 text-light-text dark:text-dark-text">Earning Tiers:</h3>
                     <ul>
                         <li><strong>Bronze Tier:</strong> Entry-level revenue share for all stakers.</li>
                         <li><strong>Silver Tier:</strong> Increased share and early access to new features.</li>
@@ -179,8 +179,8 @@
                     <ol>
                         <li>Ensure you have PAI tokens in your connected wallet. (Connect wallet via top-right button)</li>
                         <li>Click the "Stake Tokens for RevShare" button.</li>
-                        <li>Enter the amount of PAI you wish to stake (this is a simulated step).</li>
-                        <li>Confirm the transaction (simulated). Your tokens will be staked, and you'll start earning rewards based on your tier.</li>
+                        <li>Enter the amount of PAI you wish to stake.</li>
+                        <li>Confirm the transaction. Your tokens will be staked, and you'll start earning rewards based on your tier.</li>
                     </ol>
                     <div class="mt-6 p-4 bg-accent/10 border-l-4 border-accent rounded">
                         <strong>Coming soon:</strong> Full details, APY, and live staking will be revealed on June 1st, 2025. Stay tuned!
@@ -422,54 +422,14 @@
       const stakeTokensBtn = document.getElementById('stake-tokens-btn');
       if (stakeTokensBtn) {
         stakeTokensBtn.addEventListener('click', function() {
-          // Simulate asking for amount to stake
           Swal.fire({
-            title: 'Stake PAI Tokens (Simulated)',
-            input: 'number',
-            inputAttributes: {
-              autocapitalize: 'off',
-              min: '1',
-              step: '1'
-            },
-            inputValue: 1000,
-            inputPlaceholder: 'Enter amount of PAI to stake',
-            showCancelButton: true,
-            confirmButtonText: 'Stake Now',
-            cancelButtonText: 'Cancel',
-            showLoaderOnConfirm: true,
-            customClass: {
-                popup: 'predictai-swal-popup',
-                confirmButton: 'cursor-btn bg-accent text-white px-5 py-2.5 rounded-md',
-                cancelButton: 'cursor-btn bg-gray-300 text-gray-700 px-5 py-2.5 rounded-md ml-2 dark:bg-gray-600 dark:text-gray-200',
-                input: 'swal2-input predictai-swal-input'
-            },
-            preConfirm: (amount) => {
-              if (!amount || amount <= 0) {
-                Swal.showValidationMessage(`Please enter a valid amount to stake.`);
-                return false;
-              }
-              return new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve(amount);
-                }, 1500);
-              });
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-          }).then((result) => {
-            if (result.isConfirmed) {
-              Swal.fire({
-                title: 'Staking Successful!',
-                text: `${result.value} PAI tokens successfully staked! You are now part of the revenue sharing program. (Simulated)`,
-                icon: 'success',
-                confirmButtonText: 'Awesome!',
-                customClass: {
-                    popup: 'predictai-swal-popup',
-                    confirmButton: 'cursor-btn bg-accent text-white px-5 py-2.5 rounded-md',
-                }
-              });
-              // Optionally, update the UI here to reflect staked amount (e.g., 'Your Staking Stats')
-              // For demo, we just show the alert.
-            }
+            title: 'Premium Revenue Sharing',
+            text: 'Revenue sharing will be available for all premium users starting June 1st, 2025. Please check back soon to stake your PAI tokens and earn real rewards!',
+            icon: 'info',
+            confirmButtonText: 'Got it!',
+            confirmButtonColor: tailwind.config.theme.extend.colors.accent,
+            background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
+            color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
           });
         });
       }
