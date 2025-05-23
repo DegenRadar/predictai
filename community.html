@@ -412,7 +412,7 @@
       
       <div class="p-6 md:p-8">
         <div class="flex items-center justify-center mb-3">
-            <svg class="h-7 w-7 text-accent mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0M7.5 3.03v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0" /></svg>
+            <svg class="h-7 w-7 text-accent mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v0M7.5 3.03v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0" /></svg>
             <h2 class="text-xl sm:text-2xl font-semibold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
         </div>
         <p class="text-xs sm:text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4 leading-relaxed">
@@ -522,10 +522,37 @@
           console.warn("[Community Page] New popup HTML elements (pre-activation-popup, etc.) not found.");
       }
 
-      // Supabase Client Initialization (if still needed here, or ensure it's globally available)
-      // const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with actual URL if not set globally
-      // const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with actual Key if not set globally
-      // const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
+      // Supabase-Client initialisieren (Produktiv-Keys!)
+      const supabaseUrl = 'https://pewfxgfobrbejgmybdxr.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBld2Z4Z2ZvYnJiZWpnbXliZHhyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc4NDIzMDQsImV4cCI6MjA2MzQxODMwNH0._g4aGafZI2vuXm5uqKyqMb0QVF3b9Io38NuiMP8zGiE';
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+      async function initializeChatRoomSwitcher() {
+        const container = document.getElementById('token-chat-rooms-container');
+        container.innerHTML = '<p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Loading chat rooms...</p>';
+
+        const { data, error } = await supabase.from('chat_rooms').select('*').order('created_at', { ascending: true });
+        if (error) {
+          container.innerHTML = '<p class="text-sm text-red-500">Error loading chat rooms.</p>';
+          return;
+        }
+        if (!data || data.length === 0) {
+          container.innerHTML = '<p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">No chat rooms available.</p>';
+          return;
+        }
+
+        container.innerHTML = '';
+        data.forEach(room => {
+          const btn = document.createElement('button');
+          btn.className = 'w-full token-chat-room-card bg-light-bg dark:bg-dark-bg border border-light-border dark:border-dark-border rounded-lg px-4 py-3 text-left transition hover:shadow-lg hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent';
+          btn.innerHTML = `<span class="font-semibold text-accent">${room.label || room.id}</span><br><span class="text-xs text-light-text-secondary dark:text-dark-text-secondary">${room.contract_address || ''}</span>`;
+          btn.onclick = () => {
+            document.getElementById('chat-iframe').src = `https://predictaichat.vercel.app/?room=${encodeURIComponent(room.id)}`;
+            document.getElementById('current-chat-room-title').textContent = room.label || room.id;
+          };
+          container.appendChild(btn);
+        });
+      }
 
       // ... Other Community Page Specific JS that needs DOM to be ready ...
       initializeAuthUI(); // Ensure this is called after Supabase client is ready
