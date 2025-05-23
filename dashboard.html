@@ -131,10 +131,10 @@
     <!-- Top Bar -->
     <header class="w-full flex justify-end items-center px-6 py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md sticky top-0 z-10 border-b border-light-border dark:border-dark-border" style="min-height: 60px;">
       <div id="wallet-section" class="flex items-center gap-3">
-        <button id="connect-wallet" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-3 py-1.5 text-xs shadow-cursor hover:shadow-cursor-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover">
-          Connect Wallet
+        <button id="connect-wallet" class="bg-transparent text-accent border-2 border-accent font-semibold rounded-md px-4 py-2 text-xs hover:bg-accent hover:text-gray-900 transition-colors duration-300 flex items-center">
+          <i class="fas fa-wallet mr-1 sm:mr-2"></i>Connect Wallet
         </button>
-        <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: 50 SOL</span>
+        <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: <span id="wallet-balance-amount">0</span> SOL</span>
       </div>
     </header>
 
@@ -400,18 +400,15 @@
     <footer class="w-full bg-light-sidebar text-light-text-secondary py-6 px-6 md:px-10 mt-auto border-t border-light-border dark:bg-dark-sidebar dark:text-dark-text-secondary dark:border-dark-border">
       <div class="max-w-container mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
         <div class="text-sm">
-          © <span id="footer-year-dashboard">2024</span> PredictAI. All rights reserved.
-        </div>
-        <div class="flex gap-4 mb-2 md:mb-0 text-sm">
-          <a href="#" class="hover:text-accent dark:hover:text-accent">About</a>
-          <a href="mailto:support@predictai.com" class="hover:text-accent dark:hover:text-accent">Contact</a>
-          <a href="#" class="hover:text-accent dark:hover:text-accent">Privacy Policy</a>
+          © 2024 PredictAI. All rights reserved.
         </div>
         <div class="flex gap-3">
-          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Twitter">
-            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.38 1.64 4.7c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.82 1.92 3.6-.71-.02-1.38-.22-1.97-.54v.05c0 2.1 1.5 3.85 3.5 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.11 2.94 3.97 2.97A8.6 8.6 0 0 1 2 19.54c-.32 0-.63-.02-.94-.06A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg>
+          <a href="https://x.com/PredictAiPro" target="_blank" rel="noopener noreferrer" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="X (Twitter)">
+            <svg xmlns='http://www.w3.org/2000/svg' class='w-5 h-5' fill='currentColor' viewBox='0 0 16 16'>
+              <path d='M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.602.75Zm-.86 13.028h1.36L4.323 2.145H2.865z'/>
+            </svg>
           </a>
-          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
+          <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
             <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M9.04 16.87l-.39 3.66c.56 0 .8-.24 1.09-.53l2.62-2.5 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.84c.32-1.48-.54-2.06-1.5-1.7L2.2 9.3c-1.45.56-1.43 1.36-.25 1.72l4.6 1.44 10.7-6.74c.5-.32.96-.14.58.18z"/></svg>
           </a>
           <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Discord">
@@ -420,15 +417,50 @@
         </div>
       </div>
     </footer>
+  </div> <!-- End Main Content Wrapper -->
+
+  <!-- Pre-Activation Wallet Popup (Copied from index.html) -->
+  <div id="pre-activation-popup" class="fixed inset-0 bg-black/70 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-light-card-bg dark:bg-dark-card-bg p-0 rounded-xl shadow-2xl w-full max-w-lg text-center relative overflow-hidden">
+      <img src="banner.png" alt="PredictAI Banner" class="w-full h-auto object-cover mb-2 sm:mb-0">
+      <button id="close-pre-activation-popup" class="absolute top-3 right-4 text-white hover:text-gray-200 text-3xl bg-black/30 rounded-full w-8 h-8 flex items-center justify-center">&times;</button>
+      
+      <div class="p-6 md:p-8">
+        <div class="flex items-center justify-center mb-3">
+            <svg class="h-7 w-7 text-accent mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0M7.5 3.03v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0" /></svg>
+            <h2 class="text-xl sm:text-2xl font-semibold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4 leading-relaxed">
+          Full wallet integration and all related features will be activated for everyone approximately <strong class="text-light-text dark:text-dark-text">48 hours after our official launch.</strong>
+          <br class="hidden sm:block"/>Stay updated! Join our official Telegram for launch announcements.
+        </p>
+        <p class="text-base sm:text-lg font-semibold text-accent dark:text-accent-hover mb-5">
+            Launch Countdown: <span class="animate-pulse">Activating Soon!</span>
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+            <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" 
+               class="w-full sm:w-auto bg-transparent border-2 border-white text-white font-semibold rounded-lg px-5 py-2.5 text-sm hover:bg-white/10 dark:hover:bg-white/20 transition-colors duration-300 inline-flex items-center justify-center">
+                <i class="fab fa-telegram-plane mr-2"></i> Join on Telegram
+            </a>
+            <button id="got-it-button" 
+                    class="w-full sm:w-auto bg-transparent border-2 border-accent text-accent font-semibold rounded-lg px-8 py-2.5 text-sm hover:bg-accent hover:text-gray-900 transition-colors duration-300">
+              Got It!
+            </button>
+        </div>
+        <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-5">
+            Preview. Full functionality soon!
+        </p>
+      </div>
+    </div>
   </div>
 
-<script>
+  <script>
     // --- Global Variables & Constants ---\n
     const html = document.documentElement;
     const themeToggle = document.getElementById('theme-toggle');
     const themeIcon = document.getElementById('theme-icon');
     const connectWalletBtn = document.getElementById('connect-wallet');
-    const walletBalanceSpan = document.getElementById('wallet-balance');
+    // const walletBalanceSpan = document.getElementById('wallet-balance'); // Duplicate, removing
     let tokenTrendChart = null; 
     const TRUMP_CA = "6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN"; // Example CA
     const TRUMP_LOGO_URL = "https://dd.dexscreener.com/ds-data/tokens/solana/6p6xgHyF7AeE6TZkSmFsko444wqoP15icUSqi2jfGiPN.png?size=lg&key=f02e9e";
@@ -844,34 +876,24 @@
 
     if (connectWalletBtn) {
         connectWalletBtn.addEventListener('click', () => {
-            Swal.fire({
-                html: `
-                    <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
-                    <h2 class="text-2xl font-bold mb-4 text-light-text dark:text-dark-text"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="inline-block mr-2 -mt-1 h-6 w-6 text-accent"><path d="M13.1641 3.01327C12.5993 1.71359 11.4007 1.71359 10.8359 3.01327L9.51587 6.06189C9.36106 6.42762 9.00106 6.67386 8.59992 6.6921L5.28453 6.84403C3.89037 6.90919 3.33111 8.63908 4.38258 9.662L6.82073 12.0369C7.10354 12.3116 7.23654 12.7038 7.18043 13.094L6.51153 16.5597C6.22203 18.0373 7.68953 19.0743 9.02992 18.362L11.8707 16.8676C12.2211 16.6807 12.6313 16.6807 12.9817 16.8676L15.8225 18.362C17.1629 19.0743 18.6304 18.0373 18.3409 16.5597L17.672 13.094C17.6159 12.7038 17.7489 12.3116 18.0317 12.0369L20.4698 9.662C21.5213 8.63908 20.962 6.90919 19.5679 6.84403L16.2525 6.6921C15.8513 6.67386 15.4913 6.42762 15.3365 6.06189L14.0165 3.01327C13.8117 2.54248 13.5 2.18058 13.1641 3.01327Z" fill="currentColor"></path><path d="M12 18C12.5523 18 13 17.5523 13 17V14C13 13.4477 12.5523 13 12 13C11.4477 13 11 13.4477 11 14V17C11 17.5523 11.4477 18 12 18Z" fill="currentColor"></path><path d="M12 22C11.4477 22 11 21.5523 11 21V20C11 19.4477 11.4477 19 12 19C12.5523 19 13 19.4477 13 20V21C13 21.5523 12.5523 22 12 22Z" fill="currentColor"></path></svg>Almost Ready to Connect!</h2>
-                    <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
-                        Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
-                    </p>
-                    <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
-                        Stay updated and be the first to know! Join our official Telegram channel for the latest announcements and launch countdown.
-                    </p>
-                    <div id="countdown-timer-placeholder" class="my-4 text-lg font-semibold text-accent dark:text-accent">
-                        Launch Countdown: Activating Soon!
-                    </div>
-                    <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #2AABEE; border-color: #2AABEE;"> <!-- Telegram Blue -->
-                        <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
-                    </a>
-                `,
-                showConfirmButton: true,
-                confirmButtonText: 'Got It!',
-                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                confirmButtonColor: '#56eced',
-                footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">This is a preview. Full functionality is launching soon!</p>',
-                customClass: {
-                    htmlContainer: 'swal2-html-container-no-icon'
-                },
-                showCloseButton: true
-            });
+            // Remove old SweetAlert Logic
+            // Swal.fire({ ... }); // Old logic removed
+            
+            // NEW: Trigger the HTML popup directly if it exists
+            const preActivationPopup = document.getElementById('pre-activation-popup');
+            if (preActivationPopup && !localStorage.getItem('predictAI_almostReadyAcknowledged')) {
+                 preActivationPopup.classList.remove('hidden');
+            } else {
+                // Fallback to a simpler SweetAlert if the new popup is already acknowledged or not found
+                Swal.fire({
+                    title: 'Wallet Feature',
+                    text: 'Full wallet functionality is activating soon! Check back after our official launch.',
+                    icon: 'info',
+                    confirmButtonColor: tailwind.config.theme.extend.colors.accent, // Use tailwind config
+                    background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
+                    color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
+                });
+            }
         });
     }
     
@@ -884,11 +906,14 @@
     document.addEventListener('DOMContentLoaded', () => {
       const storedTheme = localStorage.getItem('theme');
       const defaultTheme = storedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-      
+
       if (html.classList.contains('dark') && defaultTheme === 'light') {
           html.classList.remove('dark');
       }
-      setTheme(storedTheme || 'light');
+      // setTheme(storedTheme || 'light'); // setTheme is called later, avoid double call
+      // Initialize theme first, then create chart, then display data which might update chart theme
+      setTheme(defaultTheme);
+
 
       createTokenTrendChart(); 
       displayTrumpTokenData();
@@ -929,6 +954,111 @@
         }
       });
     });
-</script>
+
+    // Active Sidebar Link, Theme Initialization, and Page Specific Logic
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('[Dashboard] DOMContentLoaded event fired.');
+      // --- Theme Initialization and Toggle ---
+      // themeToggle = document.getElementById('theme-toggle'); // Already global
+      // themeIcon = document.getElementById('theme-icon'); // Already global
+
+      // --- REMOVE OLD Connect Wallet SweetAlert Logic from second DOMContentLoaded---
+      // const connectBtn = document.getElementById('connect-wallet'); // Already global and handled above
+      // if (connectBtn) { ... old SweetAlert logic ... } // This block is now fully removed
+
+      // --- NEW Connect Wallet Popup Logic (from index.html) ---
+      const connectWalletButton = document.getElementById('connect-wallet'); // Already global
+      const preActivationPopup = document.getElementById('pre-activation-popup');
+      const closePreActivationPopupButton = document.getElementById('close-pre-activation-popup');
+      const gotItButton = document.getElementById('got-it-button'); 
+      const walletBalanceSpan = document.getElementById('wallet-balance'); // This is the correct one
+
+      function openPreActivationPopup() {
+        if (preActivationPopup && !localStorage.getItem('predictAI_almostReadyAcknowledged')) {
+            preActivationPopup.classList.remove('hidden');
+        } else {
+            Swal.fire({
+                title: 'Wallet Feature',
+                text: 'Full wallet functionality is activating soon! Check back after our official launch.',
+                icon: 'info',
+                confirmButtonColor: tailwind.config.theme.extend.colors.accent, // Use tailwind config
+                background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'],
+                color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
+            });
+        }
+      }
+
+      // The event listener for connectWalletButton is already set up outside/above this DOMContentLoaded listener.
+      // We only need to handle the new popup's own buttons here.
+      if (preActivationPopup && closePreActivationPopupButton && gotItButton) {
+        // connectWalletButton.addEventListener('click', openPreActivationPopup); // Listener already attached globally
+
+        closePreActivationPopupButton.addEventListener('click', () => {
+          preActivationPopup.classList.add('hidden');
+        });
+
+        gotItButton.addEventListener('click', () => {
+          preActivationPopup.classList.add('hidden');
+          localStorage.setItem('predictAI_almostReadyAcknowledged', 'true');
+           Swal.fire({
+                title: 'Got it!',
+                text: 'Thanks for your patience! Full features are on the way.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                background: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-card-bg'] : tailwind.config.theme.extend.colors['light-card-bg'], // Use tailwind config
+                color: document.documentElement.classList.contains('dark') ? tailwind.config.theme.extend.colors['dark-text'] : tailwind.config.theme.extend.colors['light-text'],
+            });
+        });
+      } else {
+          console.error("[Dashboard] One or more wallet popup elements not found for new popup logic inside second DOMContentLoaded. Check IDs: pre-activation-popup, close-pre-activation-popup, got-it-button.");
+      }
+
+      // --- Dashboard Specific JS (Chart, Data Fetching, etc.) ---
+      // This should be loaded from dashboard.js or placed below
+      // ... (rest of dashboard.js or its loader call) ...
+
+    }); // End of DOMContentLoaded for sidebar, theme, and new popup
+
+    // Any script that was previously outside DOMContentLoaded and NOT related to the old connectBtn logic
+    // should remain here or be moved into DOMContentLoaded if appropriate.
+  </script>
+
+  <!-- Pre-Activation Wallet Popup (Copied from index.html) -->
+  <div id="pre-activation-popup" class="fixed inset-0 bg-black/70 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-light-card-bg dark:bg-dark-card-bg p-0 rounded-xl shadow-2xl w-full max-w-lg text-center relative overflow-hidden">
+      <img src="banner.png" alt="PredictAI Banner" class="w-full h-auto object-cover mb-2 sm:mb-0">
+      <button id="close-pre-activation-popup" class="absolute top-3 right-4 text-white hover:text-gray-200 text-3xl bg-black/30 rounded-full w-8 h-8 flex items-center justify-center">&times;</button>
+      
+      <div class="p-6 md:p-8">
+        <div class="flex items-center justify-center mb-3">
+            <svg class="h-7 w-7 text-accent mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0M7.5 3.03v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0" /></svg>
+            <h2 class="text-xl sm:text-2xl font-semibold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4 leading-relaxed">
+          Full wallet integration and all related features will be activated for everyone approximately <strong class="text-light-text dark:text-dark-text">48 hours after our official launch.</strong>
+          <br class="hidden sm:block"/>Stay updated! Join our official Telegram for launch announcements.
+        </p>
+        <p class="text-base sm:text-lg font-semibold text-accent dark:text-accent-hover mb-5">
+            Launch Countdown: <span class="animate-pulse">Activating Soon!</span>
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+            <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" 
+               class="w-full sm:w-auto bg-transparent border-2 border-white text-white font-semibold rounded-lg px-5 py-2.5 text-sm hover:bg-white/10 dark:hover:bg-white/20 transition-colors duration-300 inline-flex items-center justify-center">
+                <i class="fab fa-telegram-plane mr-2"></i> Join on Telegram
+            </a>
+            <button id="got-it-button" 
+                    class="w-full sm:w-auto bg-transparent border-2 border-accent text-accent font-semibold rounded-lg px-8 py-2.5 text-sm hover:bg-accent hover:text-gray-900 transition-colors duration-300">
+              Got It!
+            </button>
+        </div>
+        <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-5">
+            Preview. Full functionality soon!
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script> 
 </body>
 </html>

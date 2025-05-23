@@ -43,6 +43,66 @@
         background-color: transparent !important;
         /* Add other hover resets if necessary */
     }
+
+    /* Scanner Animation for Cards */
+    .card {
+        position: relative; /* Needed for absolute positioning of scanner edges */
+        overflow: hidden; /* To hide edges initially if they are outside */
+    }
+    .scanner-edge {
+        position: absolute;
+        background-color: #56eced; /* Accent color */
+        opacity: 0;
+        transition-property: opacity, width, height;
+        transition-duration: 0.2s;
+        transition-timing-function: ease-out;
+    }
+    .card:hover .scanner-edge {
+        opacity: 1;
+    }
+    .scanner-edge.top-edge    { top: 0; left: 0; height: 2px; width: 0; }
+    .card:hover .scanner-edge.top-edge    { width: 100%; transition-delay: 0s; }
+
+    .scanner-edge.right-edge  { top: 0; right: 0; width: 2px; height: 0; }
+    .card:hover .scanner-edge.right-edge  { height: 100%; transition-delay: 0.15s; } /* Adjusted delay */
+
+    .scanner-edge.bottom-edge { bottom: 0; right: 0; height: 2px; width: 0; }
+    .card:hover .scanner-edge.bottom-edge { width: 100%; transition-delay: 0.3s; } /* Adjusted delay */
+
+    .scanner-edge.left-edge   { bottom: 0; left: 0; width: 2px; height: 0; }
+    .card:hover .scanner-edge.left-edge   { height: 100%; transition-delay: 0.45s; } /* Adjusted delay */
+
+    /* Hero Block Continuous Scanner Animation */
+    .hero-scanner-edge {
+        position: absolute;
+        background-color: #56eced; /* Accent color */
+        box-shadow: 0 0 5px #56eced, 0 0 10px #56eced; /* Glow effect */
+    }
+    @keyframes scanTop {
+        0%, 100% { left: -100%; width: 100%; }
+        25% { left: 0%; width: 100%; }
+        50%, 75% { left: 100%; width: 100%; }
+    }
+    @keyframes scanRight {
+        0%, 25% { top: -100%; height: 100%; }
+        50% { top: 0%; height: 100%; }
+        75%, 100% { top: 100%; height: 100%; }
+    }
+    @keyframes scanBottom {
+        0%, 50% { right: -100%; width: 100%; }
+        75% { right: 0%; width: 100%; }
+        100% { right: 100%; width: 100%; }        
+    }
+    @keyframes scanLeft {
+        0%, 75% { bottom: -100%; height: 100%; }
+        100% { bottom: 0%; height: 100%; }
+    }
+
+    .hero-scanner-edge.top    { top: 0; left: -100%; height: 2px; width: 100%; animation: scanTop 4s linear infinite; }
+    .hero-scanner-edge.right  { top: -100%; right: 0; width: 2px; height: 100%; animation: scanRight 4s linear infinite;  }
+    .hero-scanner-edge.bottom { bottom: 0; right: -100%; height: 2px; width: 100%; animation: scanBottom 4s linear infinite; }
+    .hero-scanner-edge.left   { bottom: -100%; left: 0; width: 2px; height: 100%; animation: scanLeft 4s linear infinite; }
+
   </style>
   <script>
     tailwind.config = {
@@ -136,8 +196,8 @@
     <!-- Top Bar -->
     <header class="w-full flex justify-end items-center px-6 py-3 bg-light-bg/80 dark:bg-dark-bg/80 backdrop-blur-md sticky top-0 z-10 border-b border-light-border dark:border-dark-border" style="min-height: 60px;">
       <div id="wallet-section" class="flex items-center gap-3">
-        <button id="connect-wallet" class="cursor-btn bg-accent text-gray-900 font-medium rounded-md px-3 py-1.5 text-xs shadow-cursor hover:shadow-cursor-hover dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover">
-          Connect Wallet
+        <button id="connect-wallet" class="bg-transparent text-accent border-2 border-accent font-semibold rounded-md px-4 py-2 text-xs hover:bg-accent hover:text-gray-900 transition-colors duration-300 flex items-center">
+          <i class="fas fa-wallet mr-1 sm:mr-2"></i>Connect Wallet
         </button>
         <span id="wallet-balance" class="hidden bg-highlight/10 text-highlight rounded-md px-3 py-1.5 text-xs font-medium dark:bg-highlight/20 dark:text-highlight">Balance: 50 SOL</span>
       </div>
@@ -147,81 +207,124 @@
     <main class="flex-1 px-6 md:px-10 py-8 md:py-12">
       <div class="w-full max-w-container mx-auto">
         <!-- Hero Section styled like cursor.com -->
-        <section class="text-center py-12 md:py-20">
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 text-light-text dark:text-dark-text leading-tight">
-            Unleash the <span class="text-accent">Power of AI</span> for Memecoin Dominance
+        <section class="text-center py-20 md:py-32 bg-gray-100 dark:bg-gray-900 relative overflow-hidden rounded-xl">
+          <span class="hero-scanner-edge top"></span>
+          <span class="hero-scanner-edge right"></span>
+          <span class="hero-scanner-edge bottom"></span>
+          <span class="hero-scanner-edge left"></span>
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-semibold mb-6 text-light-text dark:text-dark-text leading-tight">
+            AI-Powered Insights for <span class="text-accent font-bold">Solana Memecoins</span>
           </h1>
-          <p class="text-base sm:text-lg md:text-xl mb-10 text-light-text-secondary dark:text-dark-text-secondary max-w-3xl mx-auto">
-            PredictAI combines cutting-edge artificial intelligence with real-time market data to give you an unparalleled advantage in the fast-paced world of Solana memecoins. Discover hidden gems, anticipate market moves, and join a community of forward-thinking traders.
+          <p class="text-sm sm:text-base md:text-lg mb-10 text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
+            Leverage PredictAI's advanced analytics to discover promising memecoins, anticipate market shifts, and connect with a vibrant trading community. Your edge in the fast-paced crypto world.
           </p>
-          <button
-            id="cta-btn"
-            class="cursor-btn flex items-center gap-2.5 mx-auto bg-accent text-gray-900 font-semibold text-base sm:text-lg px-6 py-3 sm:px-8 sm:py-3.5 rounded-lg shadow-cursor hover:shadow-cursor-hover hover:bg-accent-hover dark:bg-accent dark:text-gray-900 dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover dark:hover:bg-accent-hover"
-            onclick="document.getElementById('feature-cards-section').scrollIntoView({ behavior: 'smooth' });"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-            Discover How It Works
-          </button>
-        </section>
-
-        <!-- Banner Section -->
-        <section class="py-8 md:py-12">
-          <div class="max-w-5xl mx-auto px-4">
-            <img src="banner.png" alt="PredictAI Banner" class="w-full h-auto rounded-lg shadow-lg dark:shadow-gray-800">
+          <div class="banner-image-container my-8 md:my-12">
+            <img src="banner.png" alt="PredictAI Banner" class="mx-auto rounded-lg shadow-xl max-h-60 md:max-h-80" />
+          </div>
+          <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+            <a href="#feature-cards-section" id="cta-btn" class="btn-primary bg-accent text-gray-900 text-xs sm:text-sm py-2 px-4 sm:py-2.5 sm:px-6 rounded-md font-semibold hover:bg-accent-hover transition-colors duration-300 shadow-none">
+              Explore Features
+            </a>
+            <a href="community.html" class="btn-secondary-hero bg-transparent border-2 border-white text-white text-xs sm:text-sm py-2 px-4 sm:py-2.5 sm:px-6 rounded-md font-semibold hover:bg-white/10 dark:hover:bg-white/20 transition-colors duration-300">
+              Join Our Community
+            </a>
           </div>
         </section>
-        <!-- End Banner Section -->
 
         <!-- Feature Cards Section (Cursor.com style) -->
         <section id="feature-cards-section" class="py-12 md:py-16">
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark hover:shadow-lg dark:hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
-              <i class="fas fa-brain text-3xl text-accent mb-4"></i>
-              <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-light-text dark:text-dark-text">AI-Powered Predictions</h3>
-              <p class="text-sm sm:text-base text-light-text-secondary dark:text-dark-text-secondary">Our sophisticated AI algorithms analyze vast amounts of data to forecast memecoin trends, identify breakout opportunities, and provide actionable Hype-Scores.</p>
+            
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-xl border border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors duration-300 flex items-start text-left">
+              <div class="mr-4 flex-shrink-0 pt-1">
+                <i class="fas fa-chart-line text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-semibold mb-1 text-light-text dark:text-dark-text">Real-Time Predictions</h3>
+                <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Stay ahead with AI-driven forecasts on memecoin performance and market trends.</p>
+              </div>
             </div>
-            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark hover:shadow-lg dark:hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
-              <i class="fas fa-search-dollar text-3xl text-accent mb-4"></i>
-              <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-light-text dark:text-dark-text">Smart Discovery Engine</h3>
-              <p class="text-sm sm:text-base text-light-text-secondary dark:text-dark-text-secondary">Uncover the next 100x memecoin with our real-time suggestion engine, filtering through the noise to highlight tokens with genuine potential.</p>
+
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-xl border border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors duration-300 flex items-start text-left">
+              <div class="mr-4 flex-shrink-0 pt-1">
+                <i class="fas fa-users text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-semibold mb-1 text-light-text dark:text-dark-text">Community Hub</h3>
+                <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Connect, collaborate, and launch tokens with fellow enthusiasts and experts.</p>
+              </div>
             </div>
-            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark hover:shadow-lg dark:hover:shadow-2xl transition-shadow duration-300 flex flex-col items-center text-center">
-              <i class="fas fa-rocket text-3xl text-accent mb-4"></i>
-              <h3 class="text-xl sm:text-2xl font-semibold mb-3 text-light-text dark:text-dark-text">Effortless Token Launch</h3>
-              <p class="text-sm sm:text-base text-light-text-secondary dark:text-dark-text-secondary">Launch your own memecoin on the Solana network seamlessly with our intuitive and secure token creation toolkit. No coding required!</p>
+
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-xl border border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors duration-300 flex items-start text-left">
+              <div class="mr-4 flex-shrink-0 pt-1">
+                <i class="fas fa-rocket text-2xl text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-semibold mb-1 text-light-text dark:text-dark-text">Token Launchpad</h3>
+                <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Seamlessly launch your own memecoins and tap into our supportive ecosystem.</p>
+              </div>
             </div>
+
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-xl border border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors duration-300 flex items-start text-left">
+              <div class="mr-4 flex-shrink-0 pt-1">
+                  <i class="fas fa-shield-alt text-2xl text-accent"></i>
+              </div>
+              <div>
+                  <h3 class="text-base font-semibold mb-1 text-light-text dark:text-dark-text">Secure & Transparent</h3>
+                  <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Trade with confidence on a platform built for security and on-chain transparency.</p>
+              </div>
+            </div>
+
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-xl border border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors duration-300 flex items-start text-left">
+                <div class="mr-4 flex-shrink-0 pt-1">
+                    <i class="fas fa-bolt text-2xl text-accent"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold mb-1 text-light-text dark:text-dark-text">Influencer Insights</h3>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Get the latest hype and analysis from key voices in the memecoin community.</p>
+                </div>
+            </div>
+
+            <div class="card bg-light-card-bg dark:bg-dark-card-bg p-5 rounded-xl border border-light-border dark:border-dark-border hover:border-accent dark:hover:border-accent transition-colors duration-300 flex items-start text-left">
+                <div class="mr-4 flex-shrink-0 pt-1">
+                    <i class="fas fa-lightbulb text-2xl text-accent"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-semibold mb-1 text-light-text dark:text-dark-text">Innovative Features</h3>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Continuously evolving with new tools and AI models to keep you ahead.</p>
+                </div>
+            </div>
+            
           </div>
         </section>
 
         <!-- How It Works Section -->
         <section class="py-12 md:py-16 bg-light-bg dark:bg-dark-bg rounded-xl my-12 md:my-16">
           <div class="text-center mb-12">
-            <h2 class="text-3xl sm:text-4xl font-bold text-light-text dark:text-dark-text mb-4">Get Started in 3 Simple Steps</h2>
-            <p class="text-base sm:text-lg text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">PredictAI simplifies your memecoin journey, from discovery to informed decision-making.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold text-light-text dark:text-dark-text mb-4">Get Started in 3 Simple Steps</h2>
+            <p class="text-sm sm:text-base text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">PredictAI simplifies your memecoin journey, from discovery to informed decision-making.</p>
           </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center px-4 md:px-0">
             <div class="flex flex-col items-center">
               <div class="bg-accent/10 dark:bg-accent/20 p-6 rounded-full mb-6 inline-flex">
                 <i class="fas fa-microscope text-4xl text-accent"></i>
               </div>
-              <h3 class="text-xl font-semibold mb-2 text-light-text dark:text-dark-text">1. Discover</h3>
-              <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Explore AI-curated lists of promising memecoins and access real-time market data with our Discovery Engine.</p>
+              <h3 class="text-lg font-semibold mb-2 text-light-text dark:text-dark-text">1. Discover</h3>
+              <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Explore AI-curated lists of promising memecoins and access real-time market data with our Discovery Engine.</p>
             </div>
             <div class="flex flex-col items-center">
               <div class="bg-accent/10 dark:bg-accent/20 p-6 rounded-full mb-6 inline-flex">
                 <i class="fas fa-chart-pie text-4xl text-accent"></i>
               </div>
-              <h3 class="text-xl font-semibold mb-2 text-light-text dark:text-dark-text">2. Analyze</h3>
-              <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Dive deep with AI-driven Hype-Scores, trend analysis, influencer insights, and comprehensive token metrics.</p>
+              <h3 class="text-lg font-semibold mb-2 text-light-text dark:text-dark-text">2. Analyze</h3>
+              <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Dive deep with AI-driven Hype-Scores, trend analysis, influencer insights, and comprehensive token metrics.</p>
             </div>
             <div class="flex flex-col items-center">
               <div class="bg-accent/10 dark:bg-accent/20 p-6 rounded-full mb-6 inline-flex">
                 <i class="fas fa-coins text-4xl text-accent"></i>
               </div>
-              <h3 class="text-xl font-semibold mb-2 text-light-text dark:text-dark-text">3. Engage & Grow</h3>
-              <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary">Connect with our community, launch your own token, and leverage insights for smarter trading decisions.</p>
+              <h3 class="text-lg font-semibold mb-2 text-light-text dark:text-dark-text">3. Engage & Grow</h3>
+              <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary">Connect with our community, launch your own token, and leverage insights for smarter trading decisions.</p>
             </div>
           </div>
         </section>
@@ -229,63 +332,61 @@
         <!-- Why PredictAI Section -->
         <section class="py-12 md:py-16">
             <div class="text-center mb-12">
-                <h2 class="text-3xl sm:text-4xl font-bold text-light-text dark:text-dark-text mb-4">Why Choose PredictAI?</h2>
-                <p class="text-base sm:text-lg text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">We're not just another crypto tool. We're your intelligent partner in the memecoin space.</p>
+                <h2 class="text-2xl sm:text-3xl font-bold text-light-text dark:text-dark-text mb-4">Why Choose PredictAI?</h2>
+                <p class="text-sm sm:text-base text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">We're not just another crypto tool. We're your intelligent partner in the memecoin space.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div class="bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
                     <div class="flex items-center mb-3">
                         <i class="fas fa-check-circle text-xl text-highlight mr-3"></i>
-                        <h4 class="text-lg font-semibold text-light-text dark:text-dark-text">Unmatched AI Accuracy</h4>
+                        <h4 class="text-base font-semibold text-light-text dark:text-dark-text">Unmatched AI Accuracy</h4>
                     </div>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary ml-8">Our proprietary AI models are constantly learning, providing you with highly accurate trend predictions and Hype-Scores.</p>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary ml-8">Our proprietary AI models are constantly learning, providing you with highly accurate trend predictions and Hype-Scores.</p>
                 </div>
                 <div class="bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
                     <div class="flex items-center mb-3">
                         <i class="fas fa-check-circle text-xl text-highlight mr-3"></i>
-                        <h4 class="text-lg font-semibold text-light-text dark:text-dark-text">Real-Time Data Advantage</h4>
+                        <h4 class="text-base font-semibold text-light-text dark:text-dark-text">Real-Time Data Advantage</h4>
                     </div>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary ml-8">Access up-to-the-minute market data, social sentiment, and on-chain activity for Solana memecoins.</p>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary ml-8">Access up-to-the-minute market data, social sentiment, and on-chain activity for Solana memecoins.</p>
                 </div>
                 <div class="bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
                     <div class="flex items-center mb-3">
                         <i class="fas fa-check-circle text-xl text-highlight mr-3"></i>
-                        <h4 class="text-lg font-semibold text-light-text dark:text-dark-text">User-Friendly Interface</h4>
+                        <h4 class="text-base font-semibold text-light-text dark:text-dark-text">User-Friendly Interface</h4>
                     </div>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary ml-8">Navigate complex data effortlessly with our intuitive and beautifully designed platform. Perfect for both new and experienced traders.</p>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary ml-8">Navigate complex data effortlessly with our intuitive and beautifully designed platform. Perfect for both new and experienced traders.</p>
                 </div>
                 <div class="bg-light-card-bg dark:bg-dark-card-bg p-6 rounded-xl shadow-card-light dark:shadow-card-dark">
                     <div class="flex items-center mb-3">
                         <i class="fas fa-check-circle text-xl text-highlight mr-3"></i>
-                        <h4 class="text-lg font-semibold text-light-text dark:text-dark-text">Vibrant Community & Support</h4>
+                        <h4 class="text-base font-semibold text-light-text dark:text-dark-text">Vibrant Community & Support</h4>
                     </div>
-                    <p class="text-sm text-light-text-secondary dark:text-dark-text-secondary ml-8">Join a supportive community, share insights, and get access to dedicated support from the PredictAI team.</p>
+                    <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary ml-8">Join a supportive community, share insights, and get access to dedicated support from the PredictAI team.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Final Call to Action Section -->
-        <section class="text-center py-16 md:py-24 bg-accent/5 dark:bg-accent/10 rounded-xl my-12 md:my-16">
-            <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-light-text dark:text-dark-text leading-tight">
-                Ready to Elevate Your Memecoin Game?
+        <!-- CTA Section -->
+        <section class="py-12 md:py-16 bg-gray-50 dark:bg-gray-800/50 rounded-xl mt-12 md:mt-16">
+          <div class="container mx-auto px-6 text-center">
+            <h2 class="text-2xl sm:text-3xl font-semibold mb-4 text-light-text dark:text-dark-text">
+              Ready to Dive In?
             </h2>
-            <p class="text-base sm:text-lg md:text-xl mb-10 text-light-text-secondary dark:text-dark-text-secondary max-w-2xl mx-auto">
-                Stop guessing, start predicting. Join PredictAI today and harness the power of AI for smarter memecoin investments.
+            <p class="text-sm sm:text-base text-light-text-secondary dark:text-dark-text-secondary mb-8 max-w-xl mx-auto">
+              Join PredictAI today and start leveraging the power of artificial intelligence for your memecoin strategy. Launch your own token or discover the next big hit!
             </p>
-            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <a href="token-launch.html" class="bg-accent text-gray-900 text-sm sm:text-base py-2.5 px-6 sm:py-3 sm:px-8 rounded-md font-semibold hover:bg-accent-hover transition-colors duration-300">
+                    Launch Your Token Now
+                </a>
                 <button 
-                    class="cursor-btn flex items-center gap-2.5 bg-accent text-gray-900 font-semibold text-base sm:text-lg px-8 py-3.5 rounded-lg shadow-cursor hover:shadow-cursor-hover hover:bg-accent-hover dark:bg-accent dark:text-gray-900 dark:shadow-dark-cursor dark:hover:shadow-dark-cursor-hover dark:hover:bg-accent-hover"
-                    onclick="window.location.href='suggestions.html'"
-                >
-                    <i class="fas fa-binoculars"></i> Find Next Gem
-                </button>
-                <button 
-                    id="connect-wallet-cta"
-                    class="cursor-btn flex items-center gap-2.5 bg-transparent text-accent font-semibold text-base sm:text-lg px-8 py-3.5 rounded-lg border-2 border-accent hover:bg-accent/10 dark:hover:bg-accent/20 transition-colors duration-200"
-                >
+                    id="connect-wallet-cta-footer"
+                    class="bg-transparent text-accent border-2 border-accent text-sm sm:text-base py-2.5 px-6 sm:py-3 sm:px-8 rounded-md font-semibold hover:bg-accent hover:text-gray-900 transition-colors duration-300 flex items-center gap-2">
                     <i class="fas fa-wallet"></i> Connect Wallet
                 </button>
             </div>
+          </div>
         </section>
 
       </div>
@@ -297,16 +398,11 @@
         <div class="text-sm">
           © 2024 PredictAI. All rights reserved.
         </div>
-        <div class="flex gap-4 mb-2 md:mb-0 text-sm">
-          <a href="#" class="hover:text-accent">About</a>
-          <a href="mailto:support@predictai.com" class="hover:text-accent">Contact</a>
-          <a href="#" class="hover:text-accent">Privacy Policy</a>
-        </div>
         <div class="flex gap-3">
-          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Twitter">
-            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M22.46 6c-.77.35-1.6.58-2.47.69a4.3 4.3 0 0 0 1.88-2.37 8.59 8.59 0 0 1-2.72 1.04A4.28 4.28 0 0 0 16.11 4c-2.37 0-4.29 1.92-4.29 4.29 0 .34.04.67.11.99C7.69 9.13 4.07 7.38 1.64 4.7c-.37.64-.58 1.38-.58 2.17 0 1.5.76 2.82 1.92 3.6-.71-.02-1.38-.22-1.97-.54v.05c0 2.1 1.5 3.85 3.5 4.25-.36.1-.74.16-1.13.16-.28 0-.54-.03-.8-.08.54 1.7 2.11 2.94 3.97 2.97A8.6 8.6 0 0 1 2 19.54c-.32 0-.63-.02-.94-.06A12.13 12.13 0 0 0 8.29 21.5c7.55 0 11.68-6.26 11.68-11.68 0-.18-.01-.36-.02-.54A8.18 8.18 0 0 0 24 4.59a8.36 8.36 0 0 1-2.54.7z"/></svg>
+          <a href="https://x.com/PredictAiPro" target="_blank" rel="noopener noreferrer" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="X (Twitter)">
+            <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           </a>
-          <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
+          <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Telegram">
             <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M9.04 16.87l-.39 3.66c.56 0 .8-.24 1.09-.53l2.62-2.5 5.44 3.98c1 .55 1.72.26 1.97-.92l3.58-16.84c.32-1.48-.54-2.06-1.5-1.7L2.2 9.3c-1.45.56-1.43 1.36-.25 1.72l4.6 1.44 10.7-6.74c.5-.32.96-.14.58.18z"/></svg>
           </a>
           <a href="#" class="footer-icon text-light-text-secondary hover:text-accent dark:text-dark-text-secondary dark:hover:text-accent" title="Discord">
@@ -338,112 +434,21 @@
 
     // Initial theme setup
     const savedTheme = localStorage.getItem('theme');
-    // Always default to dark mode if no theme is saved
     const initialTheme = savedTheme || 'dark'; 
     setTheme(initialTheme);
-    // Ensure the class is set correctly on initial load based on initialTheme
-    // The setTheme function already handles adding/removing classes, 
-    // but we ensure the correct class is on the html element directly after definition.
     if (initialTheme === 'dark') {
         html.classList.add('dark');
-        html.classList.remove('light'); // Ensure light is not present
+        html.classList.remove('light'); 
     } else {
         html.classList.add('light');
-        html.classList.remove('dark'); // Ensure dark is not present
+        html.classList.remove('dark'); 
     }
 
     themeToggle.addEventListener('click', () => {
       setTheme(html.classList.contains('dark') ? 'light' : 'dark');
     });
 
-    // Connect Wallet logic
-    const connectBtn = document.getElementById('connect-wallet');
-    const walletBalance = document.getElementById('wallet-balance');
-    if (connectBtn) {
-        connectBtn.addEventListener('click', function() {
-          Swal.fire({
-            html: `
-                <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
-                <div class="flex items-center justify-center mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-accent mr-2">
-                    <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071 1.071L12.75 5.25v.985c0 .245-.12.479-.326.625C11.297 7.705 9.92 8 8.25 8c-2.144 0-4.005-.805-5.115-2.06C2.673 5.423 2.25 4.735 2.25 4.005 2.25 2.9 3.15 2 4.256 2H6.75V1.125C6.75.504 7.254 0 7.875 0h2.25C10.746 0 11.25.504 11.25 1.125V2h2.506c1.105 0 2.006.9 2.006 2.005 0 .73-.423 1.418-.987 1.939C13.659 7.195 11.798 8 9.652 8c-.89 0-1.712-.123-2.46-.352-.24-.073-.392-.284-.392-.517V6.06c0-.272.176-.516.443-.625.283-.115.7-.234 1.193-.234.593 0 1.196.163 1.721.453.274.151.61.115.842-.089l.812-.721a.75.75 0 00-1.071-1.071L9.652 4.987c-.984-.52-2.205-.737-3.402-.737C4.65 4.25 3.75 4.95 3.75 5.895c0 .474.256.926.695 1.282C5.496 8.203 6.953 8.75 8.652 8.75c1.938 0 3.578-.664 4.642-1.799.24-.253.358-.561.358-.876v-1.5c0-.474-.256-.926-.695-1.282C11.801 2.26 10.837 2 9.652 2c-.399 0-.784.029-1.152.086L7.875 2.25A.75.75 0 007.5 3H4.256A.75.75 0 013.506 2.25C3.506 1.836 3.842 1.5 4.256 1.5H6.75V.75a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75V1.5h2.463z" clip-rule="evenodd" />
-                    <path d="M14.25 10.191a.75.75 0 01.634 1.332l-1.512 3.024a.75.75 0 01-1.348-.672l1.225-2.45V10.5a.75.75 0 01.75-.75h.252zM10.055 12.346a.75.75 0 00-1.332.634l3.024 1.512a.75.75 0 00.672-1.348l-2.363-1.182zM10.5 15.75a.75.75 0 00-.75.75v.252l-2.45 1.225a.75.75 0 00.672 1.348l3.024-1.512a.75.75 0 00-.634-1.332L10.5 16.5z" />
-                    <path fill-rule="evenodd" d="M12 24a.75.75 0 00.594-.275l3.291-4.608a.75.75 0 10-1.188-.846L12 22.088l-2.709-3.792a.75.75 0 00-1.188.846l3.292 4.608A.75.75 0 0012 24z" clip-rule="evenodd" />
-                    <path fill-rule="evenodd" d="M14.883 16.017a.75.75 0 001.06.023l3.358-3.358a.75.75 0 10-1.06-1.06l-3.359 3.358a.75.75 0 00-.022 1.036zM6.023 12.68a.75.75 0 00-1.037-.023L1.628 16.015a.75.75 0 101.06 1.06l3.358-3.358a.75.75 0 00-.023-1.036z" clip-rule="evenodd" />
-                  </svg>
-                  <h2 class="text-2xl font-bold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
-                </div>
-                <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
-                    Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
-                </p>
-                <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
-                    Stay updated and be the first to know! Join our official Telegram channel for the latest announcements and launch countdown.
-                </p>
-                <div id="countdown-timer-placeholder" class="my-4 text-lg font-semibold text-accent dark:text-accent">
-                    Launch Countdown: Activating Soon!
-                </div>
-                <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #2AABEE; border-color: #2AABEE;"> <!-- Telegram Blue -->
-                    <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
-                </a>
-            `,
-            showConfirmButton: true,
-            confirmButtonText: 'Got It!',
-            background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-            color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-            confirmButtonColor: '#56eced',
-            footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">This is a preview. Full functionality is launching soon!</p>',
-            customClass: {
-                htmlContainer: 'swal2-html-container-no-icon'
-            },
-            showCloseButton: true
-          });
-        });
-    }
-
-    // CTA button connect wallet
-    const connectBtnCta = document.getElementById('connect-wallet-cta');
-    if (connectBtnCta) {
-        connectBtnCta.addEventListener('click', function() {
-            Swal.fire({
-                html: `
-                    <img src="banner.png" alt="PredictAI Launch Banner" style="width: 90%; height: auto; border-radius: 8px; margin: 0 auto 20px auto; display: block;">
-                    <div class="flex items-center justify-center mb-4">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-accent mr-2">
-                        <path fill-rule="evenodd" d="M12.963 2.286a.75.75 0 00-1.071 1.071L12.75 5.25v.985c0 .245-.12.479-.326.625C11.297 7.705 9.92 8 8.25 8c-2.144 0-4.005-.805-5.115-2.06C2.673 5.423 2.25 4.735 2.25 4.005 2.25 2.9 3.15 2 4.256 2H6.75V1.125C6.75.504 7.254 0 7.875 0h2.25C10.746 0 11.25.504 11.25 1.125V2h2.506c1.105 0 2.006.9 2.006 2.005 0 .73-.423 1.418-.987 1.939C13.659 7.195 11.798 8 9.652 8c-.89 0-1.712-.123-2.46-.352-.24-.073-.392-.284-.392-.517V6.06c0-.272.176-.516.443-.625.283-.115.7-.234 1.193-.234.593 0 1.196.163 1.721.453.274.151.61.115.842-.089l.812-.721a.75.75 0 00-1.071-1.071L9.652 4.987c-.984-.52-2.205-.737-3.402-.737C4.65 4.25 3.75 4.95 3.75 5.895c0 .474.256.926.695 1.282C5.496 8.203 6.953 8.75 8.652 8.75c1.938 0 3.578-.664 4.642-1.799.24-.253.358-.561.358-.876v-1.5c0-.474-.256-.926-.695-1.282C11.801 2.26 10.837 2 9.652 2c-.399 0-.784.029-1.152.086L7.875 2.25A.75.75 0 007.5 3H4.256A.75.75 0 013.506 2.25C3.506 1.836 3.842 1.5 4.256 1.5H6.75V.75a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75V1.5h2.463z" clip-rule="evenodd" />
-                        <path d="M14.25 10.191a.75.75 0 01.634 1.332l-1.512 3.024a.75.75 0 01-1.348-.672l1.225-2.45V10.5a.75.75 0 01.75-.75h.252zM10.055 12.346a.75.75 0 00-1.332.634l3.024 1.512a.75.75 0 00.672-1.348l-2.363-1.182zM10.5 15.75a.75.75 0 00-.75.75v.252l-2.45 1.225a.75.75 0 00.672 1.348l3.024-1.512a.75.75 0 00-.634-1.332L10.5 16.5z" />
-                        <path fill-rule="evenodd" d="M12 24a.75.75 0 00.594-.275l3.291-4.608a.75.75 0 10-1.188-.846L12 22.088l-2.709-3.792a.75.75 0 00-1.188.846l3.292 4.608A.75.75 0 0012 24z" clip-rule="evenodd" />
-                        <path fill-rule="evenodd" d="M14.883 16.017a.75.75 0 001.06.023l3.358-3.358a.75.75 0 10-1.06-1.06l-3.359 3.358a.75.75 0 00-.022 1.036zM6.023 12.68a.75.75 0 00-1.037-.023L1.628 16.015a.75.75 0 101.06 1.06l3.358-3.358a.75.75 0 00-.023-1.036z" clip-rule="evenodd" />
-                      </svg>
-                      <h2 class="text-2xl font-bold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
-                    </div>
-                    <p class="text-sm mb-3 text-light-text-secondary dark:text-dark-text-secondary">
-                        Full wallet integration and all related features will be activated for everyone approximately <strong>48 hours after our official launch</strong>.
-                    </p>
-                    <p class="text-sm mb-4 text-light-text-secondary dark:text-dark-text-secondary">
-                        Stay updated and be the first to know! Join our official Telegram channel for the latest announcements and launch countdown.
-                    </p>
-                    <div id="countdown-timer-placeholder-cta" class="my-4 text-lg font-semibold text-accent dark:text-accent">
-                        Launch Countdown: Activating Soon!
-                    </div>
-                    <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" class="cursor-btn inline-flex items-center gap-2 text-white font-medium rounded-md px-4 py-2 text-sm shadow-md hover:shadow-lg transition-all duration-200" style="background-color: #2AABEE; border-color: #2AABEE;"> <!-- Telegram Blue -->
-                        <i class="fab fa-telegram-plane"></i> Join PredictAI on Telegram
-                    </a>
-                `,
-                showConfirmButton: true,
-                confirmButtonText: 'Got It!',
-                background: document.documentElement.classList.contains('dark') ? '#1F2937' : '#FFFFFF',
-                color: document.documentElement.classList.contains('dark') ? '#FFFFFF' : '#222222',
-                confirmButtonColor: '#56eced',
-                footer: '<p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-3">This is a preview. Full functionality is launching soon!</p>',
-                customClass: {
-                    htmlContainer: 'swal2-html-container-no-icon'
-                },
-                showCloseButton: true
-            });
-        });
-    }
-
-    // Active sidebar link based on current page
+    // Active sidebar link and Wallet Connect logic moved into DOMContentLoaded
     document.addEventListener('DOMContentLoaded', function() {
       const currentPath = window.location.pathname.split('/').pop() || 'index.html';
       const sidebarLinks = document.querySelectorAll('.sidebar-link');
@@ -451,17 +456,15 @@
       sidebarLinks.forEach(link => {
         const icon = link.querySelector('i');
         
-        // Reset classes more broadly first
         link.classList.remove(
             'active', 'animate-pulse-border',
-            '!text-accent', '!dark:text-accent', // Remove important text colors
+            '!text-accent', '!dark:text-accent', 
             'text-accent', 'dark:text-accent',
-            'border-l-4', 'border-accent', // Remove explicit border classes
-            '!bg-transparent', // Remove important background
+            'border-l-4', 'border-accent', 
+            '!bg-transparent', 
             'bg-accent', 'bg-accent/5', 'bg-accent/10',
             'dark:bg-accent/10', 'dark:bg-accent/20'
         );
-        // Reset to default non-active styles
         link.classList.add('text-light-text-secondary', 'dark:text-dark-text-secondary');
         if (icon) {
             icon.classList.remove('!text-accent', '!dark:text-accent', 'text-accent', 'dark:text-accent');
@@ -469,17 +472,104 @@
         }
 
         if (link.getAttribute('href') === currentPath) {
-          // Only add 'active' and 'animate-pulse-border'. Styling is now CSS-driven.
           link.classList.add('active', 'animate-pulse-border');
-          // Remove default text/icon colors so CSS !important takes over
           link.classList.remove('text-light-text-secondary', 'dark:text-dark-text-secondary');
           if (icon) {
             icon.classList.remove('text-gray-400', 'dark:text-gray-500');
           }
         }
       });
-    });
 
+      // Connect Wallet logic (now inside DOMContentLoaded)
+      const connectWalletButton = document.getElementById('connect-wallet');
+      const connectWalletButtonFooter = document.getElementById('connect-wallet-cta-footer'); // Get the new footer button
+      const preActivationPopup = document.getElementById('pre-activation-popup');
+      const closePreActivationPopupButton = document.getElementById('close-pre-activation-popup');
+      const gotItButton = document.getElementById('got-it-button'); 
+      const walletBalanceSpan = document.getElementById('wallet-balance');
+
+      function openPreActivationPopup() {
+        if (preActivationPopup && !localStorage.getItem('predictAI_almostReadyAcknowledged')) {
+            preActivationPopup.classList.remove('hidden');
+        } else {
+            Swal.fire({
+                title: 'Wallet Feature',
+                text: 'Full wallet functionality is activating soon! Check back after our official launch.',
+                icon: 'info',
+                confirmButtonColor: tailwind.theme.extend.colors.accent,
+                background: document.documentElement.classList.contains('dark') ? tailwind.theme.extend.colors['dark-card-bg'] : tailwind.theme.extend.colors['light-card-bg'],
+                color: document.documentElement.classList.contains('dark') ? tailwind.theme.extend.colors['dark-text'] : tailwind.theme.extend.colors['light-text'],
+            });
+        }
+      }
+
+      if (connectWalletButton && preActivationPopup && closePreActivationPopupButton && gotItButton) {
+        connectWalletButton.addEventListener('click', openPreActivationPopup);
+        
+        if (connectWalletButtonFooter) { // Add event listener for the footer button if it exists
+            connectWalletButtonFooter.addEventListener('click', openPreActivationPopup);
+        }
+
+        closePreActivationPopupButton.addEventListener('click', () => {
+          preActivationPopup.classList.add('hidden');
+        });
+
+        gotItButton.addEventListener('click', () => {
+          preActivationPopup.classList.add('hidden');
+          localStorage.setItem('predictAI_almostReadyAcknowledged', 'true');
+          if(walletBalanceSpan) {
+            // walletBalanceSpan.classList.remove('hidden'); 
+          }
+           Swal.fire({
+                title: 'Got it!',
+                text: 'Thanks for your patience! Full features are on the way.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+                background: document.documentElement.classList.contains('dark') ? tailwind.theme.extend.colors['dark-card-bg'] : tailwind.theme.extend.colors['light-card-bg'],
+                color: document.documentElement.classList.contains('dark') ? tailwind.theme.extend.colors['dark-text'] : tailwind.theme.extend.colors['light-text'],
+            });
+        });
+      } else {
+          console.error("One or more wallet popup elements not found. Check IDs: connect-wallet, pre-activation-popup, close-pre-activation-popup, got-it-button. Optional: connect-wallet-cta-footer");
+      }
+    }); // End of DOMContentLoaded
   </script>
+
+  <!-- Pre-Activation Wallet Popup (Updated Design from influencer.html) -->
+  <div id="pre-activation-popup" class="fixed inset-0 bg-black/70 dark:bg-black/80 backdrop-blur-md flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-light-card-bg dark:bg-dark-card-bg p-0 rounded-xl shadow-2xl w-full max-w-lg text-center relative overflow-hidden">
+      <img src="banner.png" alt="PredictAI Banner" class="w-full h-auto object-cover mb-2 sm:mb-0">
+      <button id="close-pre-activation-popup" class="absolute top-3 right-4 text-white hover:text-gray-200 text-3xl bg-black/30 rounded-full w-8 h-8 flex items-center justify-center">&times;</button>
+      
+      <div class="p-6 md:p-8">
+        <div class="flex items-center justify-center mb-3">
+            <svg class="h-7 w-7 text-accent mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0M7.5 3.03v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v.568c0 .334-.148.65-.405.85l-.708.568c-.295.236-.442.606-.442.98v.568c0 .334.148.65.405.85l.708.568c.295.236.442.606.442.98v0" /></svg>
+            <h2 class="text-xl sm:text-2xl font-semibold text-light-text dark:text-dark-text">Almost Ready to Connect!</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-light-text-secondary dark:text-dark-text-secondary mb-4 leading-relaxed">
+          Full wallet integration and all related features will be activated for everyone approximately <strong class="text-light-text dark:text-dark-text">48 hours after our official launch.</strong>
+          <br class="hidden sm:block"/>Stay updated! Join our official Telegram for launch announcements.
+        </p>
+        <p class="text-base sm:text-lg font-semibold text-accent dark:text-accent-hover mb-5">
+            Launch Countdown: <span class="animate-pulse">Activating Soon!</span>
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+            <a href="https://t.me/predictAIofficial" target="_blank" rel="noopener noreferrer" 
+               class="w-full sm:w-auto bg-transparent border-2 border-white text-white font-semibold rounded-lg px-5 py-2.5 text-sm hover:bg-white/10 dark:hover:bg-white/20 transition-colors duration-300 inline-flex items-center justify-center">
+                <i class="fab fa-telegram-plane mr-2"></i> Join on Telegram
+            </a>
+            <button id="got-it-button" 
+                    class="w-full sm:w-auto bg-transparent border-2 border-accent text-accent font-semibold rounded-lg px-8 py-2.5 text-sm hover:bg-accent hover:text-gray-900 transition-colors duration-300">
+              Got It!
+            </button>
+        </div>
+        <p class="text-xs text-light-text-secondary dark:text-dark-text-secondary mt-5">
+            Preview. Full functionality soon!
+        </p>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html> 
