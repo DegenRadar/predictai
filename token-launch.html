@@ -529,13 +529,13 @@
                 method: 'GET'
             }).then(response => {
                 if (response.ok) {
-                    Swal.fire('Erfolg!', 'Dein Token wurde an das Team übermittelt.', 'success');
+                    Swal.fire('Success!', 'Your token has been submitted to the team.', 'success');
                     form.reset();
                 } else {
-                    Swal.fire('Fehler!', 'Es gab ein Problem beim Senden.', 'error');
+                    Swal.fire('Error!', 'There was a problem submitting your token.', 'error');
                 }
             }).catch(() => {
-                Swal.fire('Fehler!', 'Es gab ein Problem beim Senden.', 'error');
+                Swal.fire('Error!', 'There was a problem submitting your token.', 'error');
             });
         });
     }
